@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import json
 from firebase import Firebase
 import requests
@@ -45,17 +46,32 @@ app = Flask(__name__)
 
 
 @app.route('/v1/api/ping/')
+=======
+import os
+
+from flask import Flask, redirect
+app = Flask(__name__)
+
+
+@app.route('/api/ping/')
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 def ping():
     return "all is OK"
 
 
 @app.route('/')
 def main():
+<<<<<<< HEAD
     return render_template('index.html')
 
 @app.route('/commands')
 def commands():
     return render_template('commands.html')
+=======
+    return redirect('api/ping')
+
+
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 @app.route('/invite/')
 def invite():
     return redirect(f'https://google.com/')

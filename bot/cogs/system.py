@@ -1,4 +1,5 @@
 import datetime
+<<<<<<< HEAD
 import os
 import platform
 import time
@@ -23,6 +24,27 @@ from discord.ext import commands
 from DiscordBar import DSprogressbar as Bar
 from github import Github
 
+=======
+import platform
+import time
+
+from dislash import slash_commands, Option, Type
+from yaml import load
+if platform.system() in ["Darwin", 'Windows']:
+    from bot.utills.time import visdelta, pickform
+elif platform.system() == 'Linux':
+    from bot.utills.time import visdelta, pickform
+
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except:
+    from yaml import  Loader,Dumper
+import discord
+import psutil
+from discord.ext import commands
+from github import Github
+from DiscordBar import DSprogressbar as Bar
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 if platform.system() in ["Darwin", 'Windows']:
     from main import startTime
 elif platform.system() == 'Linux':
@@ -148,4 +170,8 @@ def setup(bot):
         em.set_thumbnail(url={bot.avatar_url})
         em.set_footer(text=f"Запрошено: {ctx.author.name} | Команда: a.stats", icon_url=f"{ctx.author.avatar_url}")
         await ctx.reply(embed=em)
+<<<<<<< HEAD
 """
+=======
+"""
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048

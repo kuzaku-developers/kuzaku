@@ -1,5 +1,9 @@
 import platform
+<<<<<<< HEAD
 import os
+=======
+
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 import discord
 from discord.ext import commands
 from yaml import load, Loader
@@ -26,11 +30,20 @@ class errorhandler(commands.Cog):
         if hasattr(ctx.command, 'on_error'):
             return
 
+<<<<<<< HEAD
         ignored = (commands.NotOwner, discord.NotFound, commands.CommandNotFound)
+=======
+        ignored = (commands.NotOwner, discord.NotFound)
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
         error = getattr(error, 'original', error)
 
         if isinstance(error, ignored):
             return
+<<<<<<< HEAD
+=======
+        #if isinstance(error,commands.CommandNotFound):
+            #return await ctx.reply('errorr')
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 
         elif isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(color=0xFF0000).set_author(
@@ -96,8 +109,13 @@ class errorhandler(commands.Cog):
             return await ctx.reply(embed=embed)
 
         # Если ничего не подходит
+<<<<<<< HEAD
         rep_guild = discord.utils.get(self.bot.guilds, id=761991504793174117)
         rep_channel = discord.utils.get(rep_guild.channels, id=868788281528160266)
+=======
+        rep_guild = discord.utils.get(self.bot.guilds, id=802929930602151997)
+        rep_channel = discord.utils.get(rep_guild.channels, id=809311825886838856)
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 
         embed = discord.Embed(
             color=0xF56415,
@@ -118,6 +136,10 @@ class errorhandler(commands.Cog):
         if ctx.author.id in [704560097610825828, 732571199913328691]:
             await ctx.send(f'{ctx.author.mention}, у меня произошла проблема.')
         else:
+<<<<<<< HEAD
             await ctx.send('произошла ошибка! Она уже отправлена разработчикам!')
+=======
+            await ctx.send('произошла ошибка!')
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 def setup(bot):
     bot.add_cog(errorhandler(bot))

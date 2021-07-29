@@ -7,6 +7,7 @@ PyYAML
 requests
 discord.py
 asyncio
+<<<<<<< HEAD
 youtube_dl
 psutil
 pycryptodomex
@@ -18,4 +19,9 @@ gunicorn
 requests
 dislash.py
 discord-components
+=======
+psutil
+gunicorn
+dislash.py
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 python-uptimerobot

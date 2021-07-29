@@ -5,19 +5,29 @@ import time
 from os import listdir
 from os.path import join, realpath, split, splitext
 
+<<<<<<< HEAD
 from discord_components import Button, DiscordComponents, Select, SelectOption
 
 rootdir=os.path.abspath(os.path.join(os.curdir))
+=======
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 import discord
 import psutil
 from discord.ext import commands
 
+<<<<<<< HEAD
 from botconfig import botconfig
 
 #
 intents=discord.Intents.all()
 intents.members = True
 intents.guilds = True
+=======
+rootdir=os.path.abspath(os.path.join(os.curdir))
+from bot.botconfig import botconfig
+
+#
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
 ver='0.0.1'
 startTime=time.time()
 class bcolors:
@@ -48,12 +58,16 @@ class kuzaku(discord.ext.commands.Bot):
         log('бот подключается...')
         line(bcolors.OKBLUE)
     async def on_ready(self):
+<<<<<<< HEAD
         DiscordComponents(bot)
+=======
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | k.help'))
         log(f'бот подключен к discord\'у!\n[#] имя пользователя: {self.user}\n[#] кол-во серверов: {len(self.guilds)}\n[#] количество пользователей: {len(self.users)}')
         line(bcolors.OKBLUE)
 
 
+<<<<<<< HEAD
 bot=kuzaku(command_prefix='k.', self_bot=False, intents=intents)
 @bot.event
 async def on_message(message):
@@ -63,6 +77,14 @@ async def on_message(message):
         
     await bot.process_commands(message)
 def load_ext(bot,dir):
+=======
+bot=kuzaku(command_prefix='k.', self_bot=False)
+def load_ext(bot,dir):
+    print(f'cur:{os.curdir}')
+    print(f'par:{os.path.abspath(os.path.join(os.curdir))}')
+    print(f'list:{os.listdir(os.curdir)}')
+    print(f'sys:{platform.system()}')
+>>>>>>> d2e277457312a0b59961f31085629cb5ba036048
     if platform.system() in ["Darwin", 'Windows']:
         for filename in os.listdir(f'{rootdir}/bot/cogs'):
             if filename.endswith('.py'):
