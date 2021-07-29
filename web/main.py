@@ -5,6 +5,7 @@ import discord
 from discord import Webhook, RequestsWebhookAdapter
 from flask import Flask, request, Response
 import os
+from flask import Flask, redirect, render_template
 if os.getenv("PRODUCTION")!="yes":
     import dotenv
     dotenv.load_dotenv()
@@ -15,15 +16,15 @@ configfb = {
     "storageBucket": os.getenv("fstorageBucket")
 }
 
-print(os.getenv("firebase_conf"))
 
 firebase = Firebase(configfb)
 db = firebase.database()
+app = Flask(__name__)
 
-app=Flask(__name__)
 
 @app.route('/v1/api/premium',methods = ['POST'])
 def premium():
+    print(request.json)
     print(request.json)
     data = {
         'premium': 'True'
@@ -41,8 +42,6 @@ def premium():
     webhook=Webhook.from_url(WEBHOOK_URL,adapter=RequestsWebhookAdapter())
     webhook.send(embed=embed, username='покупка премиума', avatar_url=request.json['custom']['avatar'])
     return Response(status=200)
-from flask import Flask, redirect, render_template
-app = Flask(__name__)
 
 
 @app.route('/v1/api/ping/')
