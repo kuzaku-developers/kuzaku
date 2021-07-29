@@ -6,6 +6,7 @@ Flask
 PyYAML
 requests
 discord.py
+firebase
 asyncio
 youtube_dl
 psutil
