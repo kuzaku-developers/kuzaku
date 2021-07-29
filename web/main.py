@@ -3,22 +3,27 @@ from firebase import Firebase
 import requests
 import discord
 from discord import Webhook, RequestsWebhookAdapter
-from flask import Flask, request
+from flask import Flask, request, Response
 import os
+if os.getenv("PRODUCTION")!="yes":
+    import dotenv
+    dotenv.load_dotenv()
 configfb = {
-    "apiKey": "AIzaSyCfJSX5JyY03MXT-PeLopJb_iH0M8O9nvU",
-    "authDomain": "142115676780.firebaseapp.com",
-    "databaseURL": "https://chatik-dcd54.firebaseio.com/",
-    "storageBucket": "chatik-dcd54.appspot.com"
+    "apiKey": os.getenv("fapiKey"),
+    "authDomain": os.getenv("fauthDomain"),
+    "databaseURL": os.getenv("fdatabaseURL"),
+    "storageBucket": os.getenv("fstorageBucket")
 }
+
+print(os.getenv("firebase_conf"))
 
 firebase = Firebase(configfb)
 db = firebase.database()
 
 app=Flask(__name__)
 
-@app.route('/api/premium',methods = ['POST'])
-def index():
+@app.route('/v1/api/premium',methods = ['POST'])
+def premium():
     print(request.json)
     data = {
         'premium': 'True'
@@ -26,7 +31,7 @@ def index():
     if request.json['custom']['secret']==os.getenv('apisecret'):
         db.child("premium").child(request.json['custom']['id']).set(data)
     else:
-        return
+        return Response(status=401)
     # Webhook URL for your Discord channel.
     WEBHOOK_URL = os.getenv('webhook')
     embed=discord.Embed(title='ого, купили премиум!',description=f'премиум купил {request.json["custom"]["name"]}!\nнаше уважение, премим уже выдан для {request.json["custom"]["member_men"]}!')
@@ -35,15 +40,18 @@ def index():
     # Initialize the webhook class and attaches data.
     webhook=Webhook.from_url(WEBHOOK_URL,adapter=RequestsWebhookAdapter())
     webhook.send(embed=embed, username='покупка премиума', avatar_url=request.json['custom']['avatar'])
-    
+    return Response(status=200)
 from flask import Flask, redirect, render_template
 app = Flask(__name__)
 
 
 @app.route('/v1/api/ping/')
 def ping():
-    return "all is OK"
+    return {"code":"200","message":"bot is working!"}
 
+@app.route('/v1/api/')
+def api():
+    return {"code":"200","message":"api is working!"}
 
 @app.route('/')
 def main():

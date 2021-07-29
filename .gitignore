@@ -1,6 +1,6 @@
 .idea
 venv
-bot/.env
+.env
 launcher_pc.py
 **/.DS_Store
 **/.vscode

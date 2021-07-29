@@ -30,7 +30,6 @@ def get_link(ctx, botname):
             "projectCode": "kuzaku",
             'test': testli,
             "sender": {
-                "name": ctx.author.name,
                 "comment": "ваш комментарий для автора бота (не обязательно)"
             },
             "custom": {
@@ -77,22 +76,27 @@ class premium(commands.Cog):
         guild = self.bot.get_guild(761991504793174117) # find ID by right clicking on server icon and choosing "copy id" at the bottom
         if guild.get_member(ctx.author.id):
             silver=guild.get_role(869122020447748137)
-            gold=guild.get_role(869122020447748137)
-            diamond=guild.get_role(869122020447748137)
-            ultimate=guild.get_role(869122020447748137)
+            gold=guild.get_role(869883325265874975)
+            diamond=guild.get_role(869883434221330433)
+            ultimate=guild.get_role(869883527481667624)
             if silver in guild.get_member(ctx.author.id).roles or gold in guild.get_member(ctx.author.id).roles or diamond in guild.get_member(ctx.author.id).roles or ultimate in guild.get_member(ctx.author.id).roles:
                 embed=discord.Embed(title='Премиум', description='у вас есть премиум и вы можете его активровать! используйте k.gold use')
                 await ctx.reply(embed=embed)
             else:
                 
             
-                embed=discord.Embed(title='Премиум', description='у вас нет премиума! Мы были бы признательны, если бы вы приобрели подиску и активировали бонус! Для этого напишите k.gold buy или нажмите на кнопку снизу! :з')
-                await ctx.send(embed=embed, components = [
+                embed=discord.Embed(title='Премиум', description='у вас нет премиума! Мы были бы признательны, если бы вы приобрели подиску и активировали бонус! Для этого нажмите на кнопку снизу! :з')
+                msg=await ctx.reply(embed=embed, components = [
 
             Button(label = "Купить")
 
         ])
                 interaction = await self.bot.wait_for("button_click", check = lambda i: i.component.label.startswith("Купить"))
+                await msg.edit(embed=embed, components = [
+
+            Button(disabled=True,label = "Купить")
+
+        ])
                 link=get_link(ctx, self.bot.user.name)
                 print(link)
                 if link=='что-то пошло не так! 404':
@@ -100,9 +104,16 @@ class premium(commands.Cog):
                 else:
                     await interaction.respond(content = "Отлично. Нажми на кнопку для оплаты", components = [
 
-            Button(style=ButtonStyle.URL, label = "Оплата", url=link)
+                        Button(style=ButtonStyle.URL, label = "Оплата", url=link)
 
-        ])
+
+                         ])
+                    await self.bot.wait_for("button_click", check = lambda i: i.component.label.startswith("Купить"))
+                    await interaction.edit(embed=embed, components = [Button(style=ButtonStyle.URL, label = "Купить", url=link, disabled=True)
+
+
+                         ])
+
 
         else:
             embed=discord.Embed(title='Премиум', description='вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)')
