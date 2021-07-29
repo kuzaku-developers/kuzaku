@@ -1,0 +1,11 @@
+.idea
+venv
+bot/.env
+launcher_pc.py
+**/.DS_Store
+**/.vscode
+.vscode
+.DS_Store
+.venv
+*.pyc
+**/*.pyc

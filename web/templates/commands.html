@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta data-n-head='ssr' charset="utf-8">
+    <meta data-n-head='ssr' name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Head Information -->
+    <title>kuzaku - команды</title>
+    <link data-n-head='ssr' rel='icon' type='image/x-icon' href="static/images/kuzaku.png">
+
+    <!-- Styles -->
+    <link type='text/css' rel='stylesheet' href="static/css/utilities.css">
+    <link type='text/css' rel='stylesheet' href="static/css/common.css">
+    <link type='text/css' rel='stylesheet' href="static/css/commands.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous">
+
+    <!-- Meta -->
+    <meta data-n-head='ssr' data-hid='theme-color' name='theme-color' content='#8f45d9'>
+    <meta data-n-head='ssr' data-hid='og:type' name='og:type' content='website'>
+    <meta data-n-head='ssr' data-hid='og:title' name='og:title' content='nuclearbot - команды'>
+    <meta data-n-head='ssr' data-hid='og:url' name='og:url' content='https://nuclearbot.ga/commands'>
+    <meta data-n-head='ssr' data-hid='og:image' name='og:image'
+        content="static/images/kuzaku.png">
+    <meta data-n-head='ssr' data-hid='description' name='description'
+        content='все команды!'>
+    <meta data-n-head='ssr' data-hid='og:description' name='og:description'
+        content='все команды!!!!'>
+
+</head>
+
+<body style='background-color: #292a2e'>
+    <!-- Preloader -->
+
+    <body class='preload'></body>
+
+    <!-- Header -->
+    <div class='navbar'>
+        <div class='container full flex'>
+            <a href='/' class='logo flex'>
+                <img src="static/images/kuzaku.png" alt='kuzaku Logo'>
+                <p class='title'>nuclearbot</p>
+            </a>
+            <nav>
+                <ul>
+                    <li><a class='button currentPage' href='commands'><span>команды</span></a></li>
+                    <li><a class='button' href='docs'><span>информация</span></a></li>
+                    <li><a class='button' href='premium' target="_blank"><span>премиум</span></a></li>
+                    <li><a class='button' href='invite'><span>пригласить бота</span></a></li>
+                    <li><a class='button' href='support'><span>помощь</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Notes -->
+    <div class='notes card'>
+        <div class='container full grid'>
+            <div class='commandPrefix'>
+                <h2>префикс команд</h2>
+                <div class='flex'>
+                    <p>префикс по умолчанию: </p>
+                    <pre><code> k. </code></pre>
+                </div>
+                <div class='flex pop'>
+                    <p>чтобы узнать префикс упомяни бота </p>
+                    <pre><code> @kuzaku#2021 </code></pre>
+                </div>
+                <div class='flex'>
+                    <p>пример команд: </p>
+                    <pre><code> k.help </code></pre>
+                </div>
+            </div>
+            <div class='commandSyntax'>
+                <h2>синтаксис команд</h2>
+                <p><i>(не вводите скобки при вводе команд)</i></p>
+
+                <div class='flex'>
+                    <pre><code> [] </code></pre>
+                    <p>- опциональный параметр</p>
+                </div>
+                <div class='flex'>
+                    <pre><code> <> </code></pre>
+                    <p>- необходимый параметр</p>
+                </div>
+                <div class='flex pop'>
+                    <pre><code> < 1 параметр || 2 параметр > </code></pre>
+                    <p>- необходимо выбрать 1 из этого</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commands -->
+    <div class='category flex'>
+        <div class='container full accordion'>
+            <div class='card commands'>
+                <div id='funContainer'>
+                    <input type='checkbox' id='fun' class='accordion_input'>
+                    <label for='fun' class='accordion_label'>категория</label>
+                    <div class='content accordion'>
+                        <div class='card'>
+                            <input type='checkbox' id='advice' class='accordion_input'>
+                            <label for='advice' class='accordion_label'>команда</label>
+                            <div class='content'>
+                                <p>описание</p>
+                            </div>
+                        </div>
+                        <div class='card'>
+                            <input type='checkbox' id='coinFlip' class='accordion_input'>
+                            <label for='coinFlip' class='accordion_label'>команда</label>
+                            <div class='content flex container full'>
+                                <p>описание</p>
+                                <div class='flex usage'>
+                                    <h4>использование: </h4>
+                                    <pre><code>использование</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='card'>
+                            <input type='checkbox' id='cmd2' class='accordion_input'>
+                            <label for='cmd2' class='accordion_label'>команда</label>
+                            <div class='content'>
+                                <p>описание!</p>
+                                <div class='flex usage'>
+                                    <h4>использование: </h4>
+                                    <pre><code>команда</code></pre>
+                                </div>
+                                <div class='flex usage'>
+                                    <h4>алиасы: </h4>
+                                    <pre><code>алиас</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                        <div id='cmd3'>
+                    <input type='checkbox' id='cmd33' class='accordion_input'>
+                    <label for='cmd33' class='accordion_label'>категория 2</label>
+                    <div class='content accordion'>
+                        <div class='card'>
+                            <input type='checkbox' id='cmd4' class='accordion_input'>
+                            <label for='cmd4' class='accordion_label'>команда</label>
+                            <div class='content'>
+                                <p>описание!</p>
+                                <div class='flex usage'>
+                                    <h4>использование: </h4>
+                                    <pre><code>описание</code></pre>
+                                </div>
+                                <div class='flex usage'>
+                                    <h4>пример: </h4>
+                                    <pre><code>пример</code></pre>
+                                </div>
+                                <div class='flex usage'>
+                                    <h4>необходимые права: </h4>
+                                    <pre><code>право</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <div class='footer'>
+        <div class='container full grid'>
+            <div class='branding'>
+                <h4>kuzaku</h4>
+                <p>Copyright &copy; 2021 kuzaku</p>
+            </div>
+            <div class='flex'>
+                <div class='footernav'>
+                    <ul>
+                        <li><a class='button' href='/'><span>домашняя страница</span></a></li>
+                        <li><a class='button' href='commands'><span>команды</span></a></li>
+                        <li><a class='button' href='docs'><span>информация</span></a></li>
+                    </ul>
+                </div>
+                <div class='footernav'>
+                    <ul>
+                        <li><a class='button' href='premium'><span>премиум</span></a></li>
+                        <li><a class='button' href='support'><span>саппорт сервер</span></a></li>
+                        <li><a class='button' href='invite'><span>пригласить бота</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>$(window).load(function () { 'body'.removeClass('.preload'); });</script>
+</body>
+
+</html>
