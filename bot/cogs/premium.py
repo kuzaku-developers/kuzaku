@@ -38,8 +38,6 @@ def get_link(ctx, botname):
                 "name": str(ctx.author),
                 "avatar": str(ctx.author.avatar_url),
                 'member_men': str(ctx.author.mention),
-                'bot_name': botname,
-                'test': testli,
                 'secret': os.getenv('apisecret')
             },
         }
