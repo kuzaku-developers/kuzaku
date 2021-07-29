@@ -28,7 +28,7 @@ def index():
     else:
         return
     # Webhook URL for your Discord channel.
-    WEBHOOK_URL = 'https://discord.com/api/webhooks/802842133937258518/K1G_UJeYD_l_XWqyZVi_Wf-NUdPfJgp1BI3MpWpO7Srq7R_zI2NuHpow3DA_Fg6OyEu-'
+    WEBHOOK_URL = os.getenv('webhook')
     embed=discord.Embed(title='ого, купили премиум!',description=f'премиум купил {request.json["custom"]["name"]}!\nнаше уважение, премим уже выдан для {request.json["custom"]["member_men"]}!')
     embed.set_footer(text='kuzaku', icon_url='https://cdn.discordapp.com/avatars/781162235673968651/392391e3893cfff8e4f2892e761eb660.webp?size=1024')
     embed.set_author(name=request.json['custom']['name'], icon_url=request.json['custom']['avatar'])
