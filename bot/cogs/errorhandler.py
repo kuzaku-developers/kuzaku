@@ -19,6 +19,7 @@ class errorhandler(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
+        
         """The event triggered when an error is raised while invoking a command.
         ctx   : Context
         error : Exception"""
@@ -59,11 +60,7 @@ class errorhandler(commands.Cog):
                         name=f'у тебя нет прав',
                         icon_url='http://s1.iconbird.com/ico/2013/11/504/w128h1281385326559hazard.png')
                     return await ctx.reply(embed=embed)
-                if isinstance(error, discord.ext.commands.errors.CheckFailure):
-                    embed = discord.Embed(color=0xFF0000, ).set_author(
-                        name=f'добрый день, {ctx.author.name}, пошел нафиг ты забанен',
-                        icon_url='http://s1.iconbird.com/ico/2013/11/504/w128h1281385326559hazard.png')
-                    return await ctx.reply(embed=embed)
+                
                 embed = discord.Embed(color=0xFF0000).set_author(
                     name='У вас нет прав.',
                     icon_url='http://s1.iconbird.com/ico/2013/11/504/w128h1281385326559hazard.png')
@@ -115,9 +112,9 @@ class errorhandler(commands.Cog):
             dev = discord.utils.get(self.bot.users, id=704560097610825828)
             await dev.send(embed=embed)
 
-        if ctx.author.id in [704560097610825828, 732571199913328691]:
+        if ctx.author.id in [704560097610825828]:
             await ctx.send(f'{ctx.author.mention}, у меня произошла проблема.')
         else:
             await ctx.send('произошла ошибка! Она уже отправлена разработчикам!')
-def setup(bot):
-    bot.add_cog(errorhandler(bot))
+#def setup(bot):
+    #bot.add_cog(errorhandler(bot))
