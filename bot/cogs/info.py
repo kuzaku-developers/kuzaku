@@ -3,6 +3,7 @@ import platform
 import discord
 from discord.ext import commands
 from yaml import Loader, load
+from dislash import *
 
 rootdir=os.path.abspath(os.path.join(os.curdir))
 
@@ -16,7 +17,7 @@ class info(commands.Cog):
             with open("bot/localization/ru/commands.yml", 'r') as stream:
                 self.data = load(stream, Loader=Loader)
 
-    @commands.command(name='invite')
+    @slash_commands.command(name='invite')
     async def invite(self, ctx):
         full_url = self.data['info.invite.fullurl'].format(self.bot.user.id)
         low_url = self.data['info.invite.lowurl'].format(self.bot.user.id)
