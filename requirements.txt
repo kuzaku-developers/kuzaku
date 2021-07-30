@@ -17,6 +17,6 @@ gcloud
 requests_toolbelt
 gunicorn
 requests
-dislash.py
+discord-py-slash-command
 discord-components
 python-uptimerobot

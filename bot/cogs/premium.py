@@ -1,14 +1,18 @@
 import json
 import os
 import sys
-
+from main import slash
 import discord
 from discord.ext import commands
 from discord.ext.commands.core import Group
 from discord_components import Button, DiscordComponents, Select, SelectOption, ButtonStyle
+from discord_slash import SlashCommand
 from requests import post
+from discord_slash.utils.manage_components import wait_for_component
+from discord_slash.utils.manage_components import create_button, create_actionrow
+from discord_slash.model import ButtonStyle
 from utils.db import test
-
+from discord_slash import cog_ext
 rootdir=os.path.abspath(os.path.join(os.curdir))
 sys.path.append(f'{rootdir}/utils/')
 from discord.ext.commands import Command
@@ -69,7 +73,7 @@ class premium(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
 
-    @commands.group(name = "gold")
+    @cog_ext.cog_slash(name = "gold", description='Премиум!', guild_ids=[761991504793174117])
     @commands.guild_only()
     @cooldoown(1, 3, commands.BucketType.user, False)
     async def gold(self, ctx:commands.Context):
@@ -86,33 +90,18 @@ class premium(commands.Cog):
                 
             
                 embed=discord.Embed(title='Премиум', description='у вас нет премиума! Мы были бы признательны, если бы вы приобрели подиску и активировали бонус! Для этого нажмите на кнопку снизу! :з')
-                msg=await ctx.reply(embed=embed, components = [
-
-            Button(label = "Купить")
-
-        ])
-                interaction = await self.bot.wait_for("button_click", check = lambda i: i.component.label.startswith("Купить"))
-                await msg.edit(embed=embed, components = [
-
-            Button(disabled=True,label = "Купить")
-
-        ])
+                row=create_actionrow(
+                                        create_button(style=ButtonStyle.green, label="Купить"))
+                await ctx.send(embed=embed,  components=[row])
+                button_ctx: ComponentContext = await wait_for_component(self.bot, components=row)  
                 link=get_link(ctx, self.bot.user.name)
                 print(link)
                 if link=='что-то пошло не так! 404':
-                    await interaction.respond(content='что-то пошло не так! 404')
+                    await button_ctx.send(content='что-то пошло не так! 404', hidden=True)
                 else:
-                    await interaction.respond(content = "Отлично. Нажми на кнопку для оплаты", components = [
-
-                        Button(style=ButtonStyle.URL, label = "Оплата", url=link)
-
-
-                         ])
-                    await self.bot.wait_for("button_click", check = lambda i: i.component.label.startswith("Купить"))
-                    await interaction.edit(embed=embed, components = [Button(style=ButtonStyle.URL, label = "Купить", url=link, disabled=True)
-
-
-                         ])
+                    await button_ctx.send(content = "Отлично. Нажми на кнопку для оплаты", hidden=True,components = [create_actionrow(
+                                        create_button(style=ButtonStyle.URL, url=link, label="Оплата"))])
+                    
 
 
         else:
@@ -120,7 +109,6 @@ class premium(commands.Cog):
             
             await ctx.reply(embed=embed)
 
-    @commands.command(name='sendd')
-    async def sendd(self)
+
 def setup(bot:commands.Bot):
     bot.add_cog(premium(bot))

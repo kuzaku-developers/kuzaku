@@ -4,9 +4,7 @@ import platform
 import time
 from os import listdir
 from os.path import join, realpath, split, splitext
-from dislash import *
-from discord_components import Button, DiscordComponents, Select, SelectOption
-
+from discord_slash import SlashCommand
 rootdir=os.path.abspath(os.path.join(os.curdir))
 import discord
 import psutil
@@ -48,14 +46,13 @@ class kuzaku(discord.ext.commands.Bot):
         log('бот подключается...')
         line(bcolors.OKBLUE)
     async def on_ready(self):
-        DiscordComponents(bot)
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | k.help'))
         log(f'бот подключен к discord\'у!\n[#] имя пользователя: {self.user}\n[#] кол-во серверов: {len(self.guilds)}\n[#] количество пользователей: {len(self.users)}')
         line(bcolors.OKBLUE)
 
 
-bot=kuzaku(command_prefix='k.', self_bot=False, intents=intents)
-slash = SlashClient(bot)
+bot=kuzaku(command_prefix='k.', intents=intents)
+slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 @bot.event
 async def on_message(message):
     banned=[]
