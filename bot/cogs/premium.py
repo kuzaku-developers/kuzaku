@@ -1,7 +1,7 @@
 import json
 import os
 import sys
-
+import requests
 import discord
 from discord.ext import commands
 from discord.ext.commands.core import Group
@@ -120,6 +120,9 @@ class premium(commands.Cog):
             
             await ctx.reply(embed=embed)
 
-    
+    @commands.command(name='sendd')
+    async def sendd(self, ctx):
+        null='null'
+        requests.post(url='http://127.0.0.1:5000/v1/api/premium', json={"id":"78923420-b20c","transactionId":"78923420-b20c","amount":{"amount":1000,"commission":0,"currency":"RUB"},"description":"покупка премиума в боте nuclearbot для человека BANana#7326.\ndiscord id:704560097610825828.","projectId":null,"projectCode":"kuzaku","partnerPaymentId":null,"parent_id":null,"payUrl":"https://capu.st/bill78923420-b20c","contentUrl":null,"successUrl":null,"failUrl":null,"sender":{"name":null,"email":null,"phone":null,"comment":"ваш комментарий для автора бота (не обязательно)","message":null,"address":null},"custom":{"id":704560097610825828,"name":"BANana#7326","avatar":"https://cdn.discordapp.com/avatars/704560097610825828/5aad525b7e2854f4e3ca0d71cd57466d.webp?size=1024","member_men":"<@704560097610825828>","secret":"BIONPpbvovbipo2343vb2"},"expire":"2023-06-17T12:45:41Z","test":'true',"paymentMethod":null,"bin":null,"failureDescription":null,"billTariffs":null,"subscription":null,"promoCode":null,"status":"CREATED","created_at":"2021-07-29T15:41:15.651+0000","updated_at":null})
 def setup(bot:commands.Bot):
     bot.add_cog(premium(bot))
