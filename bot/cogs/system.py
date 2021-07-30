@@ -68,7 +68,7 @@ class system(commands.Cog):
         # Sending the output
         await inter.reply(embed=emb, hide_user_input=True)
 
-    @commands.command(name='stats')
+    @slash_commands.command(name='stats')
     async def stats(self, ctx):
         sec = int(round(time.time() - startTime))
         upt = (time.gmtime(sec))

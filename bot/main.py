@@ -4,7 +4,7 @@ import platform
 import time
 from os import listdir
 from os.path import join, realpath, split, splitext
-
+from dislash import *
 from discord_components import Button, DiscordComponents, Select, SelectOption
 
 rootdir=os.path.abspath(os.path.join(os.curdir))
@@ -55,6 +55,7 @@ class kuzaku(discord.ext.commands.Bot):
 
 
 bot=kuzaku(command_prefix='k.', self_bot=False, intents=intents)
+slash = SlashClient(bot)
 @bot.event
 async def on_message(message):
     banned=[]
