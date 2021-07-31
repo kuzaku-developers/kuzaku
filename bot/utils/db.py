@@ -4,13 +4,23 @@ if os.getenv('PRODUCTION')!="yes":
     import dotenv
     dotenv.find_dotenv()
 configfb = {
-    "apiKey": os.getenv('firebase_key'),
-    "authDomain": "142115676780.firebaseapp.com",
-    "databaseURL": "https://chatik-dcd54.firebaseio.com/",
-    "storageBucket": "chatik-dcd54.appspot.com"
+    "apiKey": os.getenv('fapiKey'),
+    "authDomain": os.getenv('fauthDomain'),
+    "databaseURL": os.getenv('fdatabaseURL'),
+    "storageBucket": os.getenv('fstorageBucket')
 }
 firebase = Firebase(configfb)
 db = firebase.database()
 
-def test():
-    print(db.child("prefix").get().val())
+def getdb():
+    return dict(db.child("db").get().val())
+
+def setdb(dbb):
+    db.child("db").set(dbb)
+
+def geteco(guildid, id):
+    return dict(db.child('db').child("eco").child(guildid).child(id).get().val())
+
+def seteco(guildid, id, xp, lvl, nextxp):
+    data={'xp':xp, 'lvl': lvl, 'nextxp': nextxp}
+    db.child("db").child('eco').child(guildid).child(id).set(data)

@@ -32,6 +32,15 @@ class bcolors:
 def line(color):
     print(f"{color}-----------")
 print(f"{bcolors.OKBLUE}-----------")
+print('''
+ __                             __               
+[  |  _                        [  |  _           
+ | | / ] __   _   ____   ,--.   | | / ] __   _   
+ | '' < [  | | | [_   ] `'_\ :  | '' < [  | | |  
+ | |`\ \ | \_/ |, .' /_ // | |, | |`\ \ | \_/ |, 
+[__|  \_]'.__.'_/[_____]\'-;__/[__|  \_]'.__.'_/                                             
+''')
+print(f"{bcolors.OKBLUE}-----------")
 def log(log):
     print(f'{bcolors.OKBLUE}[#] {log}')
 def warning(warn):

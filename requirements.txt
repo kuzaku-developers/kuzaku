@@ -20,3 +20,4 @@ requests
 discord-py-slash-command
 discord-components
 python-uptimerobot
+Pillow

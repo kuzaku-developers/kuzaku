@@ -3,7 +3,12 @@ import os
 import platform
 import time
 
-from dislash import Option, Type, slash_commands
+from discord_slash import SlashCommand
+from discord_slash.utils.manage_components import wait_for_component
+from discord_slash.utils.manage_components import create_button, create_actionrow
+from discord_slash.utils.manage_commands import create_option
+from discord_slash.model import ButtonStyle
+from discord_slash import cog_ext
 from yaml import load
 
 if platform.system() in ["Darwin", 'Windows']:
@@ -39,36 +44,8 @@ class system(commands.Cog):
             with open("bot/localization/ru/commands.yml", 'r') as stream:
                 self.data = load(stream, Loader=Loader)
 
-    @slash_commands.command(
-        description="Builds a custom embed",
-        options=[
-            Option('title', 'Makes the title of the embed', Type.STRING),
-            Option('desc', 'Makes the description', Type.STRING),
-            Option('color', 'The color of the embed', Type.STRING)
-
-            # Note that all args are optional
-            # because we didn't specify required=True in Options
-        ]
-    )
-    async def embed(self, inter, title=None, desc=None, color=None):
-        # Converting color
-        if color is not None:
-            try:
-                color = await commands.ColorConverter().convert(inter, color)
-            except:
-                color = None
-        if color is None:
-            color = discord.Color.default()
-        # Generating an embed
-        emb = discord.Embed(color=color)
-        if title is not None:
-            emb.title = title
-        if desc is not None:
-            emb.description = desc
-        # Sending the output
-        await inter.reply(embed=emb, hide_user_input=True)
-
-    @slash_commands.command(name='stats')
+    
+    @cog_ext.cog_slash(name='stats', description='Статистика бота')
     async def stats(self, ctx):
         sec = int(round(time.time() - startTime))
         upt = (time.gmtime(sec))
@@ -117,9 +94,9 @@ class system(commands.Cog):
         embed.add_field(name='задержка', value='позде')
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-        embed.set_footer(text=f'{ctx.prefix}stats | вызваал {ctx.author.name}', icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f'команда stats | вызваал {ctx.author}', icon_url=ctx.author.avatar_url)
 
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 def setup(bot):
     bot.add_cog(system(bot))
 """

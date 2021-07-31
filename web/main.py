@@ -30,7 +30,7 @@ def premium():
         'premium': 'True'
     }
     if request.json['custom']['secret']==os.getenv('apisecret'):
-        db.child("premium").child(request.json['custom']['id']).set(data)
+        db.child("db").child("premium").child(request.json['custom']['id']).set(data)
     else:
         return Response(status=401)
     # Webhook URL for your Discord channel.

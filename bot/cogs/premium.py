@@ -11,14 +11,12 @@ from requests import post
 from discord_slash.utils.manage_components import wait_for_component
 from discord_slash.utils.manage_components import create_button, create_actionrow
 from discord_slash.model import ButtonStyle
-from utils.db import test
 from discord_slash import cog_ext
 rootdir=os.path.abspath(os.path.join(os.curdir))
 sys.path.append(f'{rootdir}/utils/')
 from discord.ext.commands import Command
 from discord.ext.commands.cooldowns import (BucketType, Cooldown,
                                             CooldownMapping)
-from utils.db import test
 
 def get_link(ctx, botname):
     testli = 'true'
@@ -85,7 +83,7 @@ class premium(commands.Cog):
             ultimate=guild.get_role(869883527481667624)
             if silver in guild.get_member(ctx.author.id).roles or gold in guild.get_member(ctx.author.id).roles or diamond in guild.get_member(ctx.author.id).roles or ultimate in guild.get_member(ctx.author.id).roles:
                 embed=discord.Embed(title='Премиум', description='у вас есть премиум и вы можете его активровать! используйте k.gold use')
-                await ctx.reply(embed=embed)
+                await ctx.send(embed=embed)
             else:
                 
             
