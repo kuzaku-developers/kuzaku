@@ -1,2 +1,2 @@
 kuzaku: python3 bot/main.py
-web: gunicorn web.main:app
+web: gunicorn --worker-class quart.worker.GunicornWorker web.main:app
