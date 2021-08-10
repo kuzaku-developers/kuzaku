@@ -10,10 +10,11 @@ from discord_slash.utils.manage_commands import create_option
 from discord_slash.model import ButtonStyle
 from discord_slash import cog_ext
 from yaml import load
-
 if platform.system() in ["Darwin", 'Windows']:
     from utils.time import pickform, visdelta
+    from botconfig import botconfig
 elif platform.system() == 'Linux':
+    from bot.botconfig import botconfig
     from bot.utils.time import pickform, visdelta
 
 try:
@@ -38,10 +39,10 @@ class system(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
         if platform.system() in ["Darwin", 'Windows']:
-            with open(f"{rootdir}/bot/localization/ru/commands.yml", 'r') as stream:
+            with open(f"{rootdir}/bot/localization/ru/commands.yml", 'r', encoding='utf8') as stream:
                 self.data = load(stream, Loader=Loader)
         elif platform.system() == 'Linux':
-            with open("bot/localization/ru/commands.yml", 'r') as stream:
+            with open("bot/localization/ru/commands.yml", 'r', encoding='utf8') as stream:
                 self.data = load(stream, Loader=Loader)
 
     
@@ -58,7 +59,7 @@ class system(commands.Cog):
 
         embed=discord.Embed(title=self.data['system.stats.title'])
         g=Github()
-        repo=g.get_repo('The-Naomi-Developers/naomi-localization')
+        repo=g.get_repo('kuzaku-developers/kuzaku')
         commit=repo.get_commits().totalCount
         date=repo.get_commits()[0].commit.author.date
         date=date.strftime("%Y-%M-%d")
@@ -91,12 +92,27 @@ class system(commands.Cog):
 <:members:796455485506322493> всего людей: {ppl}
 :hourglass_flowing_sand: Аптайм: {visdelta(timee)}
 ''')
-        embed.add_field(name='задержка', value='позде')
+        embed.add_field(name='последний коммит', value=f'''
+```
+{repo.get_commits()[0].commit.message}
+```
+''')
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=f'команда stats | вызваал {ctx.author}', icon_url=ctx.author.avatar_url)
 
         await ctx.send(embed=embed)
+    
+    @cog_ext.cog_slash(name='devs', description='разработчики бота')
+    async def devs(self, ctx):
+        embed = discord.Embed(title='разработчики бота')
+        for i in botconfig['devs']:
+            embed.add_field(name=i, inline=False, value=f'''
+{botconfig['devs'][i]['description']} | {botconfig['devs'][i]['site']}
+        ''')
+        await ctx.send(embed=embed)
+
+
 def setup(bot):
     bot.add_cog(system(bot))
 """

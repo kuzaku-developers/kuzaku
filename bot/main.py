@@ -8,7 +8,7 @@ from discord_slash import SlashCommand
 rootdir=os.path.abspath(os.path.join(os.curdir))
 import discord
 import psutil
-from discord.ext import commands
+from discord.ext import commands, ipc
 
 from botconfig import botconfig
 
@@ -51,24 +51,24 @@ def error(error):
 class kuzaku(discord.ext.commands.Bot):
     def __init__(self, **options):
         super().__init__(**options)
+        self.ipc = ipc.Server(self, secret_key=os.getenv('ipckey'))
+
+    async def on_ipc_ready(self):
+        log("IPC сервер готов")
+
+    async def on_ipc_error(self, endpoint, error):
+        error(endpoint, "raised", error)
     async def on_connect(self):
         log('бот подключается...')
         line(bcolors.OKBLUE)
     async def on_ready(self):
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | k.help'))
-        log(f'бот подключен к discord\'у!\n[#] имя пользователя: {self.user}\n[#] кол-во серверов: {len(self.guilds)}\n[#] количество пользователей: {len(self.users)}')
+        log(f'бот подключен к discord\'у!\n[#] имя пользователя: {self.user}\n[#] id: {self.user.id}\n[#] кол-во серверов: {len(self.guilds)}\n[#] количество пользователей: {len(self.users)}')
         line(bcolors.OKBLUE)
 
 
 bot=kuzaku(command_prefix='k.', intents=intents)
 slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
-@bot.event
-async def on_message(message):
-    banned=[]
-    if str(message.author.id) in banned and message.content.startswith('k.'):
-        return await message.reply('ты забанен')
-        
-    await bot.process_commands(message)
 def load_ext(bot,dir):
     if platform.system() in ["Darwin", 'Windows']:
         for filename in os.listdir(f'{rootdir}/bot/cogs'):
@@ -91,7 +91,14 @@ def load_ext(bot,dir):
 load_ext(bot, 'cogs')
 line(bcolors.OKBLUE)
 bot.load_extension('jishaku')
+
+@bot.ipc.route()
+async def get_stats(data):
+    return {"status":"200", "message":"all is ok", "guilds":len(bot.guilds), "users":len(bot.users)}
+
+
 if __name__ == '__main__':
+    bot.ipc.start()
     bot.run(botconfig['token'])
 
 

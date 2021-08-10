@@ -12,10 +12,10 @@ class info(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
         if platform.system() in ["Darwin", 'Windows']:
-            with open(f"{rootdir}/bot/localization/ru/commands.yml", 'r') as stream:
+            with open(f"{rootdir}/bot/localization/ru/commands.yml", 'r', encoding='utf8') as stream:
                 self.data = load(stream, Loader=Loader)
         elif platform.system()=='Linux':
-            with open("bot/localization/ru/commands.yml", 'r') as stream:
+            with open("bot/localization/ru/commands.yml", 'r', encoding='utf8') as stream:
                 self.data = load(stream, Loader=Loader)
     @commands.guild_only()
     @cog_ext.cog_slash(name='invite',  description='Пригласить бота')

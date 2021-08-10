@@ -12,10 +12,9 @@ botconfig={
     "member_role_id":"868788263035498507",
     "log_channel_id":"869638984161189908",
     "devs":
-        {"banana": 
-            {'id':"704560097610825828",
+        {"BANana": 
+            {'site':"https://bananadev.ml",
             "description":"просто разработчик, который нашел смысл дискорда."}
-            
         },
     "token": os.getenv('BOTTOKEN')
 }

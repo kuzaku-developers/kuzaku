@@ -144,7 +144,7 @@ class Song:
                  .add_field(name='длительность', value=self.source.duration)
                  .add_field(name='запрошено', value=self.requester.mention)
                  .add_field(name='загрузчик', value='[{0.source.uploader}]({0.source.uploader_url})'.format(self))
-                 .add_field(name='URL', value='[Click]({0.source.url})'.format(self))
+                 .add_field(name='URL', value='[клик]({0.source.url})'.format(self))
                  .set_thumbnail(url=self.source.thumbnail))
         return embed
 

@@ -2,7 +2,7 @@ Pygithub
 DiscordBar
 jishaku
 icecream
-Flask
+quart
 PyYAML
 requests
 discord.py
@@ -19,5 +19,6 @@ gunicorn
 requests
 discord-py-slash-command
 discord-components
+discord-ext-ipc
 python-uptimerobot
 Pillow

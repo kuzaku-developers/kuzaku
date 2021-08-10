@@ -1,22 +1,27 @@
 import json
 import os
 import sys
-from main import slash
+
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands.core import Group
-from discord_components import Button, DiscordComponents, Select, SelectOption, ButtonStyle
-from discord_slash import SlashCommand
-from requests import post
-from discord_slash.utils.manage_components import wait_for_component
-from discord_slash.utils.manage_components import create_button, create_actionrow
+from discord_components import (Button, ButtonStyle, DiscordComponents, Select,
+                                SelectOption)
+from discord_slash import SlashCommand, cog_ext
 from discord_slash.model import ButtonStyle
-from discord_slash import cog_ext
+from discord_slash.utils.manage_components import (create_actionrow,
+                                                   create_button,
+                                                   wait_for_component)
+from main import slash
+from requests import post
+from utils.db import *
+
 rootdir=os.path.abspath(os.path.join(os.curdir))
 sys.path.append(f'{rootdir}/utils/')
 from discord.ext.commands import Command
 from discord.ext.commands.cooldowns import (BucketType, Cooldown,
                                             CooldownMapping)
+
 
 def get_link(ctx, botname):
     testli = 'true'
@@ -70,19 +75,20 @@ def cooldoown(rate, per, type=BucketType.default, premium: bool = False):
 class premium(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
+        #self.check_premium.start()
 
-    @cog_ext.cog_slash(name = "gold", description='Премиум!', guild_ids=[761991504793174117])
+    @cog_ext.cog_subcommand(base='ggold', name = "buy", description='Премиум!', guild_ids=[761991504793174117])
     @commands.guild_only()
     @cooldoown(1, 3, commands.BucketType.user, False)
-    async def gold(self, ctx:commands.Context):
-        guild = self.bot.get_guild(761991504793174117) # find ID by right clicking on server icon and choosing "copy id" at the bottom
+    async def ggold(self, ctx:commands.Context):
+        guild = self.bot.get_guild(761991504793174117)
         if guild.get_member(ctx.author.id):
             silver=guild.get_role(869122020447748137)
             gold=guild.get_role(869883325265874975)
             diamond=guild.get_role(869883434221330433)
             ultimate=guild.get_role(869883527481667624)
             if silver in guild.get_member(ctx.author.id).roles or gold in guild.get_member(ctx.author.id).roles or diamond in guild.get_member(ctx.author.id).roles or ultimate in guild.get_member(ctx.author.id).roles:
-                embed=discord.Embed(title='Премиум', description='у вас есть премиум и вы можете его активровать! используйте k.gold use')
+                embed=discord.Embed(title='Премиум', description='у вас есть премиум и вы можете его активровать! используйте /gold use')
                 await ctx.send(embed=embed)
             else:
                 
@@ -105,8 +111,15 @@ class premium(commands.Cog):
         else:
             embed=discord.Embed(title='Премиум', description='вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)')
             
-            await ctx.reply(embed=embed)
-
-
+            await ctx.send(embed=embed)
+    @cog_ext.cog_subcommand(base='ggold', name='use', description='использовать премиум', guild_ids=[761991504793174117])
+    async def use(self, ctx):
+        await ctx.send('lalalal')
+    
+    @tasks.loop(minutes=1)
+    async def check_premium(self):
+        for i in dict(getdb()['premium']):
+            print(i)
+    
 def setup(bot:commands.Bot):
     bot.add_cog(premium(bot))

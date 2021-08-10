@@ -18,8 +18,6 @@ class owner(commands.Cog):
     @commands.is_owner()
     @cog_ext.cog_slash(name='checkvoice', description='Проверить, играю ли я музыку.')
     async def check_voice_clients(self, ctx):
-        """Проверить, проигрывается ли где-то музыка в моем исполнении.
-        """
         active_voice_clients = [x.name for x in self.bot.guilds if x.voice_client]
         await ctx.send('В данный момент я проигрываю музыку на %s серверах.' % len(active_voice_clients), hidden=True)
 

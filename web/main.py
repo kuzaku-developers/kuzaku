@@ -3,9 +3,9 @@ from firebase import Firebase
 import requests
 import discord
 from discord import Webhook, RequestsWebhookAdapter
-from flask import Flask, request, Response
+from discord.ext import ipc
+from quart import Quart, render_template, request, session, redirect, url_for, Response
 import os
-from flask import Flask, redirect, render_template
 if os.getenv("PRODUCTION")!="yes":
     import dotenv
     dotenv.load_dotenv()
@@ -19,11 +19,12 @@ configfb = {
 
 firebase = Firebase(configfb)
 db = firebase.database()
-app = Flask(__name__)
+app = Quart(__name__)
+ipc_client = ipc.Client(secret_key=os.getenv("ipckey"))
 
 
-@app.route('/v1/api/premium',methods = ['POST'])
-def premium():
+@app.route('/api/v1/premium',methods = ['POST'])
+async def premium():
     print(request.json)
     print(request.json)
     data = {
@@ -43,24 +44,34 @@ def premium():
     webhook.send(embed=embed, username='покупка премиума', avatar_url=request.json['custom']['avatar'])
     return Response(status=200)
 
+@app.route('/api/v1/statistic/')
+async def test():
+    return await ipc_client.request("get_stats")
 
-@app.route('/v1/api/ping/')
-def ping():
+@app.route('/docs')
+async def docs():
+    return redirect('https://docs.kuzaku.ml')
+@app.route('/api/v1/ping/')
+async def ping():
     return {"code":"200","message":"bot is working!"}
 
-@app.route('/v1/api/')
-def api():
+@app.errorhandler(404)
+async def page_not_found(e):
+    return await render_template('404.html'), 404
+
+@app.route('/api/v1/')
+async def api():
     return {"code":"200","message":"api is working!"}
 
 @app.route('/')
-def main():
-    return render_template('index.html')
+async def main():
+    return await render_template('index.html')
 
 @app.route('/commands')
-def commands():
-    return render_template('commands.html')
+async def commands():
+    return await render_template('commands.html')
 @app.route('/invite/')
-def invite():
+async def invite():
     return redirect(f'https://google.com/')
 
 if os.getenv('PRODUCTION')!='yes':
