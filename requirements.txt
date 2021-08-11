@@ -15,7 +15,7 @@ python_jwt
 sseclient
 gcloud
 requests_toolbelt
-gunicorn
+hypercorn
 requests
 discord-py-slash-command
 discord-components
