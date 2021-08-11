@@ -92,5 +92,4 @@ async def commands():
 async def invite():
     return redirect(await app_dashboard.request("get_invite_url"))
 
-if os.getenv('PRODUCTION')!='yes':
-    app.run()
+app.run(host='0.0.0.0')
