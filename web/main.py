@@ -50,8 +50,10 @@ async def premium():
 
 @app.route('/api/v1/statistic/')
 async def test():
-    return await app_dashboard.request("get_stats")
-
+    if await app_dashboard.request("get_stats"):
+        return await app_dashboard.request("get_stats"), 200
+    else:
+        return {"code":"503","message":"bot is offline!"}, 503
 
 @app.route("/dash_handler", methods=["POST"])
 async def dash_handler():
@@ -68,7 +70,11 @@ async def docs():
     
 @app.route('/api/v1/ping/')
 async def ping():
-    return {"code":"200","message":"bot is working!"}
+    if await app_dashboard.request("get_stats"):
+        return {"code":"200","message":"bot is working!"}, 200
+    else:
+        return {"code":"503","message":"bot is offline!"}, 503
+
 
 @app.errorhandler(404)
 async def page_not_found(e):
@@ -76,7 +82,7 @@ async def page_not_found(e):
 
 @app.route('/api/v1/')
 async def api():
-    return {"code":"200","message":"api is working!"}
+    return {"code":"200","message":"api is working!"}, 200
 
 @app.route('/')
 async def main():
@@ -88,6 +94,11 @@ async def main():
 @app.route('/commands')
 async def commands():
     return await render_template('commands.html')
+
+@app.route('/status')
+async def status():
+    return await render_template('status.html')
+
 @app.route('/invite/')
 async def invite():
     return redirect(await app_dashboard.request("get_invite_url"))
