@@ -3,7 +3,7 @@ from firebase import Firebase
 import requests
 import discord
 from discord import Webhook, RequestsWebhookAdapter
-from discord.ext import ipc
+from discord.ext.dashboard import Server
 from quart import Quart, render_template, request, session, redirect, url_for, Response
 import os
 if os.getenv("PRODUCTION")!="yes":
@@ -20,8 +20,12 @@ configfb = {
 firebase = Firebase(configfb)
 db = firebase.database()
 app = Quart(__name__)
-ipc_client = ipc.Client(secret_key=os.getenv("ipckey"))
-
+app_dashboard = Server(
+	app,
+	os.getenv('ipckey'), 
+	webhook_url=os.getenv('webhook_ipc'),
+	sleep_time=1
+)
 
 @app.route('/api/v1/premium',methods = ['POST'])
 async def premium():
@@ -46,11 +50,22 @@ async def premium():
 
 @app.route('/api/v1/statistic/')
 async def test():
-    return await ipc_client.request("get_stats")
+    return await app_dashboard.request("get_stats")
+
+
+@app.route("/dash_handler", methods=["POST"])
+async def dash_handler():
+	# Don't worry about authorization, the bot will handle it
+    try:
+	    await app_dashboard.process_request(request)
+    except:
+        pass
+
 
 @app.route('/docs')
 async def docs():
     return redirect('https://docs.kuzaku.ml')
+    
 @app.route('/api/v1/ping/')
 async def ping():
     return {"code":"200","message":"bot is working!"}
@@ -65,14 +80,17 @@ async def api():
 
 @app.route('/')
 async def main():
-    return await render_template('index.html')
+    if await app_dashboard.request("get_stats"):
+        return await render_template('index.html', guilds=dict(await app_dashboard.request("get_stats"))['guilds'], users=dict(await app_dashboard.request("get_stats"))['users'], txtchannels=dict(await app_dashboard.request("get_stats"))['txtchannels'], voicechannels=dict(await app_dashboard.request("get_stats"))['voicechannels'])
+    else:
+        return await render_template('index.html', guilds='-', users='-', txtchannels='-', voicechannels='-')
 
 @app.route('/commands')
 async def commands():
     return await render_template('commands.html')
 @app.route('/invite/')
 async def invite():
-    return redirect(f'https://google.com/')
+    return redirect(await app_dashboard.request("get_invite_url"))
 
 if os.getenv('PRODUCTION')!='yes':
     app.run()

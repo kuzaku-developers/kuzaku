@@ -42,8 +42,16 @@ h3 {
 	text-align: center;
 }
 
+.stats {
+	text-align: center;
+}
+
 .devs .card {
 	background-color: var(--primary-color);
+}
+
+.stats .card {
+	background-color: #424242;
 }
 
 .devs i {

@@ -4,15 +4,19 @@ import platform
 import time
 from os import listdir
 from os.path import join, realpath, split, splitext
+
 from discord_slash import SlashCommand
-rootdir=os.path.abspath(os.path.join(os.curdir))
+
 import discord
+from discord import ChannelType
 import psutil
-from discord.ext import commands, ipc
+from discord.ext import commands
+from discord.ext.dashboard import Dashboard
 
 from botconfig import botconfig
 
 #
+rootdir=os.path.abspath(os.path.join(os.curdir))
 intents=discord.Intents.all()
 intents.members = True
 intents.guilds = True
@@ -51,13 +55,7 @@ def error(error):
 class kuzaku(discord.ext.commands.Bot):
     def __init__(self, **options):
         super().__init__(**options)
-        self.ipc = ipc.Server(self, secret_key=os.getenv('ipckey'))
 
-    async def on_ipc_ready(self):
-        log("IPC сервер готов")
-
-    async def on_ipc_error(self, endpoint, error):
-        error(endpoint, "raised", error)
     async def on_connect(self):
         log('бот подключается...')
         line(bcolors.OKBLUE)
@@ -65,9 +63,21 @@ class kuzaku(discord.ext.commands.Bot):
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | k.help'))
         log(f'бот подключен к discord\'у!\n[#] имя пользователя: {self.user}\n[#] id: {self.user.id}\n[#] кол-во серверов: {len(self.guilds)}\n[#] количество пользователей: {len(self.users)}')
         line(bcolors.OKBLUE)
+    async def on_message(self, message):
+	    await bot_dashboard.process_request(message)
 
 
 bot=kuzaku(command_prefix='k.', intents=intents)
+if os.getenv('PRODUCTION') == 'yes':
+    bot_dashboard = Dashboard(bot,
+	os.getenv('ipckey'), 
+	"https://kuzaku.ml/dash_handler"
+    )
+else:
+    bot_dashboard = Dashboard(bot,
+	os.getenv('ipckey'), 
+	"http://127.0.0.1:5000/dash_handler"
+    )
 slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 def load_ext(bot,dir):
     if platform.system() in ["Darwin", 'Windows']:
@@ -92,13 +102,24 @@ load_ext(bot, 'cogs')
 line(bcolors.OKBLUE)
 bot.load_extension('jishaku')
 
-@bot.ipc.route()
+@bot_dashboard.route
 async def get_stats(data):
-    return {"status":"200", "message":"all is ok", "guilds":len(bot.guilds), "users":len(bot.users)}
+    txtchannel_list = []
+    voicechannel_list = []
+    for guild in bot.guilds:
+        for channel in guild.channels:
+            if channel.type == ChannelType.text:
+                txtchannel_list.append(channel)
+            elif channel.type == ChannelType.voice:
+                voicechannel_list.append(channel)
+    return {"status":"200", "message":"all is ok", "guilds":str(len(bot.guilds)), "users":str(len(bot.users)), "txtchannels": str(len(txtchannel_list)), "voicechannels": str(len(voicechannel_list))}
+
+@bot_dashboard.route
+async def get_invite_url(data):
+    return f'https://discord.com/oauth2/authorize?client_id={bot.user.id}&scope=bot+applications.commands&permissions=473197655'
 
 
 if __name__ == '__main__':
-    bot.ipc.start()
     bot.run(botconfig['token'])
 
 
