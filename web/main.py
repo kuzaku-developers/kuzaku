@@ -92,4 +92,4 @@ async def commands():
 async def invite():
     return redirect(await app_dashboard.request("get_invite_url"))
 
-app.run(host='0.0.0.0')
+app.run(host='0.0.0.0', port=os.getenv("PORT", 5000))
