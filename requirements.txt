@@ -19,6 +19,6 @@ gunicorn
 requests
 discord-py-slash-command
 discord-components
-discord-ext-ipc
+discord-ext-dashboard
 python-uptimerobot
 Pillow
