@@ -66,7 +66,6 @@ class kuzaku(discord.ext.commands.Bot):
     async def on_message(self, message):
 	    await bot_dashboard.process_request(message)
 
-
 bot=kuzaku(command_prefix='k.', intents=intents)
 if os.getenv('PRODUCTION') == 'yes':
     bot_dashboard = Dashboard(bot,
