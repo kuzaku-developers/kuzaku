@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kuzaku дашбоард</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/static/materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="/static/materialize/extras/noUiSlider/nouislider.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block custom_styles %}{% endblock %}
+</head>
+
+{% macro card(title) -%}
+<div class="card" style="width: 60%;">
+    <div class="card-content white-text">
+        <span class="card-title">{{ title }}</span>
+        {{ caller() }}
+    </div>
+</div>
+{%- endmacro %}
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo left" style="margin-left: 15px;">Kuzaku</a>
+            <ul id="nav-mobile" class="right">
+                <li>
+                    <a class="dropdown-trigger valign-wrapper" href="#!" data-target="userDropdown">
+                        <img class="circle" src="{% block user_avatar %}{% endblock %}">
+                        <span>{% block username %}{% endblock %} <i class="material-icons right">arrow_drop_down</i></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul id="userDropdown" class="dropdown-content" style="width: 100px !important;">
+        <li><a style="width: 200px !important;" href="/dashboard"><span class="material-icons">dns</span> ваши сервера</a>
+        </li>
+        <li><a style="width: 200px !important;" href="/logout"><span class="material-icons">logout</span> выйти</a>
+        </li>
+    </ul>
+
+    <div class="flex-center">
+        <h2>{% block headline %}{% endblock %}</h2>
+        <h5>{% block description %}{% endblock %}</h5>
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="/static/materialize/js/materialize.min.js"></script>
+    <script src="/static/materialize/extras/noUiSlider/nouislider.min.js"></script>
+    <script src="/static/js/app.js"></script>
+    {% block custom_scripts %}{% endblock %}
+</body>
+</html>

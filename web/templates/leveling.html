@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "base.html" as base %}
+{% block username %} {{ user.name }} {% endblock %}
+{% block headline %} Leveling Settings {% endblock %}
+{% block description %} Change your preferences for the leveling system. {% endblock %}
+{% block user_avatar %} {{ user.avatar_url }} {% endblock %}
+{% block content %}
+    {% call base.card("Leveling system") %}
+        <div class="switch">
+            <label>
+                Disabled
+                <input type="checkbox">
+                <span class="lever"></span>
+                Enabled
+            </label>
+        </div>
+    {% endcall %}
+    
+    {% call base.card("XP rate") %}
+        <p>The bot will give users this amount of XP each minute they message.</p><br>
+        <div id="xp-slider"></div><br>
+        <a class="waves-effect waves-light btn">save</a>
+    {% endcall %}
+{% endblock %}
+
+{% block custom_scripts %}
+    <script>
+        var slider = document.getElementById('xp-slider');
+        noUiSlider.create(slider, {
+            start: [20, 80],
+            connect: true,
+            range: {
+                'min': 0,
+                'max': 100
+            }
+        });
+    </script>
+{% endblock %}

@@ -77,7 +77,7 @@ class premium(commands.Cog):
         self.bot = bot
         #self.check_premium.start()
 
-    @cog_ext.cog_subcommand(base='ggold', name = "buy", description='Премиум!', guild_ids=[761991504793174117])
+    @cog_ext.cog_subcommand(base='gold', name = "buy", description='Премиум!', guild_ids=[761991504793174117])
     @commands.guild_only()
     @cooldoown(1, 3, commands.BucketType.user, False)
     async def ggold(self, ctx:commands.Context):
@@ -112,7 +112,7 @@ class premium(commands.Cog):
             embed=discord.Embed(title='Премиум', description='вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)')
             
             await ctx.send(embed=embed)
-    @cog_ext.cog_subcommand(base='ggold', name='use', description='использовать премиум', guild_ids=[761991504793174117])
+    @cog_ext.cog_subcommand(base='gold', name='use', description='использовать премиум', guild_ids=[761991504793174117])
     async def use(self, ctx):
         await ctx.send('lalalal')
     

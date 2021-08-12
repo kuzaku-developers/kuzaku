@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "base.html" as base %}
+{% block username %} {{ user.name }} {% endblock %}
+{% block headline %} Morandi Dashboard {% endblock %}
+{% block description %} Click a module to see and change settings or use functions. {% endblock %}
+{% block user_avatar %} {{ user.avatar_url }} {% endblock %}
+{% block content %}
+    <div class="row container">
+        {% for module in modules %}
+            <div class="col m4 center">
+                <a class="module" href="/dashboard/{{ guild.id }}/{{ module.url }}">
+                    <div class="guild">
+                        <span class="material-icons">{{ module.icon }}</span>
+                        <p style="height: 100%; font-size: 150%;">{{ module.name }}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

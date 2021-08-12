@@ -2,9 +2,11 @@ import json
 from firebase import Firebase
 import requests
 import discord
+from functools import wraps
 from discord import Webhook, RequestsWebhookAdapter
 from discord.ext.dashboard import Server
 from quart import Quart, render_template, request, session, redirect, url_for, Response
+from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 import os
 if os.getenv("PRODUCTION")!="yes":
     import dotenv
@@ -15,17 +17,139 @@ configfb = {
     "databaseURL": os.getenv("fdatabaseURL"),
     "storageBucket": os.getenv("fstorageBucket")
 }
-
+modules = [
+    {
+        "name": "Leveling",
+        "url": "leveling",
+        "icon": "star_rate"
+    },
+    {
+        "name": "Bot Settings",
+        "url": "botsettings",
+        "icon": "smart_toy"
+    },
+    {
+        "name": "Role Reactions",
+        "url": "rolereactions",
+        "icon": "emoji_emotions"
+    },
+    {
+        "name": "Embeds",
+        "url": "embeds",
+        "icon": "chat"
+    },
+    {
+        "name": "Модерация",
+        "url": "moderation",
+        "icon": "storage"
+    }
+]
 
 firebase = Firebase(configfb)
 db = firebase.database()
 app = Quart(__name__)
+app.secret_key = os.getenv("apisecret")
+
+app.config["DISCORD_CLIENT_ID"] = 788834922340679700    # Discord client ID.
+app.config["DISCORD_CLIENT_SECRET"] = os.getenv("CSEC")          # Discord client secret.
+app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:5000/callback"                 # URL to your callback endpoint.
+app.config["DISCORD_BOT_TOKEN"] = os.getenv("BOTTOKEN")                    # Required to access BOT resources.
+discord = DiscordOAuth2Session(app)
 app_dashboard = Server(
 	app,
 	os.getenv('ipckey'), 
 	webhook_url=os.getenv('webhook_ipc'),
 	sleep_time=1
 )
+
+
+
+
+@app.route("/login/")
+async def login():
+    return await discord.create_session()
+
+@app.route("/callback")
+async def callback():
+    await discord.callback()
+    return redirect(url_for(".dashboard"))
+
+@app.errorhandler(Unauthorized)
+async def redirect_unauthorized(e):
+    return redirect(url_for("login"))
+
+
+@app.route("/dashboard")
+async def dashboard():
+    return redirect('/')
+    authorized = await discord.authorized
+    if authorized != True:
+        return redirect("/")
+    
+    guild_ids = await app_dashboard.request("get_mutual_guilds")
+    if not guild_ids:
+        return 'bot is offline'
+    user_guilds = await discord.fetch_guilds()
+    user = await discord.fetch_user()
+    admin_guilds = []
+    mutual_guilds = []
+
+    for guild in user_guilds:
+        if guild.permissions.administrator == True and guild.id not in guild_ids:
+            admin_guilds.append(guild)
+        elif guild.permissions.administrator == True and guild.id in guild_ids:
+            mutual_guilds.append(guild)
+
+    return await render_template("dashboard.html", admin_guilds=admin_guilds, mutual_guilds=mutual_guilds, user=user, config={'discord_client_id': '788834922340679700'})
+
+@app.route("/dashboard/<guild_id>")
+async def guild_dashboard(guild_id):
+    return redirect('/')
+    authorized = await discord.authorized
+    if authorized != True:
+        return redirect("/")
+
+    user = await discord.fetch_user()
+    guilds = await discord.fetch_guilds()
+
+    for guild in guilds:
+        if guild.id == int(guild_id):
+            return await render_template("guild-dashboard.html", guild=guild, user=user, modules=modules)
+
+@app.route("/dashboard/<guild_id>/<module>")
+async def guild_dashboard_leveling(guild_id, module):
+    return redirect('/')
+    authorized = await discord.authorized
+    if authorized != True:
+        return redirect("/")
+    
+    user = await discord.fetch_user()
+    guilds = await discord.fetch_guilds()
+
+    for guild in guilds:
+        if guild.id == int(guild_id):
+            return await render_template(f"{module}.html", guild=guild, user=user, config={})
+    
+    return redirect("/")
+
+@app.route("/api/settings/change/<guild_id>", methods=["POST"])
+async def api_change_setting(guild_id):
+    authorized = await discord.authorized
+    if authorized != True:
+        return "unauthorized"
+    
+    args = await request.form
+    callback = True #database.change_config(guild_id, args["item"], args["value"])
+    if callback == True:
+        return "done"
+    else:
+        return "error" 
+
+@app.route("/logout")
+async def logout():
+    discord.revoke()
+    return redirect("/")
+
 
 @app.route('/api/v1/premium',methods = ['POST'])
 async def premium():

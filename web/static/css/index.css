@@ -46,8 +46,18 @@ body {
 .showcase {
 	height: 700px;
 	position: relative;
+	background-color: #0084a5;
 }
-
+.trans {
+	background-image: linear-gradient(#0084a5, #0084a5, #424242);
+}
+svg {
+	width: 100%;
+	height: 100%;
+  }  
+.trans2 {
+	background-color: #0084a5;
+}
 .showcase h1 {
 	font-size: 40px;
 	position: center;
@@ -67,7 +77,7 @@ body {
 /* Panels */
 .features {
 	height: auto 500px;
-	margin: 50px 0;
+	background-color: #424242;
 }
 
 .features h3 {
