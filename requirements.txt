@@ -17,8 +17,8 @@ gcloud
 requests_toolbelt
 hypercorn
 requests
+Quart-Discord
 discord-py-slash-command
-discord-components
 git+https://github.com/BANanaD3V/discord-ext-dashboard.git
 python-uptimerobot
 Pillow

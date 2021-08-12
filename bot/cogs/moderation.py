@@ -11,15 +11,6 @@ from discord_slash import cog_ext
 class moderation(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
-    @cog_ext.cog_slash(name="test", guild_ids=[761991504793174117],
-            description="This is just a test command, nothing more.",
-            permissions={
-              761991504793174117: [
-                create_permission(704560097610825828, SlashCommandPermissionType.USER, False)
-              ]
-           })
-    async def test(self, ctx):
-        await ctx.send(content="Hello World!")
     @cog_ext.cog_slash(name='ban', description='Банит участника.',
         options=[
     create_option(

@@ -259,3 +259,6 @@ body {
         margin: 5px 0;
     }
 }
+::-webkit-scrollbar {
+    width: 0;
+  }

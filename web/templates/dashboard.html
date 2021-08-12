@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import "base.html" as base %}
+{% block username %} {{ user.name }} {% endblock %}
+{% block headline %} добавить kuzaku на сервер {% endblock %}
+{% block description %} вы можете добавить kuzaku на следующие сервера: {% endblock %}
+{% block user_avatar %} {{ user.avatar_url }} {% endblock %}
+{% block content %}
+    <div class="row container">
+        {% for guild in mutual_guilds %}
+            <div class="col m4 center">
+                <div class="guild">
+                    <img style="border-radius: 100%; width: 60%;" src="{{ guild.icon_url }}" onerror="this.onerror=null;this.src='/static/images/server.png'">
+                    <p style="height: 100%; font-size: 150%;">{{ guild.name }}</p>
+                    <a href="/dashboard/{{ guild.id }}" class="waves-effect waves-light btn">дашбоард</a>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% for guild in admin_guilds %}
+            <div class="col m4 center">
+                <div class="guild">
+                    <img style="border-radius: 100%; width: 60%;" src="{{ guild.icon_url }}" onerror="this.onerror=null;this.src='/static/images/server.png'">
+                    <p style="height: 100%; font-size: 150%;">{{ guild.name }}</p>
+                    <a target="_blank" href="https://discord.com/oauth2/authorize?client_id={{ config.discord_client_id }}&guild_id={{ guild.id }}&scope=bot&permissions=8" class="waves-effect waves-light btn invite">invite</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>    
+{% endblock %}

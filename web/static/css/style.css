@@ -1,0 +1,79 @@
+body {
+    background-color: #2C2F33;
+    color: #fff;
+}
+
+.flex-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    background: #23272A;
+}
+
+div.nav-wrapper {
+    background-color: #7289DA;
+}
+
+a {
+    background-color: #7289DA !important;
+    outline: 0 !important;
+}
+
+img {
+    width: 100% !important;
+    height: auto;
+}
+
+.guild {
+    width: 90%;
+    padding: 20px 0px 20px 0px !important;
+    background-color: #23272A !important;
+    border-radius: 20px;
+    margin-top: 30px;
+}
+
+.guild img {
+    width: 50% !important;
+}
+
+.guild span {
+    font-size: 350%;
+}
+
+.invite {
+    background-color: #99AAB5 !important;
+}
+
+a.module {
+    color: #fff;
+}
+
+a.module:hover {
+    color: #fff;
+}
+
+a.module div.guild {
+    transition: transform .2s;
+}
+
+a.module div.guild:hover {
+    transform: scale(1.1);
+}
+
+ul#userDropdown a {
+    background-color: #23272A !important;
+    color: #fff !important;
+}
+
+a.dropdown-trigger {
+    width: 200px !important;
+}
+
+a.dropdown-trigger img {
+    width: 25% !important;
+    margin-right: 5px;
+}
