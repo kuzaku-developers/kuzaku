@@ -111,7 +111,7 @@ async def get_stats(data):
                 txtchannel_list.append(channel)
             elif channel.type == ChannelType.voice:
                 voicechannel_list.append(channel)
-    return {"status":"200", "message":"all is ok", "guilds":str(len(bot.guilds)), "users":str(len(bot.users)), "txtchannels": str(len(txtchannel_list)), "voicechannels": str(len(voicechannel_list))}
+    return {"status":"200", "message":"all is ok", "guilds":str(len(bot.guilds)), "users":str(len(bot.users)), "txtchannels": str(len(txtchannel_list)), "voicechannels": str(len(voicechannel_list))}, 200
 
 @bot_dashboard.route
 async def get_invite_url(data):

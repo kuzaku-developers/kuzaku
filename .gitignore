@@ -9,3 +9,4 @@ launcher_pc.py
 .venv
 *.pyc
 **/*.pyc
+.pytest_cache
