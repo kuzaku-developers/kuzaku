@@ -52,7 +52,10 @@ app.secret_key = os.getenv("apisecret")
 
 app.config["DISCORD_CLIENT_ID"] = 788834922340679700    # Discord client ID.
 app.config["DISCORD_CLIENT_SECRET"] = os.getenv("CSEC")          # Discord client secret.
-app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:5000/callback"                 # URL to your callback endpoint.
+if os.getenv("PRODUCTION") == 'yes':
+    app.config["DISCORD_REDIRECT_URI"] = "https://kuzaku.ml/callback" 
+else:
+    app.config["DISCORD_REDIRECT_URI"] = "http://127.0.0.1:5000/callback"                 # URL to your callback endpoint.
 app.config["DISCORD_BOT_TOKEN"] = os.getenv("BOTTOKEN")                    # Required to access BOT resources.
 discord = DiscordOAuth2Session(app)
 app_dashboard = Server(
