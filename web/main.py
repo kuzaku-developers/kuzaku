@@ -72,7 +72,7 @@ async def login():
 @app.route("/callback")
 async def callback():
     await discord.callback()
-    return redirect(url_for(".dashboard"))
+    return redirect('/')
 
 @app.errorhandler(Unauthorized)
 async def redirect_unauthorized(e):
@@ -81,10 +81,10 @@ async def redirect_unauthorized(e):
 
 @app.route("/dashboard")
 async def dashboard():
-    return redirect('/')
+    return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
-        return redirect("/")
+        return redirect("/login")
     
     guild_ids = await app_dashboard.request("get_mutual_guilds")
     if not guild_ids:
@@ -118,7 +118,7 @@ async def guild_dashboard(guild_id):
 
 @app.route("/dashboard/<guild_id>/<module>")
 async def guild_dashboard_leveling(guild_id, module):
-    return redirect('/')
+    return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
         return redirect("/")
@@ -210,10 +210,17 @@ async def api():
 
 @app.route('/')
 async def main():
-    if await app_dashboard.request("get_stats"):
-        return await render_template('index.html', guilds=dict(await app_dashboard.request("get_stats"))['guilds'], users=dict(await app_dashboard.request("get_stats"))['users'], txtchannels=dict(await app_dashboard.request("get_stats"))['txtchannels'], voicechannels=dict(await app_dashboard.request("get_stats"))['voicechannels'])
+    authorized = await discord.authorized
+    if authorized != True:
+        dashbtnname='Войти'
+        user = None
     else:
-        return await render_template('index.html', guilds='-', users='-', txtchannels='-', voicechannels='-')
+        dashbtnname='Пользователь'
+        user = await discord.fetch_user()
+    if await app_dashboard.request("get_stats"):
+        return await render_template('index.html', guilds=dict(await app_dashboard.request("get_stats"))['guilds'], users=dict(await app_dashboard.request("get_stats"))['users'],  channels=dict(await app_dashboard.request("get_stats"))['channels'], dashbtnname=dashbtnname, user=user)
+    else:
+        return await render_template('index.html', guilds='0', users='0', channels='0', dashbtnname=dashbtnname, user=user)
 
 @app.route('/commands')
 async def commands():

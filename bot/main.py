@@ -103,20 +103,21 @@ bot.load_extension('jishaku')
 
 @bot_dashboard.route
 async def get_stats(data):
-    txtchannel_list = []
-    voicechannel_list = []
+    channels_list = []
     for guild in bot.guilds:
         for channel in guild.channels:
-            if channel.type == ChannelType.text:
-                txtchannel_list.append(channel)
-            elif channel.type == ChannelType.voice:
-                voicechannel_list.append(channel)
-    return {"status":"200", "message":"all is ok", "guilds":str(len(bot.guilds)), "users":str(len(bot.users)), "txtchannels": str(len(txtchannel_list)), "voicechannels": str(len(voicechannel_list))}
+            channels_list.append(channel)
+    return {"status":"200", "message":"all is ok", "guilds":str(len(bot.guilds)), "users":str(len(bot.users)), "channels": len(channels_list)}
 
 @bot_dashboard.route
 async def get_invite_url(data):
     return f'https://discord.com/oauth2/authorize?client_id={bot.user.id}&scope=bot+applications.commands&permissions=473197655'
-
+@bot_dashboard.route
+async def get_mutual_guilds(data):
+    guild_ids = []
+    for guild in bot.guilds:
+        guild_ids.append(guild.id)
+    return guild_ids
 
 if __name__ == '__main__':
     bot.run(botconfig['token'])

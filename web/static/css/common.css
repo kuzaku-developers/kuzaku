@@ -65,6 +65,11 @@ body {
     font-weight: 400;
     background-color: var(--secondary-color);
     border-bottom: var(--purple) 5px solid;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
 }
 
 .navbar ul {
@@ -88,7 +93,7 @@ body {
 }
 
 .navbar .flex {
-    justify-content: space-between;
+    justify-content: left;
 } 
 
 .navbar .logo {
@@ -106,7 +111,15 @@ body {
     padding: 0 2px;
     color: #ffffff;
 }
-
+.login-btn {
+    border: 2px solid #00d9ec !important;
+    font-size: 10px !important;
+    position: absolute;
+    right: 0;
+}
+.login-btn:hover {
+    background: #00d9ec !important;
+}
 /* Footer */
 .footer {
     border-top: var(--purple) 5px solid;
@@ -187,6 +200,10 @@ body {
     .navbar .logo img {
         height: 50px;
     }
+    .login-btn {
+        position: revert;
+        right: revert;
+    }  
 }
 
 @media (max-width: 450px) {
