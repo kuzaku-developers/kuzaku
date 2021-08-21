@@ -10,3 +10,4 @@ launcher_pc.py
 *.pyc
 **/*.pyc
 .pytest_cache
+ffmpeg.exe
