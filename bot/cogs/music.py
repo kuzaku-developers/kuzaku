@@ -395,8 +395,8 @@ class Music (commands.Cog):
         if not vc or not vc.is_connected():
             return await ctx.send('Я не подключена к голосовому каналу.', delete_after=20)
 
-        if not 0 < vol < 101:
-            return await ctx.send('Введите число от 1 до 100.')
+        if not 0 < vol < 201:
+            return await ctx.send('Введите число от 1 до 200.')
 
         player = self.get_player(ctx)
 
