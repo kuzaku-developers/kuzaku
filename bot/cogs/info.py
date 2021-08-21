@@ -33,7 +33,7 @@ class info(commands.Cog):
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=f'{ctx.author} | {self.bot.user}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
-    @cog_ext.cog_slash(name='server', description='Information abot server.', guild_ids =[761991504793174117])
+    @cog_ext.cog_slash(name='server', description='Information abot server.')
     @commands.guild_only()
     async def guild(self, ctx):
         """Информация о сервере.

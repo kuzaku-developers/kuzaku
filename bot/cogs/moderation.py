@@ -42,7 +42,7 @@ class moderation(commands.Cog):
         embed.set_footer(text=f'{ctx.author} | kuzaku#2021')
 
         await button_ctx.send(embed=embed)
-    @cog_ext.cog_slash(name='say', description='Бот что-то скажет!', guild_ids=[877890175252983828], 
+    @cog_ext.cog_slash(name='say', description='Бот что-то скажет!', 
         options=[
     create_option(
     name='текст',
@@ -60,7 +60,7 @@ class moderation(commands.Cog):
         await ctx.channel.send(text)
         embed= discord.Embed(title='Я сказала все, что могла!')
         await ctx.send(embed=embed, hidden=True)
-    @cog_ext.cog_slash(name='kick', guild_ids=[877890175252983828], description='Кикнет участника.',
+    @cog_ext.cog_slash(name='kick',  description='Кикнет участника.',
         options=[
     create_option(
     name='участник',
