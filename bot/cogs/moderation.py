@@ -42,8 +42,54 @@ class moderation(commands.Cog):
         embed.set_footer(text=f'{ctx.author} | kuzaku#2021')
 
         await button_ctx.send(embed=embed)
-    
+    @cog_ext.cog_slash(name='say', description='Бот что-то скажет!', guild_ids=[877890175252983828], 
+        options=[
+    create_option(
+    name='текст',
+    description='Текст, который сказать',
+    required=True,
+    option_type=3
+        )
+    ], connector={'текст':'text'})
+    @cog_ext.permission(guild_id=877890175252983828,
+                  permissions=[
+                    create_permission(704560097610825828, SlashCommandPermissionType.USER, False)
+                  ])
+    @commands.has_permissions(manage_messages=True)
+    async def say(self, ctx, text):
+        await ctx.channel.send(text)
+        embed= discord.Embed(title='Я сказала все, что могла!')
+        await ctx.send(embed=embed, hidden=True)
+    @cog_ext.cog_slash(name='kick', guild_ids=[877890175252983828], description='Кикнет участника.',
+        options=[
+    create_option(
+    name='участник',
+    description='Участник, которого кикнуть.',
+    required=True,
+    option_type=6
+        ),
+    create_option(
+    name='причина',
+    description='Причина кика. (не обязательна)',
+    required=False,
+    option_type=3
+        )
+            ], connector={'участник':'member', 'причина':'reason'})
+    @commands.has_permissions(kick_members=True)
+    async def kick(self, ctx, member, reason: str = 'Причина не указана.'):
+        embedd=discord.Embed(title='Точно кикать?', description=f'вы уверены, что хотите кикнуть пользователя {member.mention}? Тогда нажмите на кнопку!')
+        row=create_actionrow(
+                                        create_button(style=ButtonStyle.gray, emoji='✅'))
+        msg=await ctx.send(embed=embedd,  components=[row])
+        button_ctx: ComponentContext = await wait_for_component(self.bot, components=row)  
+        await msg.edit(embed=embedd, components=[create_actionrow(create_button(style=ButtonStyle.gray, emoji='✅', disabled=True))])
+        await ctx.guild.kick(user=member, reason=reason)
 
+        embed = discord.Embed(color=0x00ff00,
+                description=f'Пользователь {member.mention} кикнут!\nПричина: {reason}.')
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f'{ctx.author} | kuzaku#2021')
 
+        await button_ctx.send(embed=embed)
 def setup(bot:commands.Bot):
     bot.add_cog(moderation(bot))

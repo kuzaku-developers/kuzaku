@@ -24,3 +24,16 @@ def geteco(guildid, id):
 def seteco(guildid, id, xp, lvl, nextxp):
     data={'xp':xp, 'lvl': lvl, 'nextxp': nextxp}
     db.child("db").child('eco').child(guildid).child(id).set(data)
+def minusoneguild(userid):
+    data=dict(getdb()['premium'])[str(userid)]
+    data['count'] = str(int(data['count'])-1)
+    db.child("db").child('premium').child(str(userid)).set(data)
+def setsupporter(guildid, status):
+    if status:
+        data={'premium' : 'True'}
+        db.child("db").child('premium').child('guilds').child(guildid).set(data)
+def getpremium(guildid):
+    for i in dict(getdb()['premium'])['guilds']:
+        if str(i) == str(guildid):
+            return True
+        return False

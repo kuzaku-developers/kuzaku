@@ -61,7 +61,6 @@ class economy(commands.Cog):
             except:
                 seteco(message.guild.id, message.author.id, 0, 1, 100)
                 ecc=geteco(message.guild.id, message.author.id)
-            print(ecc['nextxp'])
             lenn=len((message.content))
             if lenn>=ecc['lvl']*10:
                 lenn=ecc['lvl']

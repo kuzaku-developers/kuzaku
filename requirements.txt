@@ -17,6 +17,7 @@ gcloud
 requests_toolbelt
 hypercorn
 requests
+python-socketio
 Quart-Discord
 discord-py-slash-command
 git+https://github.com/BANanaD3V/discord-ext-dashboard.git
