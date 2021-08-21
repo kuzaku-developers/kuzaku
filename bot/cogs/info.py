@@ -12,6 +12,8 @@ from discord_slash import cog_ext
 rootdir=os.path.abspath(os.path.join(os.curdir))
 
 class info(commands.Cog):
+    global data
+    data={}
     def __init__(self, bot):
         self.bot=bot
         if platform.system() in ["Darwin", 'Windows']:
@@ -21,7 +23,7 @@ class info(commands.Cog):
             with open("bot/localization/ru/commands.yml", 'r', encoding='utf8') as stream:
                 self.data = load(stream, Loader=Loader)
     @commands.guild_only()
-    @cog_ext.cog_slash(name='invite',  description='Пригласить бота')
+    @cog_ext.cog_slash(name='invite',  description='invite bot')
     async def invite(self, ctx):
         full_url = self.data['info.invite.fullurl'].format(self.bot.user.id)
         low_url = self.data['info.invite.lowurl'].format(self.bot.user.id)
@@ -31,7 +33,7 @@ class info(commands.Cog):
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=f'{ctx.author} | {self.bot.user}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
-    @cog_ext.cog_slash(name='server', description='Информация о сервере.', guild_ids =[761991504793174117])
+    @cog_ext.cog_slash(name='server', description='Information abot server.', guild_ids =[761991504793174117])
     @commands.guild_only()
     async def guild(self, ctx):
         """Информация о сервере.
@@ -41,9 +43,9 @@ class info(commands.Cog):
         embed.set_thumbnail(url=ctx.guild.icon_url)
         embed.set_footer(text=f"Запрошено {ctx.author}", icon_url=ctx.author.avatar_url)
         if getpremium(str(ctx.guild.id)):
-            embed.add_field(name="Осн. информация:", value=f":gem: | **На сервере __активен__ статус Kuzaku Premium.**\n\n:clock1: | Этот сервер создан **<t:{int(time.mktime(ctx.guild.created_at.timetuple()))}:R>** назад\n:flag_white: | Регион сервера: **{ctx.guild.region}**", inline=False)
+            embed.add_field(name=self.data['info.guild.embed.name'], value=self.data['info.guild.embed.maininfo.havepremium'].format(f'<t:{int(time.mktime(ctx.guild.created_at.timetuple()))}:R>', ctx.guild.region), inline=False)
         else:
-            embed.add_field(name="Осн. информация:", value=f"<:n4_no:701392095822479370> | **На сервере __не активен__ статус Kuzaku Premium.**\n\n:clock1: | Этот сервер создан **<t:{int(time.mktime(ctx.guild.created_at.timetuple()))}:R>** назад\n:flag_white: | Регион сервера: **{ctx.guild.region}**", inline=False)
+            embed.add_field(name=self.data['info.guild.embed.name'], value=self.data['info.guild.embed.maininfo.nopremium'].format(f'<t:{int(time.mktime(ctx.guild.created_at.timetuple()))}:R>', ctx.guild.region), inline=False)
             
         embed.add_field(name="Доп. информация:", value=f":page_facing_up: | Макс. размер вложений **{humanbytes(ctx.guild.filesize_limit)}**\n:id: | ID: `{ctx.guild.id}`", inline=False)
         embed.add_field(name="Каналы:", value=f":hash: | Всего каналов:\n- **{len(ctx.guild.channels)}**\n:dividers: | Категорий:\n- **{len(ctx.guild.categories)}**\n:pen_ballpoint: | Текстовых:\n- **{len(ctx.guild.text_channels)}**\n:loud_sound: | Голосовых:\n- **{len(ctx.guild.voice_channels)}**", inline=True)
