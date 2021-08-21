@@ -5,8 +5,6 @@ import sys
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands.core import Group
-from discord_components import (Button, ButtonStyle, DiscordComponents, Select,
-                                SelectOption)
 from discord_slash import SlashCommand, cog_ext
 from discord_slash.model import ButtonStyle
 from discord_slash.utils.manage_components import (create_actionrow,
@@ -29,7 +27,7 @@ def get_link(ctx, botname):
                    'Content-Type': 'application/json'}
     params = {
             "amount": {
-                "amount": 1000,
+                "amount": 2000,
                 "currency": "RUB"
             },
             "expire": "2023-06-17T15:45:41.000+03:00",
@@ -75,19 +73,17 @@ def cooldoown(rate, per, type=BucketType.default, premium: bool = False):
 class premium(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
-        #self.check_premium.start()
-
-    @cog_ext.cog_subcommand(base='gold', name = "buy", description='Премиум!', guild_ids=[761991504793174117])
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.check_premium.start()
+    @cog_ext.cog_subcommand(base='gold', name = "buy", description='Премиум!')
     @commands.guild_only()
     @cooldoown(1, 3, commands.BucketType.user, False)
-    async def ggold(self, ctx:commands.Context):
+    async def gold(self, ctx:commands.Context):
         guild = self.bot.get_guild(761991504793174117)
         if guild.get_member(ctx.author.id):
-            silver=guild.get_role(869122020447748137)
-            gold=guild.get_role(869883325265874975)
-            diamond=guild.get_role(869883434221330433)
-            ultimate=guild.get_role(869883527481667624)
-            if silver in guild.get_member(ctx.author.id).roles or gold in guild.get_member(ctx.author.id).roles or diamond in guild.get_member(ctx.author.id).roles or ultimate in guild.get_member(ctx.author.id).roles:
+            premium=guild.get_role(869122020447748137)
+            if premium in guild.get_member(ctx.author.id).roles:
                 embed=discord.Embed(title='Премиум', description='у вас есть премиум и вы можете его активровать! используйте /gold use')
                 await ctx.send(embed=embed)
             else:
@@ -112,14 +108,47 @@ class premium(commands.Cog):
             embed=discord.Embed(title='Премиум', description='вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)')
             
             await ctx.send(embed=embed)
-    @cog_ext.cog_subcommand(base='gold', name='use', description='использовать премиум', guild_ids=[761991504793174117])
+    @cog_ext.cog_subcommand(base='gold', name='use', description='использовать премиум')
     async def use(self, ctx):
-        await ctx.send('lalalal')
+        await ctx.defer()
+        if int(dict(getdb()['premium'])[str(ctx.author.id)]['count']) <= 0:
+            embed=discord.Embed(title='Активация!', description='Провал! У вас больше нет серверов для активации!')
+            await ctx.send(embed=embed)
+        else:
+            print(dict(getdb()['premium'])[str(ctx.author.id)]['count'])
+            if True:
+                print(dict(getdb()['premium'])['guilds'])
+                for i in dict(getdb()['premium'])['guilds']:
+                    if str(i) == str(ctx.guild.id):
+                        await ctx.send(embed=discord.Embed(title='Активация!', description='Провал! Премиум уже активирован!'))
+                        break
+                else:
+                    try:
+                        minusoneguild(ctx.author.id)
+                        setsupporter(str(ctx.guild.id), True)
+                        await ctx.send(embed=discord.Embed(title='Активация!', description='Успех! Премиум активирован!'))
+                    except Exception as e:
+                        await ctx.send(embed=discord.Embed(title='Активация!', description='Провал! Возникла неизвестная ошибка!'))
+                        print(e)
     
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=10)
     async def check_premium(self):
         for i in dict(getdb()['premium']):
-            print(i)
-    
+            if i != 'guilds' and dict(getdb()['premium'])[i]['premium']:
+                try:
+                    user=await self.bot.fetch_user(i)
+                    guild = self.bot.get_guild(761991504793174117)
+                    if user in guild.members:
+                        member=guild.get_member(user.id)
+                        premium=guild.get_role(869122020447748137)
+                        if not premium in guild.get_member(user.id).roles:
+                            await member.add_roles(premium)
+                        else:
+                            pass
+                            
+                except Exception as e:
+                    print(e)
+                    
+                        
 def setup(bot:commands.Bot):
     bot.add_cog(premium(bot))

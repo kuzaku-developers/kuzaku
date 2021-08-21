@@ -17,7 +17,7 @@ from botconfig import botconfig
 
 #
 rootdir=os.path.abspath(os.path.join(os.curdir))
-intents=discord.Intents.all()
+intents=discord.Intents.default()
 intents.members = True
 intents.guilds = True
 ver='0.0.1'
@@ -64,9 +64,10 @@ class kuzaku(discord.ext.commands.Bot):
         log(f'бот подключен к discord\'у!\n[#] имя пользователя: {self.user}\n[#] id: {self.user.id}\n[#] кол-во серверов: {len(self.guilds)}\n[#] количество пользователей: {len(self.users)}')
         line(bcolors.OKBLUE)
     async def on_message(self, message):
-	    await bot_dashboard.process_request(message)
+        await bot_dashboard.process_request(message)
+        await self.process_commands(message)
 
-bot=kuzaku(command_prefix='k.', intents=intents)
+bot=kuzaku(command_prefix='kk.', intents=intents)
 if os.getenv('PRODUCTION') == 'yes':
     bot_dashboard = Dashboard(bot,
 	os.getenv('ipckey'), 
@@ -87,7 +88,7 @@ def load_ext(bot,dir):
                     bot.load_extension(f'{dir}.{filename[:-3]}')
                     log(f'ког {filename[:-3]} загружен')
                 except Exception as e:
-                    log(f'загрузка кога {filename[:-3]} НЕ УДАЛАСЬ!\n[#] ошибка:\n{e}')
+                    error(f'загрузка кога {filename[:-3]} НЕ УДАЛАСЬ!\n[#] ошибка:\n{e}')
     elif platform.system()=='Linux':
         for filename in os.listdir(f'{os.curdir}/bot/cogs'):
             if filename.endswith('.py'):
@@ -96,10 +97,9 @@ def load_ext(bot,dir):
                     bot.load_extension(f'bot.cogs.{filename[:-3]}')
                     log(f'ког {filename[:-3]} загружен')
                 except Exception as e:
-                    log(f'загрузка кога {filename[:-3]} НЕ УДАЛАСЬ!\n[#] ошибка:\n{e}')
+                    error(f'загрузка кога {filename[:-3]} НЕ УДАЛАСЬ!\n[#] ошибка:\n{e}')
 load_ext(bot, 'cogs')
 line(bcolors.OKBLUE)
-bot.load_extension('jishaku')
 
 @bot_dashboard.route
 async def get_stats(data):

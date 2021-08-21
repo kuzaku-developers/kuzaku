@@ -159,7 +159,8 @@ async def premium():
     print(request.json)
     print(request.json)
     data = {
-        'premium': 'True'
+        'premium': 'True',
+        'count': '3'
     }
     if request.json['custom']['secret']==os.getenv('apisecret'):
         db.child("db").child("premium").child(request.json['custom']['id']).set(data)
