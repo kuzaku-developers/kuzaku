@@ -33,7 +33,9 @@ def setsupporter(guildid, status):
         data={'premium' : 'True'}
         db.child("db").child('premium').child('guilds').child(guildid).set(data)
 def getpremium(guildid):
+    print(dict(getdb()['premium'])['guilds'])
     for i in dict(getdb()['premium'])['guilds']:
+        print(i)
         if str(i) == str(guildid):
             return True
-        return False
+    return False
