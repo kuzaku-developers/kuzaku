@@ -187,5 +187,5 @@ class owner(commands.Cog):
             await ctx.send(f'**`Ошибка при перезагрузке модуля {cog}:`** \n{type(e).__name__} - {e}')
         else:
             await ctx.send(f'**`Модуль {cog} успешно перезагружен`**')
-def setup(bot:commands.Bot):
-    bot.add_cog(owner(bot))
+#def setup(bot:commands.Bot):
+    #bot.add_cog(owner(bot))

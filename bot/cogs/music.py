@@ -3,7 +3,7 @@
 
 import discord
 from discord.ext import commands
-
+from utils.db import getpremium
 import asyncio
 import itertools
 import sys
@@ -11,7 +11,14 @@ import traceback
 from async_timeout import timeout
 from functools import partial
 from youtube_dl import YoutubeDL
-
+from discord_slash import SlashCommand
+from discord_slash.utils.manage_commands import create_permission
+from discord_slash.model import SlashCommandPermissionType
+from discord_slash.utils.manage_components import wait_for_component
+from discord_slash.utils.manage_components import create_button, create_actionrow
+from discord_slash.utils.manage_commands import create_option
+from discord_slash.model import ButtonStyle
+from discord_slash import cog_ext
 from random import randint
 
 
@@ -121,18 +128,21 @@ class MusicPlayer:
         self.volume = .5
         self.current = None
 
-        ctx.bot.loop.create_task(self.player_loop())
+        ctx.bot.loop.create_task(self.player_loop(idd=ctx.guild.id))
 
-    async def player_loop(self):
+    async def player_loop(self, idd):
+        
         """Our main player loop."""
         await self.bot.wait_until_ready()
-
         while not self.bot.is_closed():
             self.next.clear()
 
             try:
-                # Wait for the next song. If we timeout cancel the player and disconnect...
-                async with timeout(300):  # 5 minutes...
+                if not getpremium(idd):
+                    # Wait for the next song. If we timeout cancel the player and disconnect...
+                    async with timeout(20):  # 5 minutes... 300
+                        source = await self.queue.get()
+                else:
                     source = await self.queue.get()
             except asyncio.TimeoutError:
                 return self.destroy(self._guild)
@@ -222,7 +232,7 @@ class Music (commands.Cog):
 
         return player
 
-    @commands.command(name='connect', aliases=['join'])
+    @cog_ext.cog_slash(name='connect', description='Joins the voice channel!')
     async def connect_(self, ctx, *, channel: discord.VoiceChannel=None):
         """Подключить меня к голосовому каналу. *Просто подключить? А пати?*
         Аргументы:
@@ -248,19 +258,19 @@ class Music (commands.Cog):
             try:
                 await vc.move_to(channel)
             except asyncio.TimeoutError:
-                raise VoiceConnectionError(
+                await ctx.send(
                         f':notes: Переход в канал <{channel}> не удался. TimeOut.')
         else:
             try:
                 await channel.connect()
             except asyncio.TimeoutError:
-                raise VoiceConnectionError(
+                await ctx.send(
                         f':notes: Подключение к каналу <{channel}> не удалось. TimeOut.')
 
         await ctx.send(f':notes: Голосовой канал: **{channel}**', delete_after=20)
 
-    @commands.command(name='play')
-    async def play_(self, ctx, *, search: str):
+    @cog_ext.cog_slash(name='play', description='Play some music!')
+    async def play_(self, ctx, *, song: str):
         """Запросить проигрывание музыки. *Мне надоело сидеть в тишине, го пати!*
         Аргументы:
         `:search` - название / ссылка YouTube
@@ -270,24 +280,22 @@ class Music (commands.Cog):
         n!play Nightcore - MayDay
         ```
         """
-        await ctx.trigger_typing()
-
+        await ctx.defer()
         vc = ctx.voice_client
 
         if not vc:
             await ctx.invoke(self.connect_)
 
         player = self.get_player(ctx)
-
         # If download is False, source will be a dict which will be used later to
         # regather the stream. If download is True, source will be
         # a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop,
+        source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop,
                                                 download=False)
 
         await player.queue.put(source)
 
-    @commands.command(name='pause')
+    @cog_ext.cog_slash(name='pause', description='Pause the music. IM AFK!!1111!1')
     async def pause_(self, ctx):
         """Поставить проигрыватель на паузу. *Я афк!11*
         """
@@ -302,7 +310,7 @@ class Music (commands.Cog):
         vc.pause()
         await ctx.send(f'**`{ctx.author}`** поставил проигрыватель на паузу.')
 
-    @commands.command(name='resume')
+    @cog_ext.cog_slash(name='resume', description='Resume music. Wait, don\'t stop cool music!')
     async def resume_(self, ctx):
         """Снять проигрыватель с паузы. *А? Кто-то отходил?*
         """
@@ -317,7 +325,7 @@ class Music (commands.Cog):
         vc.resume()
         await ctx.send(f'**`{ctx.author}`** снял проигрыватель с паузы.')
 
-    @commands.command(name='skip')
+    @cog_ext.cog_slash(name='skip', description='I don\'t like this song!')
     async def skip_(self, ctx):
         """Перейти к следующему треку в очереди. *Мне надоела эта песня!*
         """
@@ -335,7 +343,7 @@ class Music (commands.Cog):
         vc.stop()
         await ctx.send(f'**`{ctx.author}`** пропустил текущий трек.')
 
-    @commands.command(name='queue', aliases=['q', 'playlist'])
+    @cog_ext.cog_slash(name='queue', description='What will play next? oh no, rickro...')
     async def queue_info(self, ctx):
         """Отобразить список песен в очереди. *А что будет играть дальше?...*
         """
@@ -356,7 +364,7 @@ class Music (commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name='playing', aliases=['currentsong'])
+    @cog_ext.cog_slash(name='playing', description='hey, what is playing? its a good song!')
     async def now_playing_(self, ctx):
         """Информация о проигрываемой песне. *Крутая песня! Как называется?*
         """
@@ -379,8 +387,8 @@ class Music (commands.Cog):
         player.np = await ctx.send(f'**Проигрывается:** `{vc.source.title}` '
                                    f'Запросил: `{vc.source.requester}`')
 
-    @commands.command(name='volume', aliases=['vol'])
-    async def change_volume(self, ctx, *, vol: float):
+    @cog_ext.cog_slash(name='volume', description='You need loudy music? OK!')
+    async def change_volume(self, ctx, *, volume: float):
         """Изменить громкость проигрывателя. *Нужно еще громче?? Пожалуйста!*
         Аргументы:
         `:vol` - процент громкости
@@ -395,18 +403,18 @@ class Music (commands.Cog):
         if not vc or not vc.is_connected():
             return await ctx.send('Я не подключена к голосовому каналу.', delete_after=20)
 
-        if not 0 < vol < 201:
-            return await ctx.send('Введите число от 1 до 200.')
+        if not 0 < vol < 401:
+            return await ctx.send('Введите число от 1 до 400.')
 
         player = self.get_player(ctx)
 
         if vc.source:
-            vc.source.volume = vol / 100
+            vc.source.volume = volume / 100
 
-        player.volume = vol / 100
-        await ctx.send(f'**`{ctx.author}`** установил громкость проигрывателя на **{vol}%**')
+        player.volume = volume / 100
+        await ctx.send(f'**`{ctx.author}`** установил громкость проигрывателя на **{volume}%**')
 
-    @commands.command(name='stop')
+    @cog_ext.cog_slash(name='stop', description='Stop music! wait... you don\'t like it?')
     async def stop_(self, ctx):
         """Остановить проигрывание. Это так же очистит очередь песен.
         """
@@ -419,7 +427,7 @@ class Music (commands.Cog):
         await self.cleanup(ctx.guild)
         await ctx.send(':notes: Успешно выполнено.', delete_after=20)
 
-    reactions = {'🔊': 'Начать проигрывание',
+    reactions = { #'🔊': 'Начать проигрывание',
                  '⏹': 'Остановить проигрывание',
                  '⏸': 'Поставить проигрыватель на паузу',
                  '▶': 'Возобновить проигрывание',
@@ -427,7 +435,7 @@ class Music (commands.Cog):
                  '🗂': 'Отобразить список песен в очереди',
                  '🔗': 'Подключить меня к каналу'}
 
-    @commands.command(name='musmenu', aliases=['music', 'muscontrol', 'playmenu'])
+    @cog_ext.cog_slash(name='musmenu', description='Open reactions menu! Its cool!')
     async def call_menu_(self, ctx):
         embed = discord.Embed(title='Контроллер проигрывателя.')
         paginator = commands.Paginator(prefix='',suffix='')
@@ -439,7 +447,6 @@ class Music (commands.Cog):
             embed.add_field(name='Описание реакций', value=page)
 
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-        embed.set_footer(text=f'{ctx.prefix}{ctx.command}')
 
         m = await ctx.send(embed=embed)
 
@@ -458,7 +465,7 @@ class Music (commands.Cog):
 
             while True:
                 r, u = await self.bot.wait_for('reaction_add', check=check)
-                if str(r) == '🔊':
+                '''if str(r) == '🔊':
                     def msg_chk(m):
                         return m.author.id == ctx.author.id
 
@@ -471,7 +478,7 @@ class Music (commands.Cog):
 
                     except asyncio.TimeOutError:
                         return await ctx.send(':notes: Отменено - время ожидания ответа вышло.',
-                                              delete_after=15)
+                                              delete_after=15)'''
 
                 if str(r) == '⏹':
                     await ctx.invoke(self.stop_)
