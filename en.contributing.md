@@ -16,4 +16,4 @@ Our commits are based on [conventional commits](https://conventionalcommits.org)
 ### Examples:
 1. <strike>updated clear command</strike> ❌ Commit message is too inaccurate and not conventional.
 2. <strike>chore(moderation): i did some changes to clear command</strike> ❌ Commit message does not include any useful information, and it's written in Simple Past.
-3. **chore(moderation): make second argumentin clear command  optional** ✅ Everything is perfect!
+3. **chore(moderation): make second argument in clear command optional** ✅ Everything is perfect!

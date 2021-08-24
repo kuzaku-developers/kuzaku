@@ -403,7 +403,7 @@ class Music (commands.Cog):
         if not vc or not vc.is_connected():
             return await ctx.send('Я не подключена к голосовому каналу.', delete_after=20)
 
-        if not 0 < vol < 401:
+        if not 0 < volume < 401:
             return await ctx.send('Введите число от 1 до 400.')
 
         player = self.get_player(ctx)

@@ -4,7 +4,6 @@ import platform
 import time
 from os import listdir
 from os.path import join, realpath, split, splitext
-
 from discord_slash import SlashCommand
 
 import discord
