@@ -51,10 +51,6 @@ class moderation(commands.Cog):
     option_type=3
         )
     ], connector={'текст':'text'})
-    @cog_ext.permission(guild_id=877890175252983828,
-                  permissions=[
-                    create_permission(704560097610825828, SlashCommandPermissionType.USER, False)
-                  ])
     @commands.has_permissions(manage_messages=True)
     async def say(self, ctx, text):
         await ctx.channel.send(text)
