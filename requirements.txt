@@ -15,6 +15,7 @@ python_jwt
 sseclient
 gcloud
 requests_toolbelt
+dotenv
 hypercorn
 requests
 python-socketio
