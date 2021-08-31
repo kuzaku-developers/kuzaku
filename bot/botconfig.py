@@ -15,7 +15,7 @@ botconfig={
         {"BANana": 
             {'site':"https://bananadev.ml",
             "description":"просто разработчик, который нашел смысл дискорда."},
-        "Una espanola": 
+        "Zote": 
             {'site':"https://misha-python.ml",
             "description":"урна"
             },
