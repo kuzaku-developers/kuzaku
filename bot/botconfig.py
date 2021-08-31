@@ -14,7 +14,11 @@ botconfig={
     "devs":
         {"BANana": 
             {'site':"https://bananadev.ml",
-            "description":"просто разработчик, который нашел смысл дискорда."}
+            "description":"просто разработчик, который нашел смысл дискорда."},
+        "Una espanola": 
+            {'site':"https://misha-python.ml",
+            "description":"урна"
+            },
         },
     "token": os.getenv('BOTTOKEN')
 }
