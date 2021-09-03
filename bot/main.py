@@ -5,7 +5,7 @@ import time
 from os import listdir
 from os.path import join, realpath, split, splitext
 from discord_slash import SlashCommand
-
+from discordTogether import DiscordTogether
 import discord
 from discord import ChannelType
 import psutil
