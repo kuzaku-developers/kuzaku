@@ -54,7 +54,7 @@ def error(error):
 class kuzaku(discord.ext.commands.Bot):
     def __init__(self, **options):
         super().__init__(**options)
-	self.together = DiscordTogether (self, debug = True)
+        self.together = DiscordTogether (self)
     async def on_connect(self):
         log('бот подключается...')
         line(bcolors.OKBLUE)
