@@ -140,7 +140,7 @@ class MusicPlayer:
             try:
                 if not getpremium(idd):
                     # Wait for the next song. If we timeout cancel the player and disconnect...
-                    async with timeout(20):  # 5 minutes... 300
+                    async with timeout(300):  # 5 minutes... 300
                         source = await self.queue.get()
                 else:
                     source = await self.queue.get()
@@ -190,7 +190,6 @@ class Music (commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.players = {}
-
     async def cleanup(self, guild):
         try:
             await guild.voice_client.disconnect()
@@ -218,8 +217,6 @@ class Music (commands.Cog):
         elif isinstance(error, InvalidVoiceChannel):
             await ctx.send('Не удалось подключиться к голосовому каналу. '
                            'Проверьте, в доступном ли для меня голосовом канале вы находитесь.')
-
-        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     def get_player(self, ctx):
@@ -248,7 +245,7 @@ class Music (commands.Cog):
             try:
                 channel = ctx.author.voice.channel
             except AttributeError:
-                raise InvalidVoiceChannel(':notes: Вы не подключены к голосовому каналу.')
+                return await ctx.send(':notes: Вы не подключены к голосовому каналу.')
 
         vc = ctx.voice_client
 
@@ -290,8 +287,11 @@ class Music (commands.Cog):
         # If download is False, source will be a dict which will be used later to
         # regather the stream. If download is True, source will be
         # a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop,
+        try:
+            source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop,
                                                 download=False)
+        except Exception as e:
+            print(e)
 
         await player.queue.put(source)
 

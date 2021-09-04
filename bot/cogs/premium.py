@@ -48,7 +48,6 @@ def get_link(ctx, botname):
     req = post('https://api.capusta.space/v1/partner/payment', headers=headers, json=params)
     try:
         if json.loads(req.text)['status'] != '404':
-            print(req.text)
             jsons = json.loads(req.text)
             if jsons["payUrl"]:
                 return jsons["payUrl"]
@@ -95,7 +94,6 @@ class premium(commands.Cog):
                 await ctx.send(embed=embed,  components=[row])
                 button_ctx: ComponentContext = await wait_for_component(self.bot, components=row)  
                 link=get_link(ctx, self.bot.user.name)
-                print(link)
                 if link=='что-то пошло не так! 404':
                     await button_ctx.send(content='что-то пошло не так! 404', hidden=True)
                 else:
@@ -115,9 +113,8 @@ class premium(commands.Cog):
             embed=discord.Embed(title='Активация!', description='Провал! У вас больше нет серверов для активации!')
             await ctx.send(embed=embed)
         else:
-            print(dict(getdb()['premium'])[str(ctx.author.id)]['count'])
             if True:
-                print(dict(getdb()['premium'])['guilds'])
+
                 for i in dict(getdb()['premium'])['guilds']:
                     if str(i) == str(ctx.guild.id):
                         await ctx.send(embed=discord.Embed(title='Активация!', description='Провал! Премиум уже активирован!'))
@@ -129,7 +126,6 @@ class premium(commands.Cog):
                         await ctx.send(embed=discord.Embed(title='Активация!', description='Успех! Премиум активирован!'))
                     except Exception as e:
                         await ctx.send(embed=discord.Embed(title='Активация!', description='Провал! Возникла неизвестная ошибка!'))
-                        print(e)
     
     @tasks.loop(minutes=10)
     async def check_premium(self):
@@ -147,7 +143,7 @@ class premium(commands.Cog):
                             pass
                             
                 except Exception as e:
-                    print(e)
+                    ...
                     
                         
 def setup(bot:commands.Bot):

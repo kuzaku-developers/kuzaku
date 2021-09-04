@@ -28,7 +28,6 @@ class economy(commands.Cog):
         try:
             ecc=geteco(ctx.guild.id, member.id)
         except Exception as e:
-            print(e)
             seteco(ctx.guild.id, member.id, 0, 1, 100)
             ecc=geteco(ctx.guild.id, member.id)
         lvl=ecc['lvl']

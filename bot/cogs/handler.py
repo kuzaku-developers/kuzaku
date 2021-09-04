@@ -78,7 +78,6 @@ class EventCog(commands.Cog):
             return await ctx.send(embed=embed)
 
         elif isinstance(error, commands.CheckFailure):
-            print(error.__module__)
             if not isinstance(error, commands.errors.NSFWChannelRequired):
                 if isinstance(error, discord.ext.commands.errors.MissingPermissions):
                     embed = discord.Embed(color=0xFF0000, ).set_author(

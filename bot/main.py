@@ -1,20 +1,19 @@
 #imports
+import datetime
 import os
 import platform
 import time
 from os import listdir
 from os.path import join, realpath, split, splitext
-from discord_slash import SlashCommand
-from discordTogether import DiscordTogether
 import discord
-from discord import ChannelType
 import psutil
+from discord import ChannelType
 from discord.ext import commands
 from discord.ext.dashboard import Dashboard
-
+from discord_slash import SlashCommand
+from discordTogether import DiscordTogether
 from botconfig import botconfig
 
-#
 rootdir=os.path.abspath(os.path.join(os.curdir))
 intents=discord.Intents.default()
 intents.members = True
@@ -31,37 +30,46 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    YELLOW = '\033[1;33;40m'
 
-def line(color):
-    print(f"{color}-----------")
-print(f"{bcolors.OKBLUE}-----------")
-print('''
- __                             __               
-[  |  _                        [  |  _           
- | | / ] __   _   ____   ,--.   | | / ] __   _   
- | '' < [  | | | [_   ] `'_\ :  | '' < [  | | |  
- | |`\ \ | \_/ |, .' /_ // | |, | |`\ \ | \_/ |, 
-[__|  \_]'.__.'_/[_____]\'-;__/[__|  \_]'.__.'_/                                             
-''')
-print(f"{bcolors.OKBLUE}-----------")
-def log(log):
-    print(f'{bcolors.OKBLUE}[#] {log}')
-def warning(warn):
-    print(f'{bcolors.WARNING}[!] {warn}')
-def error(error):
-    print(f'{bcolors.FAIL}{error}')
+
+
+
+def log (*msg):
+    def _ (msg):
+        print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+    list(map (_, msg))
+def warning(*msg):
+    def _ (msg):
+        print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.WARNING} | ALERT | {bcolors.HEADER}{msg}')
+    list(map (_, msg))
+def error(*msg):
+    def _ (msg):
+        print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+    list(map (_, msg))
 
 class kuzaku(discord.ext.commands.Bot):
     def __init__(self, **options):
         super().__init__(**options)
-        self.together = DiscordTogether (self)
-    async def on_connect(self):
-        log('бот подключается...')
-        line(bcolors.OKBLUE)
+        self.together = DiscordTogether(self)
+    def log (self, *msg):
+        def _ (msg):
+            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+        list(map (_, msg))
+    def warning(self, *msg):
+        def _ (msg):
+            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.WARNING} | ALERT | {bcolors.HEADER}{msg}')
+        list(map (_, msg))
+    def error(self, *msg):
+        def _ (msg):
+            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}|{bcolors.HEADER}{msg}')
+        list(map (_, msg))
+
     async def on_ready(self):
-        await self.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | k.help'))
-        log(f'бот подключен к discord\'у!\n[#] имя пользователя: {self.user}\n[#] id: {self.user.id}\n[#] кол-во серверов: {len(self.guilds)}\n[#] количество пользователей: {len(self.users)}')
-        line(bcolors.OKBLUE)
+        sec = int(round(time.time() - startTime))
+        await self.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | k.help'))
+        self.log(f'<main> :: Bot info', f'  {self.user} started successfully in {sec} seconds')
+        load_ext(bot, 'cogs')
     async def on_message(self, message):
         await bot_dashboard.process_request(message)
         await self.process_commands(message)
@@ -79,27 +87,27 @@ else:
     )
 slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 def load_ext(bot,dir):
+    log('<main> :: Cogs loader')
+    log(f'  Loading \'{dir}/*\' ...')
     if platform.system() in ["Darwin", 'Windows']:
         for filename in os.listdir(f'{rootdir}/bot/cogs'):
             if filename.endswith('.py'):
-                log(f'загружаю ког {filename[:-3]}')
+                #log(f'trying to load cog {filename[:-3]}')
                 try:
                     bot.load_extension(f'{dir}.{filename[:-3]}')
-                    log(f'ког {filename[:-3]} загружен')
+                    log(f'  loaded: {dir}/{filename[:-3]}')
                 except Exception as e:
-                    error(f'загрузка кога {filename[:-3]} НЕ УДАЛАСЬ!\n[#] ошибка:\n{e}')
+                    error(f'  not loaded: {dir}/{filename[:-3]}', f'  error: {e}')
     elif platform.system()=='Linux':
         for filename in os.listdir(f'{os.curdir}/bot/cogs'):
             if filename.endswith('.py'):
-                log(f'загружаю ког {filename[:-3]}')
+                #log(f'trying to load cog {filename[:-3]}')
                 try:
                     bot.load_extension(f'bot.cogs.{filename[:-3]}')
-                    log(f'ког {filename[:-3]} загружен')
+                    log(f'  loaded: {dir}/{filename[:-3]}')
                 except Exception as e:
-                    error(f'загрузка кога {filename[:-3]} НЕ УДАЛАСЬ!\n[#] ошибка:\n{e}')
-load_ext(bot, 'cogs')
-line(bcolors.OKBLUE)
-
+                    error(f'  not loaded: {dir}/{filename[:-3]}', f'  error: {e}')
+    log('<main> :: Bot', '  Bot is ready to use')
 @bot_dashboard.route
 async def get_stats(data):
     channels_list = []
@@ -119,6 +127,17 @@ async def get_mutual_guilds(data):
     return guild_ids
 
 if __name__ == '__main__':
+    print('''
+ __                             __               
+[  |  _                        [  |  _           
+ | | / ] __   _   ____   ,--.   | | / ] __   _   
+ | '' < [  | | | [_   ] `'_\ :  | '' < [  | | |  
+ | |`\ \ | \_/ |, .' /_ // | |, | |`\ \ | \_/ |, 
+[__|  \_]'.__.'_/[_____]\-;__/[__|  \_]'.__.'_/   
+
+                                       
+        ﹝ kuzaku - the discord bot ﹞
+''')
     bot.run(botconfig['token'])
 
 
