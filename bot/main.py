@@ -37,15 +37,24 @@ class bcolors:
 
 def log (*msg):
     def _ (msg):
-        print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+        if os.getenv('DONTUSECOLORS') != 'yes':
+            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+        else: 
+            print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  LOG  | {msg}')
     list(map (_, msg))
 def warning(*msg):
     def _ (msg):
-        print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.WARNING} | ALERT | {bcolors.HEADER}{msg}')
+        if os.getenv('DONTUSECOLORS') != 'yes':
+            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.WARNING} | ALERT | {bcolors.HEADER}{msg}')
+        else:
+            print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ALERT | {msg}')
     list(map (_, msg))
 def error(*msg):
     def _ (msg):
-        print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+        if os.getenv('DONTUSECOLORS') != 'yes':
+            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+        else:
+            print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ERROR | {msg}')
     list(map (_, msg))
 
 class kuzaku(discord.ext.commands.Bot):
@@ -54,15 +63,24 @@ class kuzaku(discord.ext.commands.Bot):
         self.together = DiscordTogether(self)
     def log (self, *msg):
         def _ (msg):
-            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+            if os.getenv('DONTUSECOLORS') != 'yes':
+                print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+            else: 
+                print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  LOG  | {msg}')
         list(map (_, msg))
     def warning(self, *msg):
         def _ (msg):
-            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.WARNING} | ALERT | {bcolors.HEADER}{msg}')
+            if os.getenv('DONTUSECOLORS') != 'yes':
+                print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.WARNING} | ALERT | {bcolors.HEADER}{msg}')
+            else:
+                print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ALERT | {msg}')
         list(map (_, msg))
     def error(self, *msg):
         def _ (msg):
-            print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}|{bcolors.HEADER}{msg}')
+            if os.getenv('DONTUSECOLORS') != 'yes':
+                print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+            else:
+                print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ERROR | {msg}')
         list(map (_, msg))
 
     async def on_ready(self):
