@@ -68,6 +68,20 @@ class kuzaku(discord.ext.commands.Bot):
             else: 
                 print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  LOG  | {msg}')
         list(map (_, msg))
+    def cmd (self, *msg):
+        def _ (msg):
+            if os.getenv('DONTUSECOLORS') != 'yes':
+                print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  CMD  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+            else: 
+                print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  CMD  | {msg}')
+        list(map (_, msg))
+    def msglog (self, *msg):
+        def _ (msg):
+            if os.getenv('DONTUSECOLORS') != 'yes':
+                print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  MSG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
+            else: 
+                print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  MSG  | {msg}')
+        list(map (_, msg))
     def warning(self, *msg):
         def _ (msg):
             if os.getenv('DONTUSECOLORS') != 'yes':
@@ -82,12 +96,12 @@ class kuzaku(discord.ext.commands.Bot):
             else:
                 print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ERROR | {msg}')
         list(map (_, msg))
-
-    async def on_ready(self):
+    async def on_connect(self):
         sec = int(round(time.time() - startTime))
+        self.log(f'<main> :: Bot info', f'  {self.user} connected successfully in {sec} seconds')
+    async def on_ready(self):
         await self.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | k.help'))
-        self.log(f'<main> :: Bot info', f'  {self.user} started successfully in {sec} seconds')
-        load_ext(bot, 'cogs')
+        self.log('<main> :: Bot', '  Bot is ready to use')
     async def on_message(self, message):
         await bot_dashboard.process_request(message)
         await self.process_commands(message)
@@ -125,7 +139,6 @@ def load_ext(bot,dir):
                     log(f'  loaded: {dir}/{filename[:-3]}')
                 except Exception as e:
                     error(f'  not loaded: {dir}/{filename[:-3]}', f'  error: {e}')
-    log('<main> :: Bot', '  Bot is ready to use')
 @bot_dashboard.route
 async def get_stats(data):
     channels_list = []
@@ -156,6 +169,7 @@ if __name__ == '__main__':
                                        
         ﹝ kuzaku - the discord bot ﹞
 ''')
+    load_ext(bot, 'cogs')
     bot.run(botconfig['token'])
 
 
