@@ -11,9 +11,9 @@ This repository has only two branches. Each branch has it own version.
 * `dev` — development branch, related to **kuzaku indev#0900**. It is unstable and may contain bugs, so if you want to add something new, please choose this branch and do not commit directly into `master`.
 
 ## Commit style
-Our commits are based on [conventional commits](https://conventionalcommits.org).
+Our commits are based on our style.
 
 ### Examples:
-1. <strike>updated clear command</strike> ❌ Commit message is too inaccurate and not conventional.
-2. <strike>chore(moderation): i did some changes to clear command</strike> ❌ Commit message does not include any useful information, and it's written in Simple Past.
-3. **chore(moderation): make second argument in clear command optional** ✅ Everything is perfect!
+1. <strike>clear cmd</strike> ❌ Commit message is too inaccurate and not conventional.
+2. <strike>i did some changes to clear command</strike> ❌ Commit message does not include any useful information, and it's written in Simple Past.
+3. **make second argument in clear command optional** ✅ Everything is perfect!
