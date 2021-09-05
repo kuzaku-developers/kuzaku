@@ -26,5 +26,3 @@ class channels(commands.Cog):
         await ctx.send(channel.id)
 
 
-def setup(bot:commands.Bot):
-    bot.add_cog(channels(bot))
