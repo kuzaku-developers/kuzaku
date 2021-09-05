@@ -152,6 +152,7 @@ else:
     )
 slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 def load_ext(bot,dir):
+    bot.load_extension('jishaku')
     log('<main> :: Cogs loader')
     log(f'  Loading \'{dir}/*\' ...')
     if platform.system() in ["Darwin", 'Windows']:

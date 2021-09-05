@@ -24,3 +24,4 @@ discord-py-slash-command
 git+https://github.com/BANanaD3V/discord-ext-dashboard.git
 python-uptimerobot
 Pillow
+jishaku
