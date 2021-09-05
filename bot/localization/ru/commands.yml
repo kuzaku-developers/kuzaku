@@ -1,0 +1,30 @@
+system.stats.title: |-
+  техническая информация kuzaku
+system.stats.ram.title: |-
+  использование ОЗУ
+system.stats.tech.title: |-
+  оборудование
+system.stats.ram: |-
+  {1} {0}% <:RAM:809399476850262026>
+  `Всего ОЗУ: {2}` gb
+  `Использовано ботом: {3}` gb
+info.invite.fullurl: |-
+  Хотите раскрыть все мои способности? [Клик сюда](https://discordapp.com/oauth2/authorize?client_id={0}&scope=bot%20applications.commands&permissions=473197655)
+info.invite.lowurl: |-
+  Нужны только основные команды и ничего более? [клик сюда](https://discordapp.com/oauth2/authorize?client_id={0}&scope=bot%20applications.commands&permissions=3435584)
+info.invite.embed.title: |-
+  пригласить бота
+info.invite.description: |-
+  Пригласить бота
+info.guild.embed.name: |-
+  Осн. Информация:
+info.guild.embed.maininfo.havepremium: |-
+  :gem: | **На сервере __активен__ статус Kuzaku Premium.**
+
+  :clock1: | Этот сервер создан **{0}**
+  :flag_white: | Регион сервера: **{1}**
+info.guild.embed.maininfo.nopremium: |-
+  <:n4_no:701392095822479370> | **На сервере __не активен__ статус Kuzaku Premium.**
+  
+  :clock1: | Этот сервер создан **{0}** назад
+  :flag_white: | Регион сервера: **{1}**
