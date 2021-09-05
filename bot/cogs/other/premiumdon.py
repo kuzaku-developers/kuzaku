@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import socketio
 import json
-sio = socketio.Client()
+sio = socketio.Client(reconnection=False)
 class premiumdon(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
