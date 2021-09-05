@@ -2,6 +2,7 @@
 import datetime
 import os
 import platform
+from pathlib import Path
 import time
 from os import listdir
 from os.path import join, realpath, split, splitext
@@ -173,28 +174,37 @@ else:
 	"http://127.0.0.1:5000/dash_handler"
     )
 slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
-def load_ext(bot,dir):
+
+def load_dir (bot, path, rel_to, ignore = []):
+    for cog in path.iterdir ():
+        if cog.is_file ():
+            cog = cog.relative_to (rel_to)
+            if cog.name [:-3] in ignore:
+                continue
+
+            cog = str (cog) [:-3].replace ('/', '.').replace ('\\', '.')
+
+            try:
+                bot.load_extension (f'{cog}')
+
+            except Exception as e:
+                error(f'    not loaded: {cog !r}', f'    error: {e}')
+
+            else:
+                log(f'    loaded: {cog !r}')
+
+        else:
+            if cog.name != '__pycache__':
+                load_dir (bot, cog, rel_to, ignore)
+
+
+def load_cogs (bot, ignore = []):
     bot.load_extension('jishaku')
     log('<main> :: Cogs loader')
-    log(f'    Loading \'{dir}/*\' ...')
-    if platform.system() in ["Darwin", 'Windows']:
-        for filename in os.listdir(f'bot/cogs'):
-            if filename.endswith('.py'):
-                #log(f'trying to load cog {filename[:-3]}')
-                try:
-                    bot.load_extension(f'{dir}.{filename[:-3]}')
-                    log(f'    loaded: {dir}/{filename[:-3]}')
-                except Exception as e:
-                    error(f'    not loaded: {dir}/{filename[:-3]}', f'    error: {e}')
-    elif platform.system()=='Linux':
-        for filename in os.listdir(f'{os.curdir}/bot/cogs'):
-            if filename.endswith('.py'):
-                #log(f'trying to load cog {filename[:-3]}')
-                try:
-                    bot.load_extension(f'bot.cogs.{filename[:-3]}')
-                    log(f'    loaded: {dir}/{filename[:-3]}')
-                except Exception as e:
-                    error(f'    not loaded: {dir}/{filename[:-3]}', f'    error: {e}')
+    log(f'    Loading \'cogs/*\' ...')
+    path = Path.cwd () / 'bot' / 'cogs'
+
+    load_dir (bot, path, path.parent, ignore)
 @bot_dashboard.route
 async def get_stats(data):
     channels_list = []
@@ -225,7 +235,7 @@ if __name__ == '__main__':
                                        
         ﹝ kuzaku - the discord bot ﹞
 ''')
-    load_ext(bot, 'cogs')
+    load_cogs(bot, ['channels'])
     bot.run(botconfig['token'])
 
 

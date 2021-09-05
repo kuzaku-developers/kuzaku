@@ -115,14 +115,6 @@ class owner(commands.Cog):
         await ctx.send(embed=discord.Embed(color=0x13CFEB).set_footer(text="Перезагружаемся..."))
         os.execl(sys.executable, sys.executable, *sys.argv)
 
-    @cog_ext.cog_slash(name='exception', description='Выдать исключение.', guild_ids=[761991504793174117])
-    @commands.is_owner()
-    async def exception(self, ctx):
-        """Выдать исключение.
-        """
-        
-        raise RuntimeError('Вызвано разработчиком.')
-
     @cog_ext.cog_slash(name='load', description='Загрузить модуль.', guild_ids=[761991504793174117])
     @commands.is_owner()
     async def cogload(self, ctx, *, cog: str):
@@ -187,5 +179,5 @@ class owner(commands.Cog):
             await ctx.send(f'**`Ошибка при перезагрузке модуля {cog}:`** \n{type(e).__name__} - {e}')
         else:
             await ctx.send(f'**`Модуль {cog} успешно перезагружен`**')
-#def setup(bot:commands.Bot):
-    #bot.add_cog(owner(bot))
+def setup(bot:commands.Bot):
+    bot.add_cog(owner(bot))

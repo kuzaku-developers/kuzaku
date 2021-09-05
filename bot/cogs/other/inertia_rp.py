@@ -62,14 +62,10 @@ class roleplay(commands.Cog):
                 return user == user1 and str(reaction.emoji) in ['✅', '❌']
 
             reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
-            print(f'r:{reaction.emoji}')
-            print(reaction.emoji == '✅')
             if reaction.emoji == '❌':
-                print('43234')
                 await ctx.author.send('звонок сброшен!')
 
             elif reaction.emoji == '✅':
-                print('1232')
                 await ctx.author.send('ок! звоним!')
 
                 await user.send(f'дозвон! ты соединен с {ctx.author}')
@@ -83,21 +79,18 @@ class roleplay(commands.Cog):
 
                 while ended != 1:
                     try:
-                        print('1232222')
                         msgc = await self.bot.wait_for('message', timeout=30, check=check1)
                         if msgc.author==caller:
                             await user.send(f'{caller}: {msgc.content}')
                         if msgc.author==user:
                             await caller.send(f'{user}: {msgc.content}')
 
-                        print(msgc)
 
                     except:
                         await ctx.author.send('ответа нет! сброс')
                         await user.send('ответа нет! сброс!')
                         ended = 1
         except Exception as e:
-            print(e)
             await user1.send('ожидание истекло! звонок пропущен')
     '''
     @cog_ext.cog_slash(
@@ -130,7 +123,6 @@ class roleplay(commands.Cog):
         )
         emb.set_thumbnail(url=user.avatar_url)
         msg = await ctx.send(embed=emb)
-        print(msg)
         try:
             if dbrpgetuser(ctx.user.id)['rubles'] < money:
                 await msg.edit(
@@ -151,7 +143,7 @@ class roleplay(commands.Cog):
                 await asyncio.sleep(5)
                 await msg.delete()
         except Exception as error:
-            print(error)
+            ...
 
     @cog_ext.cog_slash(
         guild_ids=guild_ids,
@@ -188,7 +180,6 @@ class roleplay(commands.Cog):
     '''
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        print(member.guild.id)
         if member.guild.id == 835384947773669386:
             Role = discord.utils.get(member.guild.roles, id=835559304852537404)
             await member.add_roles(Role)
@@ -196,12 +187,11 @@ class roleplay(commands.Cog):
             name = dbrpgetuser(member.id)
             await member.edit(nick=f'{name["rpname"]} | {name["idrp"]}')
         except:
-            print('member never joined')
+            ...
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
 
-        print(payload)
         # -----start of reg----#
         if payload.member == self.bot.user:
             return
@@ -240,17 +230,14 @@ class roleplay(commands.Cog):
                 await payload.member.send('я не могу так долго ждать! твое имя станет твоим дискорд именем!')
                 regname = payload.member.name
             await payload.member.send('напиши свои навыки в РП. (типо лечения болезней)', delete_after=60)
-            print(f'regname: {regname}')
             try:
                 regnaviki = await self.bot.wait_for('message', check=check(payload.member), timeout=30)
                 regnaviki = regnaviki.content
             except Exception as error:
-                print(error)
                 await payload.member.send('я не могу так долго ждать! ты будешь уметь жить!')
                 regnaviki = 'жить'
 
             dbsetrp(payload.member.id, str(regname), str(regnaviki))
-            print(len(f'{regname} | {dbgetrpid(payload.member.id)}'))
             if not len(f'{regname} | {dbgetrpid(payload.member.id)}') > 32:
                 try:
                     await payload.member.edit(nick=f'{regname} | {dbgetrpid(payload.member.id)}')
@@ -276,7 +263,6 @@ class roleplay(commands.Cog):
 
             # -----end of passport----#
         # ------start of BOMZ------#
-        print(payload.emoji.name)
         if payload.emoji.name == "🙏" and payload.channel_id == 837340041176416277:
             try:
                 if int(dbrpgetuser(payload.member.id)['rubles']) >= 150 and dbrpgetuser(payload.member.id)[
@@ -306,7 +292,6 @@ class roleplay(commands.Cog):
                     await msg.remove_reaction('🙏', payload.member)
                     return
             if random.randint(1, 100) > 20:
-                print(payload)
                 money = random.randint(2, 4)
                 dbrpaddrubles(payload.member.id, money)
 
@@ -319,11 +304,8 @@ class roleplay(commands.Cog):
             # ----end of BOMZ----#
         # ----start of shop--#
 
-        print(str(payload.emoji.name) == '1️⃣')
         msg = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
-        print('1')
         if str(payload.emoji.name) == '1️⃣' and payload.channel_id == 837663284207157339:
-            print('132123')
             await msg.add_reaction('1️⃣')
             await msg.remove_reaction('1️⃣', payload.member)
 
@@ -459,7 +441,6 @@ class roleplay(commands.Cog):
                                                               description='вы пожарный! вы зарабатываете `143$`/час!'))
             else:
                 def check(reaction, user):
-                    print(f'react: {reaction.message}')
                     return reaction.message.id == message1.id and str(
                         reaction.emoji) == '💸' and user.id == reaction.message.channel.recipient.id
 
@@ -572,7 +553,6 @@ class roleplay(commands.Cog):
                     dbrpaddrubles(payload.user_id, int(moneyhave))
                     await payload.member.send(f'готово! ты взял {moneyhave} рублей!')
             except Exception as error:
-                print(f'errpr: {error}')
                 await payload.member.send('это не число!')
 
         if payload.emoji.name == '💰':
@@ -607,7 +587,6 @@ class roleplay(commands.Cog):
                     dbrpaddrubles(payload.user_id, -int(moneyhave))
                     await payload.member.send(f'готово! ты положил {moneyhave} рублей!')
             except Exception as error:
-                print(f'errpr: {error}')
                 await payload.member.send('это не число!')
 
     @commands.Cog.listener()
@@ -619,25 +598,22 @@ class roleplay(commands.Cog):
     async def give_money(self):
         firework = dbrpgetcolumn('rp')
         for i in firework:
+            if i == 'federation':
+                return
             try:
 
                 if firework[i]["hunger"] >= 2:
                     dbrpsetjson(i, 'hunger', dbrpgetuser(i)['hunger']-2)
-                    print(i)
                     user = self.bot.get_user(int(i))
-                    print(user)
                     if dbrpgetuser(i)['hunger']<=10:
                         await user.send(
                             embed=discord.Embed(title='голод', description=f'ты прогододался! лучше поешь, твой голод равен {dbrpgetuser(i)["hunger"]}/100!'),
                             delete_after=3600)
             except KeyError:
-                print('34567543456543234565432345676')
                 if i != 'federation:':
                     dbrpsetjson(i, 'hunger', 100)
                     dbrpsetjson(i, 'hunger', dbrpgetuser(i)['hunger'] - 2)
-                    print(i)
                     user = self.bot.get_user(int(i))
-                    print(user)
                     if dbrpgetuser(i)['hunger'] <= 10:
                         await user.send(
                             embed=discord.Embed(title='голод',
@@ -655,8 +631,6 @@ class roleplay(commands.Cog):
                     user = self.bot.get_user(int(i))
                     if firework[i]["health"] >= 1:
                         dbrpsetjson(i, 'health', dbrpgetuser(i)['health'] - 1)
-                        print(i)
-                        print(user)
                         if dbrpgetuser(i)['health'] <= 20:
                             if firework[i]['health'] <= 0:
                                 await user.send('ты умер')
@@ -669,15 +643,12 @@ class roleplay(commands.Cog):
                     elif firework[i]['health']<=0:
                         await user.send('ты умер')
             except KeyError:
-                print('34567543456543234565432345676')
                 if i != 'federation:':
                     dbrpsetjson(i, 'health', 100)
                     if firework[i]['hunger'] <= 0:
                         user = self.bot.get_user(int(i))
                         if firework[i]["health"] >= 1:
                             dbrpsetjson(i, 'health', dbrpgetuser(i)['health'] - 1)
-                            print(i)
-                            print(user)
                             if dbrpgetuser(i)['health'] <= 20:
                                 if firework[i]['health'] <= 0:
                                     await user.send('ты умер')
