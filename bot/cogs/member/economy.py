@@ -54,7 +54,7 @@ class economy(commands.Cog):
             
     @commands.Cog.listener()
     async def on_message(self, message:discord.Message):
-        if message.channel.type != 'private':
+        if message.channel.type != 'private' and message.guild:
             try:
                 ecc=geteco(message.guild.id, message.author.id)
             except:
