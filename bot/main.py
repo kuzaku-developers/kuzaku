@@ -136,27 +136,27 @@ class kuzaku(discord.ext.commands.Bot):
         list(map (_, msg))
     async def on_connect(self):
         sec = int(round(time.time() - startTime))
-        self.log(f'<main> :: Bot info', f'  {self.user} connected successfully in {sec} seconds')
+        self.log(f'<main> :: Bot info', f'    {self.user} connected successfully in {sec} seconds')
     async def on_ready(self):
         await self.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | /help'))
-        self.log('<main> :: Bot', '  Bot is ready to use')
+        self.log('<main> :: Bot', '    Bot is ready to use')
         self.log('<api> :: Trying to ping website...')
         if os.getenv('PRODUCTION')=='yes':
             try:
                 if ping('kuzaku.ml'):
-                    self.log('  Website is working!')
+                    self.log('    Website is working!')
                 else:
-                    self.warning('  Website is not working!')
+                    self.warning('    Website is not working!')
             except: 
-                self.warning('  Website is not working!')
+                self.warning('    Website is not working!')
         else:
             try:
                 if ping('127.0.0.1'):
-                    self.log('  Website is working!')
+                    self.log('    Website is working!')
                 else:
-                    self.warning('  Website is not working!')
+                    self.warning('    Website is not working!')
             except:
-                self.warning('  Website is not working!')
+                self.warning('    Website is not working!')
     async def on_message(self, message):
         await bot_dashboard.process_request(message)
         await self.process_commands(message)
@@ -176,25 +176,25 @@ slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
 def load_ext(bot,dir):
     bot.load_extension('jishaku')
     log('<main> :: Cogs loader')
-    log(f'  Loading \'{dir}/*\' ...')
+    log(f'    Loading \'{dir}/*\' ...')
     if platform.system() in ["Darwin", 'Windows']:
         for filename in os.listdir(f'bot/cogs'):
             if filename.endswith('.py'):
                 #log(f'trying to load cog {filename[:-3]}')
                 try:
                     bot.load_extension(f'{dir}.{filename[:-3]}')
-                    log(f'  loaded: {dir}/{filename[:-3]}')
+                    log(f'    loaded: {dir}/{filename[:-3]}')
                 except Exception as e:
-                    error(f'  not loaded: {dir}/{filename[:-3]}', f'  error: {e}')
+                    error(f'    not loaded: {dir}/{filename[:-3]}', f'    error: {e}')
     elif platform.system()=='Linux':
         for filename in os.listdir(f'{os.curdir}/bot/cogs'):
             if filename.endswith('.py'):
                 #log(f'trying to load cog {filename[:-3]}')
                 try:
                     bot.load_extension(f'bot.cogs.{filename[:-3]}')
-                    log(f'  loaded: {dir}/{filename[:-3]}')
+                    log(f'    loaded: {dir}/{filename[:-3]}')
                 except Exception as e:
-                    error(f'  not loaded: {dir}/{filename[:-3]}', f'  error: {e}')
+                    error(f'    not loaded: {dir}/{filename[:-3]}', f'    error: {e}')
 @bot_dashboard.route
 async def get_stats(data):
     channels_list = []

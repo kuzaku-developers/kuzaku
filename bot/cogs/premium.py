@@ -59,7 +59,7 @@ def get_link(ctx, botname):
             return 'что-то пошло не так! 404'
     except:
         return 'что-то пошло не так! 404'
-def cooldoown(rate, per, type=BucketType.default):
+def cooldoown(rate, per, type=BucketType.default, premium: bool = False):
     def decorator(func):
         if isinstance(func, Command):
             func._buckets = CooldownMapping(Cooldown(rate, per, type))
