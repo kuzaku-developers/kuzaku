@@ -28,3 +28,7 @@ info.guild.embed.maininfo.nopremium: |-
   
   :clock1: | Этот сервер создан **{0}** назад
   :flag_white: | Регион сервера: **{1}**
+avatar.embed.title: |-
+  Аватар пользователя {0}
+say.text: |-
+  Готово! [Перейти к сообщению]({0})

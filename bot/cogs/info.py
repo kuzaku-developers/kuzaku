@@ -53,5 +53,9 @@ class info(commands.Cog):
 
 
         await ctx.send(embed=embed)
+    @cog_ext.cog_slash(name='avatar', description='Show member avatar!', guild_ids=[761991504793174117])
+    async def avatar(self, ctx, member):
+        embed=discord.Embed(title=self.data['avatar.embed.title'].format(user))
+        embed.set_image(url=user.avatar_url)
 def setup(bot):
     bot.add_cog(info(bot))

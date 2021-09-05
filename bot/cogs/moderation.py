@@ -1,9 +1,18 @@
 import discord
 from discord.ext import commands
-
+from discord_slash import SlashCommand
+from discord_slash.model import SlashCommandPermissionType
+from discord_slash.utils.manage_components import wait_for_component
+from discord_slash.utils.manage_components import create_button, create_actionrow
+from discord_slash.utils.manage_commands import create_option, create_permission
+from discord_slash.model import ButtonStyle
+from discord_slash import cog_ext
+from yaml import Loader, load
 class moderation(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
+        with open("localization/ru/bot/commands.yml", 'r', encoding='utf8') as stream:
+                self.data = load(stream, Loader=Loader)
     @cog_ext.cog_slash(name='ban', description='Банит участника.',
         options=[
     create_option(
@@ -42,13 +51,20 @@ class moderation(commands.Cog):
     description='Текст, который сказать',
     required=True,
     option_type=3
+        ),
+    create_option(
+    name='канал',
+    description='Канал, в который отправить текст!',
+    required=False,
+    option_type=7
         )
-    ], connector={'текст':'text'})
+    ], connector={'текст':'text', 'канал':'channel'}, guild_ids=[761991504793174117])
     @commands.has_permissions(manage_messages=True)
-    async def say(self, ctx, text):
-        await ctx.channel.send(text)
-        embed= discord.Embed(title='Я сказала все, что могла!')
-        await ctx.send(embed=embed, hidden=True)
+    async def say(self, ctx, text, channel=None):
+        if not channel:
+            channel=ctx.channel
+        message=await channel.send(text)
+        await ctx.send(self.data['say.text'].format(message.jump_url), hidden=True)
     @cog_ext.cog_slash(name='kick',  description='Кикнет участника.',
         options=[
     create_option(
