@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import socketio
-import json
+import js
 sio = socketio.Client()
 class premiumdon(commands.Cog):
     def __init__(self, bot:commands.Bot):
