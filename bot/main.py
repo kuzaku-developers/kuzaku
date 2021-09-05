@@ -16,8 +16,30 @@ from discord.ext.dashboard import Dashboard
 from discord_slash import SlashCommand
 from discordTogether import DiscordTogether
 from botconfig import botconfig
-
+import sys
+import logging
+import logging.config
 rootdir=os.path.abspath(os.path.join(os.curdir))
+def mkdir_p(path):
+    try:
+        os.makedirs(path, exist_ok=True)  # Python>3.2
+    except TypeError:
+        try:
+            os.makedirs(path)
+        except OSError as exc: # Python >2.5
+            if exc.errno == errno.EEXIST and os.path.isdir(path):
+                pass
+            else: raise
+mkdir_p(os.path.dirname('logs/log.log'))
+logging.basicConfig(filename="logs/log.log", 
+					format='%(message)s', 
+					filemode='a') 
+logger=logging.getLogger()
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': True,
+})
+logger.setLevel(logging.INFO) 
 intents=discord.Intents.default()
 intents.members = True
 intents.guilds = True
@@ -53,6 +75,7 @@ class bcolors:
 
 def log (*msg):
     def _ (msg):
+        logging.log(level=logging.INFO, msg=f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  LOG  | {msg}')
         if os.getenv('DONTUSECOLORS') != 'yes':
             print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
         else: 
@@ -60,6 +83,7 @@ def log (*msg):
     list(map (_, msg))
 def warning(*msg):
     def _ (msg):
+        logging.log(level=logging.WARNING, msg=f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ALERT | {msg}')
         if os.getenv('DONTUSECOLORS') != 'yes':
             print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {bcolors.ENDC}|{bcolors.OKGREEN} ALERT {bcolors.ENDC}| {bcolors.HEADER}{msg}')
         else:
@@ -67,6 +91,7 @@ def warning(*msg):
     list(map (_, msg))
 def error(*msg):
     def _ (msg):
+        logging.log(level=logging.ERROR, msg=f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ERROR | {msg}')
         if os.getenv('DONTUSECOLORS') != 'yes':
             print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}| {bcolors.HEADER}{msg}')
         else:
@@ -79,6 +104,7 @@ class kuzaku(discord.ext.commands.Bot):
         self.together = DiscordTogether(self)
     def log (self, *msg):
         def _ (msg):
+            logging.log(level=logging.INFO, msg=f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  LOG  | {msg}')
             if os.getenv('DONTUSECOLORS') != 'yes':
                 print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  LOG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
             else: 
@@ -86,20 +112,15 @@ class kuzaku(discord.ext.commands.Bot):
         list(map (_, msg))
     def cmd (self, *msg):
         def _ (msg):
+            logging.log(level=logging.INFO, msg=f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  CMD  | {msg}')
             if os.getenv('DONTUSECOLORS') != 'yes':
                 print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  CMD  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
             else: 
                 print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  CMD  | {msg}')
         list(map (_, msg))
-    def msglog (self, *msg):
-        def _ (msg):
-            if os.getenv('DONTUSECOLORS') != 'yes':
-                print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.OKCYAN}  MSG  {bcolors.ENDC}| {bcolors.HEADER}{msg}')
-            else: 
-                print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |  MSG  | {msg}')
-        list(map (_, msg))
     def warning(self, *msg):
         def _ (msg):
+            logging.log(level=logging.WARNING, msg=f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ALERT | {msg}')
             if os.getenv('DONTUSECOLORS') != 'yes':
                 print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} {bcolors.ENDC}|{bcolors.OKGREEN} ALERT {bcolors.ENDC}| {bcolors.HEADER}{msg}')
             else:
@@ -107,6 +128,7 @@ class kuzaku(discord.ext.commands.Bot):
         list(map (_, msg))
     def error(self, *msg):
         def _ (msg):
+            logging.log(level=logging.ERROR, msg=f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | ERROR | {msg}')
             if os.getenv('DONTUSECOLORS') != 'yes':
                 print(f'{bcolors.YELLOW}{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}{bcolors.ENDC} |{bcolors.FAIL} ERROR {bcolors.ENDC}| {bcolors.HEADER}{msg}')
             else:
@@ -156,7 +178,7 @@ def load_ext(bot,dir):
     log('<main> :: Cogs loader')
     log(f'  Loading \'{dir}/*\' ...')
     if platform.system() in ["Darwin", 'Windows']:
-        for filename in os.listdir(f'{rootdir}/bot/cogs'):
+        for filename in os.listdir(f'bot/cogs'):
             if filename.endswith('.py'):
                 #log(f'trying to load cog {filename[:-3]}')
                 try:
