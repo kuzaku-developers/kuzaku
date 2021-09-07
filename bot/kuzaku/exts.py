@@ -31,7 +31,8 @@ def load_dir (bot, path, rel_to, ignore = []):
                 bot.load_extension (f'{cog}')
 
             except Exception as e:
-                bot.log.error(f'    not loaded: {cog !r}', f'    error: {e}')
+                bot.log.error(f'    not loaded: {cog !r}')
+                bot.log.error(f'    error: {e}')
 
             else:
                 bot.log.info (f'    loaded: {cog !r}')
@@ -42,7 +43,7 @@ def load_dir (bot, path, rel_to, ignore = []):
 
 
 def load_cogs (bot, ignore = []):
-    bot.load_extension('jishaku')
+    bot.load_extension('kuzaku.jishaku')
     bot.log.info('<main> :: Cogs loader')
     bot.log.info(f'    Loading \'cogs/*\' ...')
     path = Path.cwd () / 'bot' / 'cogs'

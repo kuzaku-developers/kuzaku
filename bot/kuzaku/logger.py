@@ -125,14 +125,14 @@ class Kuzaku_logger ():
 
     def info (self, *msgs):
         for msg in msgs:
-            log = self.__compute_log (self.sub_group, 'INFO ', msg, 'I', 'blue')
+            log = self.__compute_log (self.sub_group, 'INFO ', msg, '#', 'blue')
 
             # * logging <- log
 
             print (log)
 
     def debug (self, msg):
-        log = self.__compute_log (self.sub_group, 'DEBUG', msg, '@', 'green', ['underline'])
+        log = self.__compute_log (self.sub_group, 'DEBUG', msg, '@', 'green', ['bold'])
 
         # ! NO logging <- log
 
@@ -140,6 +140,13 @@ class Kuzaku_logger ():
 
     def error (self, msg):
         log = self.__compute_log (self.sub_group, 'ERROR', msg, '!', 'red', ['bold'])
+
+        # * logging <- log
+
+        print (log)
+
+    def warn (self, msg):
+        log = self.__compute_log (self.sub_group, 'WARN ', msg, '?', 'blue', ['bold'])
 
         # * logging <- log
 
