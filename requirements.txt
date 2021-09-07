@@ -27,3 +27,5 @@ Pillow
 jishaku
 websocket-client
 python-socketio
+termcolor
+colorama

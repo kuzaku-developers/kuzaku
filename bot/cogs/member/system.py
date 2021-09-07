@@ -2,37 +2,41 @@ import datetime
 import os
 import platform
 import time
-
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_components import wait_for_component
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.model import ButtonStyle
-from discord_slash import cog_ext
+import psutil
 from yaml import load
-if platform.system() in ["Darwin", 'Windows']:
-    from utils.time import pickform, visdelta
-    from botconfig import botconfig
-elif platform.system() == 'Linux':
-    from bot.botconfig import botconfig
-    from bot.utils.time import pickform, visdelta
-
-try:
-    from yaml import CDumper as Dumper
-    from yaml import CLoader as Loader
-except:
-    from yaml import  Loader,Dumper
 
 import discord
-import psutil
 from discord.ext import commands
 from DiscordBar import DSprogressbar as Bar
 from github import Github
 
+from discord_slash import cog_ext
+
+# from discord_slash import SlashCommand
+# from discord_slash.utils.manage_components import wait_for_component
+# from discord_slash.utils.manage_components import create_button, create_actionrow
+# from discord_slash.utils.manage_commands import create_option
+# from discord_slash.model import ButtonStyle
+
 if platform.system() in ["Darwin", 'Windows']:
-    from main import startTime
+    from utils.time import pickform, visdelta
+    from botconfig import botconfig as config
+
 elif platform.system() == 'Linux':
-    from bot.main import startTime
+    from bot.botconfig import botconfig as config
+    from bot.utils.time import pickform, visdelta
+
+try:
+    # from yaml import CDumper as Dumper
+    from yaml import CLoader as Loader
+except:
+    # from yaml import Loader, Dumper
+    pass
+
+# if platform.system() in ["Darwin", 'Windows']:
+#     from main import startTime
+# elif platform.system() == 'Linux':
+#     from bot.main import startTime
 rootdir=os.path.abspath(os.path.join(os.curdir))
 
 class system(commands.Cog):
@@ -45,10 +49,10 @@ class system(commands.Cog):
             with open("localization/ru/bot/commands.yml", 'r', encoding='utf8') as stream:
                 self.data = load(stream, Loader=Loader)
 
-    
+
     @cog_ext.cog_slash(name='stats', description='Статистика бота')
     async def stats(self, ctx):
-        sec = int(round(time.time() - startTime))
+        sec = int(round(time.time() - config ['start_time']))
         upt = (time.gmtime(sec))
         now = psutil.virtual_memory().used
         max = psutil.virtual_memory().total
@@ -71,7 +75,7 @@ class system(commands.Cog):
         ''', inline=False)
         embed.add_field(name=self.data['system.stats.ram.title'], value=self.data['system.stats.ram'].format(str(psutil.virtual_memory().percent),progress,str(psutil.virtual_memory().total/(1024.**3)),str(round(psutil.virtual_memory().used/(1024.**3),2))))
         current_time = time.time()
-        difference = current_time - startTime
+        difference = current_time - config ['start_time']
         timee = datetime.timedelta(seconds=round(difference))
         tch_count=0
         vch_count=0
@@ -85,7 +89,7 @@ class system(commands.Cog):
                 if channel.type == discord.ChannelType.voice:
                     vch_count += 1
         embed.add_field(name='информация', value=f'''
-:tools: Доступно {len(self.bot.all_commands)} {pickform(len(self.bot.all_commands), ['команда','команды', 'команд'])} 
+:tools: Доступно {len(self.bot.all_commands)} {pickform(len(self.bot.all_commands), ['команда','команды', 'команд'])}
 :file_folder: Всего серверов: {len(self.bot.guilds)}
 <:txt_channel:796381251497099356> текстовых каналов: {tch_count}
 <:voice_channel:796455929133793331> голосовых каналов: {vch_count}
@@ -102,13 +106,13 @@ class system(commands.Cog):
         embed.set_footer(text=f'команда stats | вызваал {ctx.author}', icon_url=ctx.author.avatar_url)
 
         await ctx.send(embed=embed)
-    
+
     @cog_ext.cog_slash(name='devs', description='разработчики бота')
     async def devs(self, ctx):
         embed = discord.Embed(title='разработчики бота')
-        for i in botconfig['devs']:
+        for i in config['devs']:
             embed.add_field(name=i, inline=False, value=f'''
-{botconfig['devs'][i]['description']} | {botconfig['devs'][i]['site']}
+{config['devs'][i]['description']} | {config['devs'][i]['site']}
         ''')
         await ctx.send(embed=embed)
 
@@ -118,7 +122,7 @@ def setup(bot):
 """
 @commands.command()
     async def stats(self, ctx):
-        
+
         tch_count = 0
         vch_count = 0
         for guild in self.bot.guilds:
@@ -131,13 +135,13 @@ def setup(bot):
         em = discord.Embed(
             color=0x5a91a3,
             title=f"Техническая информация {self.bot.user.name}")
-            
+
         em.add_field(name="<:settings:852398515106611220>**Каналы**", value=f"<:voice:852398543300722718>| Голосоых: `{vch_count}`\n<:text:852398523382759434>| Текстовых: `{tch_count}`\n")
         em.add_field(name="<:settings:852398515106611220>**Статистика**", value=f"<:upward_stonks:852398532254367765>| Серверов: `{len(self.bot.guilds)}`\n<:upward_stonks:852398532254367765>| Людей: `{len(self.bot.users)}`\n<:upward_stonks:852398532254367765>| Эмоджи: `{len(self.bot.emojis)}`\n")
         em.add_field(name="<:settings:852398515106611220>**Задержка**", value=f"<:greenTick:852398498657599569>|Веб-сокет:`{round(self.bot.latency*1000, 2)}`\n<:greenTick:852398498657599569>|Работает:`{сюда}`")
         em.add_field(name="<:settings:852398515106611220>**VPS (использование)**", value=f"<:rich_presence:852398506441572373>**|** ОС: `{platform.system() + platform.release()}`\n<:rich_presence:852398506441572373>**|** ОЗУ: `{psutil.virtual_memory().percent}`%\n<:rich_presence:852398506441572373>**|** ЦП: `{psutil.cpu_percent(interval=None, percpu=False)}`%\n")
         em.add_field(name="<:settings:852398515106611220>**Версии**", value=f"<:A2python:852402187232870400> **|** discord.py: `{discord.__version__}`\n<:A2python:852402187232870400> **|** Python: `{sys.version[:5]}`\n:purple_heart: **|** Anni: `2.0.2` (41 commits)")
-    
+
         em.set_thumbnail(url={bot.avatar_url})
         em.set_footer(text=f"Запрошено: {ctx.author.name} | Команда: a.stats", icon_url=f"{ctx.author.avatar_url}")
         await ctx.reply(embed=em)
