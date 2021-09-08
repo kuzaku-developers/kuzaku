@@ -14,6 +14,7 @@ pycryptodome
 python_jwt
 sseclient
 gcloud
+python-dotenv
 requests_toolbelt
 hypercorn
 requests
