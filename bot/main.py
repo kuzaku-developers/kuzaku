@@ -27,7 +27,7 @@ cprint(f'''
 
      ﹝ {botname} - the discord bot ﹞''',
 
-    color = 'red', attrs = {'bold', }
+    color = 'red', attrs = {'bold',}
 )
 
 print ('\n')
