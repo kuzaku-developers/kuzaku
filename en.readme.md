@@ -31,7 +31,8 @@ Kuzaku is a project which is created and supported by Russian developer. Please 
 - **🔧 Moderation utilities and tools:** Mutes, warnings, ban/kick/clear commands and other useful stuff; 
 - **💡 Suggestion system:** Setup a channel and collect ideas from server members via `suggest` command;
 - **🎵 100% free music:** Listen to music in voice channels on your server; 
-- **😃Fun commands:** Create demotivators or get some pictures of fluffy animals! 🦊
+- **😎 User-friendly dashboard:** Set up bot using web interface without boring commands;
+- **😃 Fun commands:** Create demotivators or get some pictures of fluffy animals! 🦊
 
 ## Contributing
 All Pull-Requests are only welcome, and we'll be very happy if you would help us with the development! So if you want to contribute, please navigate to the [contributing guide](en.contributing.md).
