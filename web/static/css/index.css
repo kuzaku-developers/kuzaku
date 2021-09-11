@@ -142,15 +142,13 @@ svg {
     transition: opacity 0.7s linear;
 	position: absolute;
     right: 0;
+	display: none;
     background-color: rgba(32, 32, 36, 0.65);
     border-bottom: none;
 	min-width: 160px;
 	z-index: 1;
 	border-bottom-left-radius: 30px;
 	border-bottom-right-radius: 30px;
-}
-.dropdown-content.fadedOut {
-    opacity: 0;
 }
   /* Links inside the dropdown */
 #dashdropbutton{

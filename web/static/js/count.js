@@ -24,7 +24,7 @@ $(document).ready(function () {
 function myFunction() {
     document.getElementById("navbarr").classList.toggle("navbar");
     document.getElementById("navbarr").classList.toggle("navbar_toggled");
-    document.getElementById("myDropdown").classList.toggle("fadedOut");
+    document.getElementById("myDropdown").classList.toggle("show");
   }
   
   // Close the dropdown menu if the user clicks outside of it
@@ -37,7 +37,6 @@ function myFunction() {
         if (openDropdown.classList.contains('show')) {
           document.getElementById("navbarr").classList.add("navbar");
           document.getElementById("navbarr").classList.remove("navbar_toggled");
-          document.getElementById("myDropdown").classList.toggle("fadedOut");
           openDropdown.classList.remove('show');
         }
       }
