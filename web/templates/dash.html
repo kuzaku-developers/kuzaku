@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta data-n-head='ssr' charset="utf-8">
+    <meta data-n-head='ssr' name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Head Information -->
+    <title>kuzaku - дискорд бот!</title>
+    <link data-n-head='ssr' rel='icon' type='image/x-icon' href="static/images/nuclear.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link type='text/css' rel='stylesheet' href="static/css/utilities.css">
+    <link type='text/css' rel='stylesheet' href="static/css/index.css">
+    <link type='text/css' rel='stylesheet' href="static/css/docs.css">
+    <link type='text/css' rel='stylesheet' href="static/css/style.css">
+    <link type='text/css' rel='stylesheet' href="static/css/common.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/static/materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="/static/materialize/extras/noUiSlider/nouislider.css">
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous">
+
+    <!-- Meta -->
+    <meta data-n-head='ssr' data-hid='theme-color' name='theme-color' content='#BB860B'>
+    <meta data-n-head='ssr' data-hid='og:type' name='og:type' content='website'>
+    <meta data-n-head='ssr' data-hid='og:title' name='og:title' content='kuzaku - дискорд бот!'>
+    <meta data-n-head='ssr' data-hid='og:url' name='og:url' content='https://kuzaku.ml'>
+    <meta data-n-head='ssr' data-hid='og:image' name='og:image'
+        content="{{ url_for('static', filename='images/kuzaku.png') }}">
+    <meta data-n-head='ssr' data-hid='description' name='description'
+        content='kuzaku - дискорд чат бот!'>
+    <meta data-n-head='ssr' data-hid='og:description' name='og:description'
+        content='kuzaku - дискорд чат бот!'>
+
+</head>
+
+<body style='background-color: #424242'>
+    <!-- Preloader -->
+
+    <body class='preload'></body>
+
+    <!-- Header -->
+    <div class='navbar animate__animated animate__backInDown' id='navbarr'>
+        <div class='container full flex'>
+            <a href='/' class='logo flex'>
+                <img src="static/images/kuzaku.png" alt='kuzaku Logo'>
+                <p class='title'>kuzaku</p>
+            </a>
+            <nav class='N/A transparent'>
+                <ul>
+                    <li><a class='button' href='commands'><span>команды</span></a></li>
+                    <li><a class='button' href='docs'><span>информация</span></a></li>
+                    <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
+                    <li><a class='button' href='invite'><span>пригласить</span></a></li>
+                    <li><a class='button' href='support'><span>помощь</span></a></li>
+                    <li><a class='button' href='status'><span>Статус</span></a></li>
+                </ul>
+            </nav>
+            {% block content_drop %}
+                {% if user %}
+                    <button onclick="myFunction()" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>
+                {% else %}
+                    <button onclick="location.href='login'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>
+                {% endif %}
+            {% endblock content_drop %}
+        </div>
+        <div id="myDropdown" class="dropdown-content">
+            <div class="usercard">
+                <img src={{ user.avatar_url }} alt="Avatar" style="width:100%">
+                <div class="ccont">
+                  <h4><b>{{ user.name }}</b></h4>
+                  <p>{{ user }}</p>
+                </div>
+              </div>
+            <a id="dashdropbutton" href="#" onclick='alert("Дашбоард еще в активной разработке. Пока что не доступно")'>Дашбоард</a>
+<a href="logout" id="exitdropbutton">Выйти</a>
+          </div>
+    </div>
+
+    {% block content %}
+    <div class="row container">
+        {% for guild in mutual_guilds %}
+            <div class="col m4 center">
+                <div class="guild">
+                    <img style="border-radius: 100%; width: 20%;" src="{{ guild.icon_url }}" onerror="this.onerror=null;this.src='/static/images/server.png'">
+                    <p style="height: 100%; font-size: 150%;">{{ guild.name }}</p>
+                    <a href="/dashboard/{{ guild.id }}" class="waves-effect waves-light btn">дашбоард</a>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% for guild in admin_guilds %}
+            <div class="col m4 center">
+                <div class="guild">
+                    <img style="border-radius: 100%; width: 60%;" src="{{ guild.icon_url }}" onerror="this.onerror=null;this.src='/static/images/server.png'">
+                    <p style="height: 100%; font-size: 150%;">{{ guild.name }}</p>
+                    <a target="_blank" href="https://discord.com/oauth2/authorize?client_id={{ config.discord_client_id }}&guild_id={{ guild.id }}&scope=bot&permissions=8" class="waves-effect waves-light btn invite">invite</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>    
+{% endblock %}
+    <!-- Footer -->
+    <div class='footer'>
+        <div class='container full grid'>
+            <div class='branding'>
+                <h4>kuzaku</h4>
+                <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> kuzaku</p>
+            </div>
+            <div class='flex'>
+                <div class='footernav'>
+                    <ul>
+                        <li><a class='button currentPage' href='/'><span>домашняя страница</span></a></li>
+                        <li><a class='button' href='commands'><span>команды</span></a></li>
+                        <li><a class='button' href='docs'><span>информация</span></a></li>
+                    </ul>
+                </div>
+                <div class='footernav'>
+                    <ul>
+                        <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
+                        <li><a class='button' href='support'><span>саппорт сервер</span></a></li>
+                        <li><a class='button' href='invite'><span>пригласить бота</span></a></li>
+                        <li><a class='button' href='status'><span>Статус</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script>$(window).load(function () { 'body'.removeClass('.preload'); });</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="static/js/jquery.spincrement.min.js"></script>
+    <script src="static/js/count.js" > </script>
+</body>
+
+</html>

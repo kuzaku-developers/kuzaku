@@ -627,6 +627,11 @@ class roleplay(commands.Cog):
         firework = dbrpgetcolumn('rp')
         for i in firework:
             try:
+                try:
+                    if dbrpgetuser(i)['ded'] =='1':
+                        return
+                except:
+                    dbrpsetjson(i, 'ded', '0')
                 if firework[i]['hunger']<=0:
                     user = self.bot.get_user(int(i))
                     if firework[i]["health"] >= 1:
@@ -641,7 +646,10 @@ class roleplay(commands.Cog):
                                 delete_after=3600)
 
                     elif firework[i]['health']<=0:
-                        await user.send('ты умер')
+                        try:
+                            await user.send('ты умер')
+                        except: ...
+                        dbrpsetjson(i, 'ded', '1')
             except KeyError:
                 if i != 'federation:':
                     dbrpsetjson(i, 'health', 100)

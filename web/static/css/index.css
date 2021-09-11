@@ -29,7 +29,7 @@ body {
 	padding: 16px;
 	border-radius: 10px;
 	text-align: center;
-	background-color: #424242;
+	background-color: #882b2b;
   }
   
   /* Responsive columns - one column layout (vertical) on small screens */
@@ -46,10 +46,10 @@ body {
 .showcase {
 	height: 700px;
 	position: relative;
-	background-color: #0084a5;
+	background-color: #424242;
 }
 .trans {
-	background-image: linear-gradient(#0084a5, #0084a5, #424242);
+	background-image: linear-gradient(#424242, #424242, #882b2b, #882b2b);
 }
 svg {
 	width: 100%;
@@ -62,7 +62,7 @@ svg {
 }
 .benefits {
     width: 100%;
-    background: #0084a5;
+    background: #424242;
 }
 
 .benefits__inner {
@@ -133,21 +133,25 @@ svg {
 	position: relative;
 	display: inline-block;
 }
-  
+
   /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-	display: none;
-	transition: 1s;
+	-moz-transition: opacity 0.7s linear;
+    -o-transition: opacity 0.7s linear;
+    -webkit-transition: opacity 0.7s linear;
+    transition: opacity 0.7s linear;
 	position: absolute;
     right: 0;
-	background-image: linear-gradient(#202024, #424242);
+    background-color: rgba(32, 32, 36, 0.65);
+    border-bottom: none;
 	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	z-index: 1;
 	border-bottom-left-radius: 30px;
 	border-bottom-right-radius: 30px;
 }
-  
+.dropdown-content.fadedOut {
+    opacity: 0;
+}
   /* Links inside the dropdown */
 #dashdropbutton{
 	border-bottom-left-radius: 30px;
@@ -173,14 +177,14 @@ svg {
   
   /* Change color of dropdown links on hover */
 .dropdown-content a:hover {
-	color: #00d9ec !important;
+	color: #ff0000 !important;
 	transition: 0.3s
 }
   
   /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 .trans2 {
-	background-color: #0084a5;
+	background-color: #424242;
 }
 .usercard {
 	/* Add shadows to create the "card" effect */
@@ -235,7 +239,7 @@ svg {
 /* Panels */
 .features {
 	height: auto 500px;
-	background-color: #424242;
+	background-color: #882b2b;
 }
 
 .features h3 {

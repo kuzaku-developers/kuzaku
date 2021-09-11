@@ -22,7 +22,9 @@ $(document).ready(function () {
 
 });
 function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
+    document.getElementById("navbarr").classList.toggle("navbar");
+    document.getElementById("navbarr").classList.toggle("navbar_toggled");
+    document.getElementById("myDropdown").classList.toggle("fadedOut");
   }
   
   // Close the dropdown menu if the user clicks outside of it
@@ -33,6 +35,9 @@ function myFunction() {
       for (i = 0; i < dropdowns.length; i++) {
         var openDropdown = dropdowns[i];
         if (openDropdown.classList.contains('show')) {
+          document.getElementById("navbarr").classList.add("navbar");
+          document.getElementById("navbarr").classList.remove("navbar_toggled");
+          document.getElementById("myDropdown").classList.toggle("fadedOut");
           openDropdown.classList.remove('show');
         }
       }

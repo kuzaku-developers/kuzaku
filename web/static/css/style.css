@@ -14,20 +14,15 @@ body {
     background: #23272A;
 }
 
-div.nav-wrapper {
-    background-color: #7289DA;
-}
 
-a {
-    background-color: #7289DA !important;
-    outline: 0 !important;
-}
 
 img {
     width: 100% !important;
     height: auto;
 }
-
+nav {
+    background-color: transparent;
+}
 .guild {
     width: 90%;
     padding: 20px 0px 20px 0px !important;

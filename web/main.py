@@ -84,7 +84,8 @@ async def redirect_unauthorized(e):
 
 @app.route("/dashboard")
 async def dashboard():
-    return redirect("/")
+    if os.getenv('PRODUCTION')=='yes':
+        return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
         return redirect("/login")
@@ -107,10 +108,11 @@ async def dashboard():
 
 @app.route("/dashboard/<guild_id>")
 async def guild_dashboard(guild_id):
-    return redirect('/')
+    if os.getenv("PRODUCTION")=='yes':
+        return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
-        return redirect("/")
+        return redirect("login")
 
     user = await discord.fetch_user()
     guilds = await discord.fetch_guilds()
@@ -121,10 +123,11 @@ async def guild_dashboard(guild_id):
 
 @app.route("/dashboard/<guild_id>/<module>")
 async def guild_dashboard_leveling(guild_id, module):
-    return redirect("/")
+    if os.getenv("PRODUCTION")=='yes':
+        return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
-        return redirect("/")
+        return redirect("login")
     
     user = await discord.fetch_user()
     guilds = await discord.fetch_guilds()
@@ -221,8 +224,9 @@ async def main():
     else:
         dashbtnname='Пользователь'
         user = await discord.fetch_user()
-    if await app_dashboard.request("get_stats"):
-        return await render_template('index.html', guilds=dict(await app_dashboard.request("get_stats"))['guilds'], users=dict(await app_dashboard.request("get_stats"))['users'],  channels=dict(await app_dashboard.request("get_stats"))['channels'], dashbtnname=dashbtnname, user=user)
+    statistic = await app_dashboard.request("get_stats")
+    if statistic:
+        return await render_template('index.html', guilds=dict(statistic)['guilds'], users=dict(statistic)['users'],  channels=dict(statistic)['channels'], dashbtnname=dashbtnname, user=user)
     else:
         return await render_template('index.html', guilds='0', users='0', channels='0', dashbtnname=dashbtnname, user=user)
 

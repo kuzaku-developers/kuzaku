@@ -9,6 +9,7 @@ from discord.ext import commands
 from yaml import Loader, load
 from discord_slash import SlashCommand
 from discord_slash import cog_ext
+from discord_slash.utils.manage_commands import create_option
 rootdir=os.path.abspath(os.path.join(os.curdir))
 
 class info(commands.Cog):
@@ -53,9 +54,18 @@ class info(commands.Cog):
 
 
         await ctx.send(embed=embed)
-    @cog_ext.cog_slash(name='avatar', description='Show member avatar!', guild_ids=[761991504793174117])
-    async def avatar(self, ctx, member):
-        embed=discord.Embed(title=self.data['avatar.embed.title'].format(user))
-        embed.set_image(url=user.avatar_url)
+    @cog_ext.cog_slash(name='avatar', description='Show member avatar!', guild_ids=[761991504793174117], options=[
+    create_option(
+    name='member',
+    description='Участник, аватар которого ты хочешь посмотреть.',
+    required=False,
+    option_type=6)
+            ])
+    async def avatar(self, ctx, member=None):
+        if not member:
+            member=ctx.author
+        embed=discord.Embed(title=self.data['avatar.embed.title'].format(member))
+        embed.set_image(url=member.avatar_url_as(format='png'))
+        await ctx.send(embed=embed)
 def setup(bot):
     bot.add_cog(info(bot))
