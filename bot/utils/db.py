@@ -24,6 +24,23 @@ def geteco(guildid, id):
 def seteco(guildid, id, xp, lvl, nextxp):
     data={'xp':xp, 'lvl': lvl, 'nextxp': nextxp}
     db.child("db").child('eco').child(guildid).child(id).set(data)
+def addpromo(promocode, uses):
+    data={'promocode': promocode, 'uses': uses}
+    db.child("db").child('promocodes').push(data)
+def getpromos():
+    return dict(getdb()['promocodes'])
+def addusepromo(promocodeid, uses):
+    data={'usedby':uses}
+    try:
+        db.child("db").child('promocodes').child(promocodeid).update(data)
+    except Exception as e:
+        print(e)
+def setpromouses(promocodeid, uses):
+    data={'uses': uses}
+    try:
+        db.child("db").child('promocodes').child(promocodeid).update(data)
+    except Exception as e:
+        print(e)
 def minusoneguild(userid):
     data=dict(getdb()['premium'])[str(userid)]
     data['count'] = str(int(data['count'])-1)

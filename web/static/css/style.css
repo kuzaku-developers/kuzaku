@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
 body {
-    background-color: #2C2F33;
+    background-image: url('https://i.postimg.cc/59cRjrJf/background.png');
     color: #fff;
+    font-family: 'Lato', sans-serif;
 }
 
 .flex-center {
@@ -14,14 +17,19 @@ body {
     background: #23272A;
 }
 
-
+::-webkit-scrollbar {
+    width: 0;
+  }
 
 img {
     width: 100% !important;
     height: auto;
 }
 nav {
-    background-color: transparent;
+    position: fixed;
+    top: 0; 
+    background-color: #23272A;
+    z-index: 1001;
 }
 .guild {
     width: 90%;

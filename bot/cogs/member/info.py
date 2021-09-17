@@ -26,6 +26,7 @@ class info(commands.Cog):
     @commands.guild_only()
     @cog_ext.cog_slash(name='invite',  description='invite bot')
     async def invite(self, ctx):
+        await ctx.defer()
         full_url = self.data['info.invite.fullurl'].format(self.bot.user.id)
         low_url = self.data['info.invite.lowurl'].format(self.bot.user.id)
         embed = discord.Embed(color=0xf0a302,
@@ -37,6 +38,7 @@ class info(commands.Cog):
     @cog_ext.cog_slash(name='server', description='Information abot server.')
     @commands.guild_only()
     async def guild(self, ctx):
+        await ctx.defer()
         """Информация о сервере.
         """
         embed = discord.Embed(title=ctx.guild.name, colour=discord.Colour(0xd9ec))
@@ -62,6 +64,7 @@ class info(commands.Cog):
     option_type=6)
             ])
     async def avatar(self, ctx, member=None):
+        await ctx.defer()
         if not member:
             member=ctx.author
         embed=discord.Embed(title=self.data['avatar.embed.title'].format(member))

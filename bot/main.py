@@ -14,7 +14,7 @@ intents.guilds  = True
 
 bot = Kuzaku (command_prefix = config ['default_prefix'], intents = intents)
 
-botname = "Kuzaku Production Ed." if config ["production"] else "Kuzaku DEV ed."
+botname = f"Kuzaku Prod Ed. Ver {config['botver']}" if config ["production"] else "Kuzaku DEV ed."
 
 cprint(f'''
  __                                __
@@ -27,7 +27,7 @@ cprint(f'''
 
      ﹝ {botname} - the discord bot ﹞''',
 
-    color = 'red', attrs = {'bold',}
+    color = 'red', attrs = {'bold'}
 )
 
 print ('\n')

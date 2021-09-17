@@ -1,0 +1,185 @@
+body {
+    width: 100%;
+    background-color: #424242;
+}
+.showcase {
+    background-color: #424242;
+}
+.container {
+    width:100%;
+}
+
+.devs {
+	text-align: center;
+}
+
+.devs .card {
+	background-color: #ff0000;
+}
+
+.devs i {
+	margin: 5px;
+}
+* {
+    box-sizing: border-box;
+}
+input {
+    display:block;
+    width:100%;
+    margin:10px 0;
+    padding:10px;
+}
+.form-control-edit {
+    background-color: #2b2b2b;
+    border: 1px solid #3c444a;
+}
+
+.form-control-edit {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #FFFFFF;
+    background-color: #2b2b2b;
+    background-clip: padding-box;
+    border-radius: 7px;
+    transition: .2s;
+}
+.form-control-edit:focus {
+    outline-width: 0;
+    transition: .4s;
+    background-color: #252525;
+}
+.form-control-edit:hover {
+    border: 1px solid rgb(255, 255, 255);
+}
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bn54 {
+    table-layout: fixed;
+    position: relative;
+    outline: none;
+    text-decoration: none;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    height: 45px;
+    width: 130px;
+    opacity: 1;
+    background-color: #222222;
+    border: 1px solid rgba(78, 78, 78, 0.6);
+}
+  
+.bn54 .bn54span {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.7px;
+}
+  
+.bn54:hover {
+    animation: bn54rotate 0.7s ease-in-out both;
+}
+  
+.bn54:hover .bn54span {
+    animation: bn54storm 0.7s ease-in-out both;
+    animation-delay: 0.06s;
+}
+  
+@keyframes bn54rotate {
+    0% {
+      transform: rotate(0deg) translate3d(0, 0, 0);
+    }
+    25% {
+      transform: rotate(3deg) translate3d(0, 0, 0);
+    }
+    50% {
+      transform: rotate(-3deg) translate3d(0, 0, 0);
+    }
+    75% {
+      transform: rotate(1deg) translate3d(0, 0, 0);
+    }
+    100% {
+      transform: rotate(0deg) translate3d(0, 0, 0);
+    }
+}
+  
+@keyframes bn54storm {
+    0% {
+      transform: translate3d(0, 0, 0) translateZ(0);
+    }
+    25% {
+      transform: translate3d(4px, 0, 0) translateZ(0);
+    }
+    50% {
+      transform: translate3d(-3px, 0, 0) translateZ(0);
+    }
+    75% {
+      transform: translate3d(2px, 0, 0) translateZ(0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) translateZ(0);
+    }
+}
+.carddr {
+	background-color: #424242;
+	border-radius: 10px;
+	padding: 20px;
+	margin: 10px;
+	width: auto;
+}
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #333; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}

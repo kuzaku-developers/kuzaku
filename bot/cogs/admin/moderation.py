@@ -30,6 +30,7 @@ class moderation(commands.Cog):
             ], connector={'участник':'member', 'причина':'reason'})
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member, reason: str = 'Причина не указана.'):
+        await ctx.defer()
         embedd=discord.Embed(title='Точно банить?', description=f'вы уверены, что хотите забанить пользователя {member.mention}? Тогда нажмите на кнопку!')
         row=create_actionrow(
                                         create_button(style=ButtonStyle.gray, emoji='✅'))
@@ -61,6 +62,7 @@ class moderation(commands.Cog):
     ], connector={'текст':'text', 'канал':'channel'}, guild_ids=[761991504793174117])
     @commands.has_permissions(manage_messages=True)
     async def say(self, ctx, text, channel=None):
+        await ctx.defer(hidden=True)
         if not channel:
             channel=ctx.channel
         message=await channel.send(text)
@@ -82,6 +84,7 @@ class moderation(commands.Cog):
             ], connector={'участник':'member', 'причина':'reason'})
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member, reason: str = 'Причина не указана.'):
+        await ctx.defer()
         embedd=discord.Embed(title='Точно кикать?', description=f'вы уверены, что хотите кикнуть пользователя {member.mention}? Тогда нажмите на кнопку!')
         row=create_actionrow(
                                         create_button(style=ButtonStyle.gray, emoji='✅'))

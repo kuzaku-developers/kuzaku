@@ -8,9 +8,15 @@ from discord.ext.dashboard import Server
 from quart import Quart, render_template, request, session, redirect, url_for, Response
 from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 import os
+import sys
+import inspect
 if os.getenv("PRODUCTION")!="yes":
     import dotenv
     dotenv.load_dotenv()
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir) 
+from bot.utils.db import *
 configfb = {
     "apiKey": os.getenv("fapiKey"),
     "authDomain": os.getenv("fauthDomain"),
@@ -46,7 +52,7 @@ modules = [
 ]
 
 firebase = Firebase(configfb)
-db = firebase.database()
+db2 = firebase.database()
 app = Quart(__name__)
 app.secret_key = os.getenv("apisecret")
 app.config["DISCORD_CLIENT_SECRET"] = os.getenv("CSEC")          # Discord client secret.
@@ -84,8 +90,6 @@ async def redirect_unauthorized(e):
 
 @app.route("/dashboard")
 async def dashboard():
-    if os.getenv('PRODUCTION')=='yes':
-        return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
         return redirect("/login")
@@ -142,23 +146,66 @@ async def guild_dashboard_leveling(guild_id, module):
 async def api_change_setting(guild_id):
     authorized = await discord.authorized
     if authorized != True:
-        return "unauthorized"
+        return "error"
     
     args = await request.form
-    callback = True #database.change_config(guild_id, args["item"], args["value"])
+    print(args['value'])
+    callback = False #database.change_config(guild_id, args["item"], args["value"])
     if callback == True:
         return "done"
     else:
         return "error" 
+    return "error" 
 
 @app.route("/logout")
 async def logout():
     discord.revoke()
     return redirect("/")
 
-
+@app.route('/api/v1/usecode',methods = ['POST'])
+async def usecode():
+    args = dict(await request.form)
+    print(args)
+    existing=False
+    global i
+    global used_by
+    for i in getpromos():
+        if str(getpromos()[i]['promocode'])==str(args['promocode']):
+            existing=True
+            try:
+                used_by=getpromos()[i]['usedby']
+            except:
+                used_by=[]  
+    if not existing:
+        return 'notexist'
+    else:
+            try:
+                if args['id'] in used_by:
+                    return 'used'
+                    
+                else:
+                    used_by.append(args['id'])
+                    addusepromo(i, used_by)
+                if getpromos()[i]['uses'] !='inf' and str(getpromos()[i]['uses']) =='0':
+                    print('noueses')
+                    return 'nouses'
+                prem=int(dict(getdb()['premium'])[str(args['id'])]['count'])+1
+            except:
+                prem=1
+            data = {
+                'premium': 'True',
+                'count': prem
+            }
+            db.child("db").child("premium").child(args['id']).set(data)
+            if getpromos()[i]['uses'] !='inf':
+                setpromouses(i, int(getpromos()[i]['uses'])-1)
+            return 'activated'
+    print('eee cALLED')
+    args = json.dumps(await request.form)
+    print(args)
+    return 'done'
 @app.route('/api/v1/premium',methods = ['POST'])
-async def premium():
+async def premium_handler():
     print(request.json)
     print(request.json)
     data = {
@@ -166,7 +213,7 @@ async def premium():
         'count': '3'
     }
     if request.json['custom']['secret']==os.getenv('apisecret'):
-        db.child("db").child("premium").child(request.json['custom']['id']).set(data)
+        db2.child("db").child("premium").child(request.json['custom']['id']).set(data)
     else:
         return Response(status=401)
     # Webhook URL for your Discord channel.
@@ -184,7 +231,7 @@ async def test():
     if await app_dashboard.request("get_stats"):
         return await app_dashboard.request("get_stats"), 200
     else:
-        return {"code":"503","message":"bot is offline!"}, 503
+        return {"code":"418","message":"No coffee today :("}, 418
 
 @app.route("/dash_handler", methods=["POST"])
 async def dash_handler():
@@ -204,8 +251,16 @@ async def ping():
     if await app_dashboard.request("get_stats"):
         return {"code":"200","message":"bot is working!"}, 200
     else:
-        return {"code":"503","message":"bot is offline!"}, 503
+        return {"code":"418","message":"No coffee today :("}, 418
 
+
+@app.route('/premium')
+async def premium():
+    authorized = await discord.authorized
+    if authorized != True:
+        return redirect("login")
+    user = await discord.fetch_user()
+    return await render_template('premium.html', user=user)
 
 @app.errorhandler(404)
 async def page_not_found(e):
@@ -234,9 +289,9 @@ async def main():
 async def commands():
     return await render_template('commands.html')
 
-@app.route('/status')
-async def status():
-    return await render_template('status.html')
+@app.route('/amogus')
+async def amogus():
+    return await render_template('amogus.html')
 
 @app.route('/invite/')
 async def invite():

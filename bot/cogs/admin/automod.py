@@ -14,6 +14,8 @@ class automod(commands.Cog):
 
 
     @cog_ext.cog_slash(name='antiscam')
+    async def antiscam(self, ctx):
+        ...
 
 
 def setup(bot:commands.Bot):

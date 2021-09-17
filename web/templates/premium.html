@@ -13,9 +13,10 @@
     <link data-n-head='ssr' rel='icon' type='image/x-icon' href="assets/kuzaku.png">
 
     <!-- Styles -->
-    <link type='text/css' rel='stylesheet' href="styles/utilities.css">
-    <link type='text/css' rel='stylesheet' href="styles/common.css">
-    <link type='text/css' rel='stylesheet' href="styles/index.css">
+    <link type='text/css' rel='stylesheet' href="static/css/utilities.css">
+    <link type='text/css' rel='stylesheet' href="static/css/common.css">
+    <link type='text/css' rel='stylesheet' href="static/css/index.css">
+    <link type='text/css' rel='stylesheet' href="static/css/premium.css">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
@@ -35,16 +36,16 @@
 
 </head>
 
-<body style='background-color: #292a2e'>
+<body>
     <!-- Preloader -->
 
     <body class='preload'></body>
 
     <!-- Header -->
-    <div class='navbar'>
+    <div class='navbar' style='margin-bottom: 120px'>
         <div class='container full flex'>
             <a href='/' class='logo flex'>
-                <img src="assets/kuzaku.png" alt='kuzaku Logo'>
+                <img src="static/images/kuzaku.png" alt='kuzaku Logo'>
                 <p class='title'>kuzaku</p>
             </a>
             <nav>
@@ -61,16 +62,44 @@
     </div>
 
     <!-- Showcase -->
-    <div class='showcase'>
+    <div class='showcase' style='margin-top: 20px; margin-bottom: 20px;'>
         <div class='container flex'>
-            <div class='showcase-text'>
-                <h1>премиум.</h1>
-                <p>напиши /gold buy</p>
-                <div class='buttons flex'>
-                    <a class='button btn' href='https://discord.gg/N5wZt2jPB2'><span><i
-                                class="fab fa-global fa-2x"></i> kuzaku саппорт сервер</span></a>
-                </div>
-            </div>
+            <section class='devs card animate__animated animate__lightSpeedInRight'>
+                <div class="bc-container">
+                    <div class="container paddings" style="padding-bottom: 0">
+                    <div class="donate-title-wrapper">
+                    <div>
+                    <div class="donate-title">
+                    <div class="donate-text">Активация промо-кода</div>
+                    </div>
+                    <div class="donate-subtitle">
+                    Здесь можно активировать промо-код от администрации.
+                    </div>
+                    </div>
+                    </div>
+                    <form onsubmit="return false">
+                    <div class="bg-dark padding-block border-15" style="margin-bottom: 50px">
+                    <div class="form-group row">
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control-edit" id='codeinput' name="code" placeholder="Ri2j-ck1l-rOq9-Ll02" required="">
+                    </div>
+                    </div>
+                    <span style="color: gray;">Нажимая на кнопку активации, Вы автоматически соглашаетесь с <a href="/rules" class="edit-link" target="_blank">нашими правилами</a>.</span>
+                    <div class="button-group">
+                            <div class='centered' style='display: inline-block; margin: 15px; margin-bottom: -8px;'>
+                                <button class="bn54" onclick="use_promo('{{ user.id }}')">
+                                    <span class="bn54span">Активировать</span>
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <br><a class="partner-va" href="/mypromo" style="font-weight: 500; color: #ff432a;"><i class="fa fa-list" style="font-size: 14px; margin-right: 7px;" aria-hidden="true"></i> Активированные промо-коды</a>
+                    </form>
+                    </div>
+                    </div>
+                    </div>
+            </section>
         </div>
     </div>
 
@@ -78,7 +107,7 @@
     <div class='footer'>
         <div class='container full grid'>
             <div class='branding'>
-                <h4>nuclearot</h4>
+                <h4>Kuzaku</h4>
                 <p>Copyright &copy; 2021 kuzaku</p>
             </div>
             <div class='flex'>
@@ -100,8 +129,10 @@
             </div>
         </div>
     </div>
+    <div id="snackbar">Some text some message..</div>
     <!-- Scripts -->
     <script>$(window).load(function () { 'body'.removeClass('.preload'); });</script>
+    <script src="/static/js/promo.js"></script>
 </body>
 
 </html>

@@ -140,7 +140,7 @@ class MusicPlayer:
             try:
                 if not getpremium(idd):
                     # Wait for the next song. If we timeout cancel the player and disconnect...
-                    async with timeout(20):  # 5 minutes... 300
+                    async with timeout(300):  # 5 minutes... 300
                         source = await self.queue.get()
                 else:
                     source = await self.queue.get()
@@ -248,7 +248,7 @@ class Music (commands.Cog):
             try:
                 channel = ctx.author.voice.channel
             except AttributeError:
-                raise InvalidVoiceChannel(':notes: Вы не подключены к голосовому каналу.')
+                await ctx.send(':notes: Вы не подключены к голосовому каналу.')
 
         vc = ctx.voice_client
 
@@ -268,7 +268,11 @@ class Music (commands.Cog):
                         f':notes: Подключение к каналу <{channel}> не удалось. TimeOut.')
 
         await ctx.send(f':notes: Голосовой канал: **{channel}**', delete_after=20)
-
+    @cog_ext.cog_slash(name='looptest', description='e', guild_ids=[])
+    async def looptest(self, ctx):
+        vc=ctx.voice.client
+        vc.loop(True)
+        await ctx.send('abobus')
     @cog_ext.cog_slash(name='play', description='Play some music!')
     async def play_(self, ctx, *, song: str):
         """Запросить проигрывание музыки. *Мне надоело сидеть в тишине, го пати!*
@@ -282,7 +286,7 @@ class Music (commands.Cog):
         """
         await ctx.defer()
         vc = ctx.voice_client
-
+        
         if not vc:
             await ctx.invoke(self.connect_)
 
@@ -290,10 +294,13 @@ class Music (commands.Cog):
         # If download is False, source will be a dict which will be used later to
         # regather the stream. If download is True, source will be
         # a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop,
+        try:
+            source = await YTDLSource.create_source(ctx, song, loop=self.bot.loop,
                                                 download=False)
-
-        await player.queue.put(source)
+            await player.queue.put(source)
+        except:
+            await ctx.send('Не удалось получить видео! Проверьте, может быть оно 18+?!')
+        
 
     @cog_ext.cog_slash(name='pause', description='Pause the music. IM AFK!!1111!1')
     async def pause_(self, ctx):
@@ -386,7 +393,7 @@ class Music (commands.Cog):
 
         player.np = await ctx.send(f'**Проигрывается:** `{vc.source.title}` '
                                    f'Запросил: `{vc.source.requester}`')
-
+        
     @cog_ext.cog_slash(name='volume', description='You need loudy music? OK!')
     async def change_volume(self, ctx, *, volume: float):
         """Изменить громкость проигрывателя. *Нужно еще громче?? Пожалуйста!*
@@ -499,6 +506,3 @@ class Music (commands.Cog):
         await m.delete()
         react_loop.cancel()
 
-
-def setup(bot):
-    bot.add_cog(Music(bot))
