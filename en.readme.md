@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/github/sponsors/kuzaku-developers?logo=github" alt="sponsors">
   </a>
   <a href="https://github.com/kuzaku-developers/kuzaku">
-    <img src="https://img.shields.io/badge/kuzaku%20version-0.0.2-blue" alt="kuzaku_ver">
+    <img src="https://img.shields.io/badge/kuzaku%20version-0.0.3-blue" alt="kuzaku_ver">
   </a>
 </p>
 
