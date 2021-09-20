@@ -8,6 +8,7 @@ requests
 discord.py
 firebase
 asyncio
+wavelink
 youtube_dl
 psutil
 pycryptodome
