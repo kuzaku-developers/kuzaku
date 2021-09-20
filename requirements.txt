@@ -3,6 +3,7 @@ DiscordBar
 jishaku
 icecream
 quart
+git+https://github.com/Rapptz/discord-ext-menus
 PyYAML
 requests
 discord.py
