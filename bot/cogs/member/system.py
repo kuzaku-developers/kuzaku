@@ -73,7 +73,7 @@ class system(commands.Cog):
 <:python:796454672860708896> discord.py версии **{discord.__version__}**
 <:settings_blue:796456043416780840> версия kuzaku **{date} ({commit})**
         ''', inline=False)
-        embed.add_field(name=self.data['system.stats.ram.title'], value=self.data['system.stats.ram'].format(str(psutil.virtual_memory().percent),progress,str(psutil.virtual_memory().total/(1024.**3)),str(round(psutil.virtual_memory().used/(1024.**3),2))))
+        embed.add_field(name=self.data['system.stats.ram.title'], value=self.data['system.stats.ram'].format(str(round(psutil.virtual_memory().percent)),progress,str(round(psutil.virtual_memory().total/(1024.**3))),str(round(psutil.virtual_memory().used/(1024.**3),2))))
         current_time = time.time()
         difference = current_time - config ['start_time']
         timee = datetime.timedelta(seconds=round(difference))
