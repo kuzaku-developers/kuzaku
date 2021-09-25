@@ -33,4 +33,5 @@ cprint(f'''
 print ('\n')
 
 ext.load_cogs (bot, ignore = config ['ignore_cogs'])
+
 bot.run (config ['token'])

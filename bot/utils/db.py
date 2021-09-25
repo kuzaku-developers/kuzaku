@@ -73,7 +73,7 @@ def dbrpadddollars(id_user, money):
     except:
         data['dollars'] = str(int(0) + int(money))
     db.child("rp").child(id_user).set(data)
-    
+
 def dbrpsethome(id_user, home):
     data=dbrpgetuser(id_user)
     data['home']=home
@@ -83,7 +83,7 @@ def dbrpsetjson(id_user, name, value):
     data=dbrpgetuser(id_user)
     data[name]=value
     db.child("rp").child(id_user).set(data)
-    
+
 def dbrpsetcar(id_user, car):
     data=dbrpgetuser(id_user)
     data['car']=car
@@ -92,7 +92,7 @@ def dbrpsetresume(id_user, resume):
     data=dbrpgetuser(id_user)
     data['resume']=resume
     db.child("rp").child(id_user).set(data)
-    
+
 def dbsetrp(id_user, rpname, naviki):
     data = {'idrp': dbgetrpid(id_user), 'rpname': rpname, "naviki": naviki, 'money': 0, 'home': False}
     db.child("rp").child(id_user).set(data)
@@ -100,7 +100,7 @@ def dbrpgetuser(id_user):
     all_users=db.child("rp").get()
     for user in all_users.each():  # все элементы
         kkey = user.key()  # ключ
-        
+
         if str(kkey) == str(id_user):  # проверка на равенство
             a = user.val()  # true(1) или false(0) (в бд так)
             try:
@@ -115,4 +115,3 @@ def dbrpgetcolumn(column):
         return dict(all_users)  # .
     except:
         return {}
-        

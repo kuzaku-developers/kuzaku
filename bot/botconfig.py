@@ -28,7 +28,7 @@ botconfig = {
 
     "token": os.getenv('BOTTOKEN'),
     "production": production == 'yes',
-    "botver": "0.0.3",
+    "botver": "1.7.10",
     "ignore_cogs": ["channels"],
 
     "start_time": time.time (),

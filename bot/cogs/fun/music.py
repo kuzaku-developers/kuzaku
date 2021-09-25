@@ -506,3 +506,5 @@ class Music (commands.Cog):
         await m.delete()
         react_loop.cancel()
 
+def setup (bot):
+    bot.log.sub_logger.warn ('Cog "/fun/music.py" is code-level disabled')

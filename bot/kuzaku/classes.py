@@ -53,13 +53,20 @@ class Kuzaku (discord.ext.commands.Bot):
         self.log.info(f'    {self.user} connected successfully in {sec} seconds')
 
     async def on_ready(self):
-        await self.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | /help'))
+        await self.change_presence (
+            status   = discord.Status.dnd,
+            activity = discord.Activity (
+                type = discord.ActivityType.competing,
+                name = f'{len (self.guilds)} guilds! | /help'
+            )
+        )
+
         self.log.info('<main> :: Bot')
         self.log.info('    Bot is ready to use')
         self.log.info('<api> :: Trying to ping website...')
         try:
             if ping('kuzaku.ml'):
-                self.log.warn('    Website is working!')
+                self.log.log('    Website is working!')
             else:
                 self.log.warn('    Website is not working!')
         except:
