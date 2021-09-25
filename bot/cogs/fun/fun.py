@@ -2,28 +2,24 @@ import discord
 import requests
 import io
 from discord.ext import commands
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_commands import create_permission
-from discord_slash.model import SlashCommandPermissionType
-from discord_slash.utils.manage_components import wait_for_component
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.model import ButtonStyle
-from discord_slash import cog_ext
+import dislash
+from dislash import slash_command, Option, OptionType
 import re
 class fun(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
     
-    @cog_ext.cog_slash(name='screenshot', description='Take site screenshot!', guild_ids=[761991504793174117])
+    @slash_command(name='screenshot', description='Take site screenshot!', guild_ids=[761991504793174117], options=[
+        Option("url", "Site url", OptionType.STRING, required=True)
+        # By default, Option is optional
+        # Pass required=True to make it a required arg
+    ])
     @commands.is_nsfw()
     async def screenshot(self, ctx, url: str):
-        await ctx.defer()
+        await ctx.respond(type=5)
         urll = re.compile(r"https?://(www\.)?")
         urlll=urll.sub('', url).strip().strip('/')
-        print(urlll)
         url=f'https://{urlll}'
-        print(f'https://render-tron.appspot.com/screenshot/{url}?width=1920&height=1080')
         embed=discord.Embed(title=f'Скриншот сайта {url}')
         response = requests.get(f'https://render-tron.appspot.com/screenshot/{url}?width=1920&height=1080') 
         file_like_object = io.BytesIO(response.content)
@@ -31,10 +27,15 @@ class fun(commands.Cog):
         msg=await imgchannel.send(file=discord.File(file_like_object, filename='screen.png'))
         print(msg.attachments[0].url)
         embed.set_image(url=msg.attachments[0].url)
-        await ctx.send(embed=embed)
+        await ctx.edit(embed=embed)
         
-    @cog_ext.cog_slash(name='anime', description='search about anime', guild_ids=[761991504793174117])
+    @slash_command(name='anime', description='search about anime', guild_ids=[761991504793174117], options=[
+        Option("anime", "Anime to find", OptionType.STRING, required=True)
+        # By default, Option is optional
+        # Pass required=True to make it a required arg
+    ])
     async def animesearch(self, ctx, anime: str):
+        await ctx.respond(type=5)
         try:
             response = requests.get(f"https://api.jikan.moe/v3/search/anime?q={anime}")
             data = response.json()
@@ -56,10 +57,10 @@ class fun(commands.Cog):
             embed.set_thumbnail(url=data['results'][0].get('image_url'))
 
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
-            await ctx.send(embed=embed)
+            await ctx.edit(embed=embed)
 
         except KeyError:
-            await ctx.send(f'По запросу ``{anime}`` ничего не найдено..')
+            await ctx.edit(f'По запросу ``{anime}`` ничего не найдено..')
     
 def setup(bot:commands.Bot):
     bot.add_cog(fun(bot))

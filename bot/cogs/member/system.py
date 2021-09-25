@@ -10,7 +10,7 @@ from discord.ext import commands
 from DiscordBar import DSprogressbar as Bar
 from github import Github
 
-from discord_slash import cog_ext
+from dislash import slash_command, Option, OptionType
 
 # from discord_slash import SlashCommand
 # from discord_slash.utils.manage_components import wait_for_component
@@ -50,7 +50,7 @@ class system(commands.Cog):
                 self.data = load(stream, Loader=Loader)
 
 
-    @cog_ext.cog_slash(name='stats', description='Статистика бота')
+    @slash_command(name='stats', description='Статистика бота')
     async def stats(self, ctx):
         sec = int(round(time.time() - config ['start_time']))
         upt = (time.gmtime(sec))
@@ -107,7 +107,7 @@ class system(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @cog_ext.cog_slash(name='devs', description='разработчики бота')
+    @slash_command(name='devs', description='разработчики бота')
     async def devs(self, ctx):
         embed = discord.Embed(title='разработчики бота')
         for i in config['devs']:

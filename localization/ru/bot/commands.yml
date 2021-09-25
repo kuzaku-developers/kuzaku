@@ -26,7 +26,7 @@ info.guild.embed.maininfo.havepremium: |-
 info.guild.embed.maininfo.nopremium: |-
   <:n4_no:701392095822479370> | **На сервере __не активен__ статус Kuzaku Premium.**
   
-  :clock1: | Этот сервер создан **{0}** назад
+  :clock1: | Этот сервер создан **{0}**
   :flag_white: | Регион сервера: **{1}**
 avatar.embed.title: |-
   Аватар пользователя {0}

@@ -6,14 +6,8 @@ import discord
 from discord.ext import commands as commands, tasks
 import asyncio
 from utils.db import dbsetrp, dbgetrpid, dbrpaddmoney, dbrpgetuser, dbrpsethome, dbrpsetcar, dbrpsetresume, dbrpsetjson, dbrpgetcolumn
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_commands import create_permission
-from discord_slash.model import SlashCommandPermissionType
-from discord_slash.utils.manage_components import wait_for_component
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.model import ButtonStyle
-from discord_slash import cog_ext
+from dislash import slash_command, Option, Type, OptionChoice
+import dislash
 
 guild_ids = [730467133162782760]
 
@@ -40,20 +34,19 @@ class roleplay(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @cog_ext.cog_slash(guild_ids=guild_ids, name='call', description='позвони мне, позвони! звонит человеку!', options=[
-    create_option(
-    name='участник',
-    description='Участник, которому позвонить.',
-    required=True,
-    option_type=6
-        )], connector={'участник':'member'})
-    async def call(self, ctx, member):
+    @slash_command(guild_ids=guild_ids, name='call', description='позвони мне, позвони! звонит человеку!', options=[
+        Option(
+            'человек', 'выыбери человека для звонка',
+            type=Type.USER, required=True
+        )
+    ])
+    async def call(self, ctx):
         caller=ctx.author
-        user1 = member
+        user1 = ctx.get('человек')
         await ctx.send(embed=discord.Embed(title='дозвон!', description=f'пробуем дозвониться до {user1}!'),
-                               hidden=True)
+                               ephemeral=True)
         msg = await user1.send(
-            embed=discord.Embed(title='звонок!', description=f'тебе звонит {ctx.author}! ✅ - принять, ❌ - отклонить'))
+            embed=discord.Embed(title='звонок!', description=f'тебе звонит {ctx.user}! ✅ - принять, ❌ - отклонить'))
         await msg.add_reaction('✅')
         await msg.add_reaction('❌')
 
@@ -62,13 +55,17 @@ class roleplay(commands.Cog):
                 return user == user1 and str(reaction.emoji) in ['✅', '❌']
 
             reaction, user = await self.bot.wait_for('reaction_add', timeout=60, check=check)
+            print(f'r:{reaction.emoji}')
+            print(reaction.emoji == '✅')
             if reaction.emoji == '❌':
+                print('43234')
                 await ctx.author.send('звонок сброшен!')
 
             elif reaction.emoji == '✅':
+                print('1232')
                 await ctx.author.send('ок! звоним!')
 
-                await user.send(f'дозвон! ты соединен с {ctx.author}')
+                await user.send(f'дозвон! ты соединен с {ctx.user}')
                 ended = 0
 
                 def check1(author):
@@ -79,21 +76,24 @@ class roleplay(commands.Cog):
 
                 while ended != 1:
                     try:
+                        print('1232222')
                         msgc = await self.bot.wait_for('message', timeout=30, check=check1)
                         if msgc.author==caller:
                             await user.send(f'{caller}: {msgc.content}')
                         if msgc.author==user:
                             await caller.send(f'{user}: {msgc.content}')
 
+                        print(msgc)
 
                     except:
                         await ctx.author.send('ответа нет! сброс')
                         await user.send('ответа нет! сброс!')
                         ended = 1
         except Exception as e:
+            print(e)
             await user1.send('ожидание истекло! звонок пропущен')
-    '''
-    @cog_ext.cog_slash(
+
+    @slash_command(
         guild_ids=guild_ids,
         name="pay",
         description="перевод денег!",
@@ -123,6 +123,7 @@ class roleplay(commands.Cog):
         )
         emb.set_thumbnail(url=user.avatar_url)
         msg = await ctx.send(embed=emb)
+        print(msg)
         try:
             if dbrpgetuser(ctx.user.id)['rubles'] < money:
                 await msg.edit(
@@ -143,9 +144,9 @@ class roleplay(commands.Cog):
                 await asyncio.sleep(5)
                 await msg.delete()
         except Exception as error:
-            ...
+            print(error)
 
-    @cog_ext.cog_slash(
+    @slash_command(
         guild_ids=guild_ids,
         description="Builds a custom embed",
         options=[
@@ -177,7 +178,6 @@ class roleplay(commands.Cog):
             emb.description = desc
         # Sending the output
         await inter.reply(embed=emb, hide_user_input=True)
-    '''
     @commands.Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id == 835384947773669386:
@@ -591,8 +591,12 @@ class roleplay(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.give_money.start()
-        self.give_hp.start()
+        try:
+            self.give_money.start()
+        except: pass
+        try:
+            self.give_hp.start()
+        except: pass
 
     @tasks.loop(hours=1)
     async def give_money(self):

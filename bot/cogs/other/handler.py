@@ -2,8 +2,9 @@ import sys
 import traceback
 from discord.ext import commands
 import discord
-import discord_slash
-
+from dislash import slash_command, Option, OptionType
+import dislash
+from utils.time import visdelta
 listen = commands.Cog.listener
 
 
@@ -105,9 +106,9 @@ class EventCog(commands.Cog):
             await ctx.send(embed=embed)
 
 
-        elif isinstance(error, commands.CommandOnCooldown):
+        elif isinstance(error, dislash.CommandOnCooldown):
             embed = discord.Embed(color=0xFF0000).set_author(
-                name=f'Команду {ctx.command} нельзя выполнять так часто. Подождите немного.',
+                name=f'Команду {ctx.data.name} нельзя выполнять так часто. Подождите {visdelta(int(error.retry_after))}.',
                 icon_url='http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png')
             return await ctx.send(embed=embed)
 
@@ -115,7 +116,7 @@ class EventCog(commands.Cog):
         embed = discord.Embed(
             color=0xF56415,
             title='ErrorHandler обнаружил ошибку!',
-            description=f'Вызвано участником: {ctx.author}\nКоманда: {ctx.command}\nПодробности ошибки: ```python\n{type(error).__name__}: {error}```\n```python\n{type(error).__name__}:\n{type(error).__doc__}```'
+            description=f'Вызвано участником: {ctx.author}\nКоманда: {ctx.data.name}\nПодробности ошибки: ```python\n{type(error).__name__}: {error}```\n```python\n{type(error).__name__}:\n{type(error).__doc__}```'
         )
         embed.set_author(
             name='Обработка исключения.',
