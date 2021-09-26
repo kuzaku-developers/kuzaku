@@ -31,7 +31,7 @@ class Kuzaku (discord.ext.commands.Bot):
         super().__init__ (**options)
 
         self.together = DiscordTogether (self)
-        self.slash = InteractionClient(self, test_guilds=[808013895917633546])
+        self.slash = InteractionClient(self)
 
         self.log = Kuzaku_logger ('root')
 
