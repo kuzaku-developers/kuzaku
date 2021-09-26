@@ -1,5 +1,5 @@
 Pygithub
-DiscordBar
+discordbar
 jishaku
 icecream
 quart
@@ -28,6 +28,7 @@ dislash.py
 git+https://github.com/BANanaD3V/discord-ext-dashboard.git
 python-uptimerobot
 Pillow
+numpy
 jishaku
 websocket-client
 python-socketio
