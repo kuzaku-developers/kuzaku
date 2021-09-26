@@ -1,5 +1,5 @@
 Pygithub
-discordbar
+python-multibar
 jishaku
 icecream
 quart
