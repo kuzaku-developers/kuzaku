@@ -4,12 +4,12 @@ import platform
 import time
 import psutil
 from yaml import load
-
+from utils.db import usedcommands
 import discord
 from discord.ext import commands
-from DiscordBar import DSprogressbar as Bar
+from multibar import ProgressBar
 from github import Github
-
+import math
 from dislash import slash_command, Option, OptionType
 
 # from discord_slash import SlashCommand
@@ -52,17 +52,31 @@ class system(commands.Cog):
 
     @slash_command(name='stats', description='Статистика бота')
     async def stats(self, ctx):
+        await ctx.respond(type=5)
+        def natural_size(size_in_bytes: int):
+            units = ('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB')
+
+            power = int(math.log(size_in_bytes, 1024))
+
+            return f"{size_in_bytes / (1024 ** power):.2f} {units[power]}"
+        proc = psutil.Process()
+        with proc.oneshot():
+            try:
+                mem = proc.memory_full_info()
+                using=mem.vms
+                allmem=psutil.virtual_memory().total
+            except psutil.AccessDenied:
+                using='None'
+                allmem='None'
         sec = int(round(time.time() - config ['start_time']))
         upt = (time.gmtime(sec))
-        now = psutil.virtual_memory().used
-        max = psutil.virtual_memory().total
-        bar = Bar(now=round(now), needed=max, type='get')
-        progress = await bar.progress(line='□', fill='[■](https://kuzaku.ml)')
+        bar = ProgressBar(round(using), round(allmem), length=10)
+        progress = bar.write_progress(line='□', fill='[■](https://kuzaku.ml)')
 
 
 
         embed=discord.Embed(title=self.data['system.stats.title'])
-        g=Github()
+        g=Github("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")
         repo=g.get_repo('kuzaku-developers/kuzaku')
         commit=repo.get_commits().totalCount
         date=repo.get_commits()[0].commit.author.date
@@ -72,8 +86,7 @@ class system(commands.Cog):
 <:python:796454672860708896> Python версии **{platform.python_version()}**
 <:python:796454672860708896> discord.py версии **{discord.__version__}**
 <:settings_blue:796456043416780840> версия kuzaku **{date} ({commit})**
-        ''', inline=False)
-        embed.add_field(name=self.data['system.stats.ram.title'], value=self.data['system.stats.ram'].format(str(round(psutil.virtual_memory().percent)),progress,str(round(psutil.virtual_memory().total/(1024.**3))),str(round(psutil.virtual_memory().used/(1024.**3),2))))
+        ''', inline=True)
         current_time = time.time()
         difference = current_time - config ['start_time']
         timee = datetime.timedelta(seconds=round(difference))
@@ -91,21 +104,22 @@ class system(commands.Cog):
         embed.add_field(name='информация', value=f'''
 :tools: Доступно {len(self.bot.all_commands)} {pickform(len(self.bot.all_commands), ['команда','команды', 'команд'])}
 :file_folder: Всего серверов: {len(self.bot.guilds)}
-<:txt_channel:796381251497099356> текстовых каналов: {tch_count}
-<:voice_channel:796455929133793331> голосовых каналов: {vch_count}
-<:members:796455485506322493> всего людей: {ppl}
 :hourglass_flowing_sand: Аптайм: {visdelta(timee)}
+<:slashcommand:891385007397031946> Использовано команд: {usedcommands()}
 ''')
-        embed.add_field(name='последний коммит', value=f'''
-```
-{repo.get_commits()[0].commit.message}
-```
-''')
+        embed.add_field(name="­", value="­", inline=True)
+        embed.add_field(name=self.data['system.stats.ram.title'], value=self.data['system.stats.ram'].format(round(using * 100 / psutil.virtual_memory().total),progress,natural_size(allmem),natural_size(using)), inline=True)
+        embed.add_field(name=self.data['system.stats.cpu.title'], value=self.data['system.stats.cpu'].format(round(using * 100 / psutil.virtual_memory().total),psutil.cpu_count(),psutil.cpu_percent(interval=None)), inline=True)
+        #embed.add_field(name='последний коммит', value=f'''
+#```
+#{repo.get_commits()[0].commit.message}
+#```
+#''', inline=False)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=f'команда stats | вызваал {ctx.author}', icon_url=ctx.author.avatar_url)
 
-        await ctx.send(embed=embed)
+        await ctx.edit(embed=embed)
 
     @slash_command(name='devs', description='разработчики бота')
     async def devs(self, ctx):

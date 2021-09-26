@@ -9,7 +9,7 @@ class fun(commands.Cog):
     def __init__(self, bot:commands.Bot):
         self.bot = bot
     
-    @slash_command(name='screenshot', description='Take site screenshot!', guild_ids=[761991504793174117], options=[
+    @slash_command(name='screenshot', description='Take site screenshot!', options=[
         Option("url", "Site url", OptionType.STRING, required=True)
         # By default, Option is optional
         # Pass required=True to make it a required arg
@@ -29,7 +29,7 @@ class fun(commands.Cog):
         embed.set_image(url=msg.attachments[0].url)
         await ctx.edit(embed=embed)
         
-    @slash_command(name='anime', description='search about anime', guild_ids=[761991504793174117], options=[
+    @slash_command(name='anime', description='search about anime', options=[
         Option("anime", "Anime to find", OptionType.STRING, required=True)
         # By default, Option is optional
         # Pass required=True to make it a required arg

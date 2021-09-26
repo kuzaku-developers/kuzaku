@@ -18,11 +18,12 @@ def ping(host):
 
     return subprocess.call(command, stdout=subprocess.PIPE) == 0
 
-def load_dir (bot, path, rel_to, ignore = []):
+def load_dir (bot, logger, path, rel_to, ignore = []):
     for cog in path.iterdir ():
         if cog.is_file ():
             cog = cog.relative_to (rel_to)
             if cog.name [:-3] in ignore:
+                logger.warn(f"Cog {cog.name} is disabled.")
                 continue
 
             cog = str (cog) [:-3].replace ('/', '.').replace ('\\', '.')
@@ -31,21 +32,21 @@ def load_dir (bot, path, rel_to, ignore = []):
                 bot.load_extension (f'{cog}')
 
             except Exception as e:
-                bot.log.error(f'    not loaded: {cog !r}')
-                bot.log.error(f'    error: {e}')
+                logger.error(f'not loaded: {cog !r}')
+                logger.error(f'error: {e}')
 
             else:
-                bot.log.info (f'    loaded: {cog !r}')
+                logger.info (f'loaded: {cog !r}')
 
         else:
             if cog.name != '__pycache__':
-                load_dir (bot, cog, rel_to, ignore)
+                load_dir (bot, logger, cog, rel_to, ignore)
 
 
 def load_cogs (bot, ignore = []):
-    bot.load_extension('kuzaku.jishaku')
-    bot.log.info('<main> :: Cogs loader')
-    bot.log.info(f'    Loading \'cogs/*\' ...')
-    path = Path.cwd () / 'bot' / 'cogs'
+    bot.load_extension('jishaku')
 
-    load_dir (bot, path, path.parent, ignore)
+    with bot.log ('COG LOADER') as logger:
+        path = Path.cwd () / 'bot' / 'cogs'
+
+        load_dir (bot, logger, path, path.parent, ignore)

@@ -4,7 +4,8 @@ from datetime import date, datetime
 from os import environ
 from pathlib import Path
 from enum import Enum
-from colorama import init as color_init # * Not needed, our team is using VSCode on windows
+
+# from colorama import init as color_init # * Not needed, owr team is using VSCode on windows
 from termcolor import colored
 from dotenv import load_dotenv
 
@@ -69,7 +70,7 @@ tabs_pattern = tabs_function (pattern_control (prod, 'TABS_FUNCTION', 'n4'))
 
 logfile = get_logfile (prod)
 
-color_init () # * Not needed, owr team is using VSCode on windows
+# color_init () # * Not needed, owr team is using VSCode on windows
 
 class Log_error (RuntimeError):
     pass
@@ -171,7 +172,8 @@ class Kuzaku_logger ():
                 log = self.__compute_log (self.sub_group, 'GROUP', f'Exited group {self.name !r} with error {error !r}', '<', 'cyan', ['bold'])
 
         # * logging <- log
-        print(log, TracingName1)
+
+        print (log)
 
     def info (self, *msgs):
         for msg in msgs:

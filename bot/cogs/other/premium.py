@@ -5,13 +5,9 @@ import sys
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands.core import Group
-from discord_slash import SlashCommand, cog_ext
-from discord_slash.model import ButtonStyle
 from discord import Webhook, RequestsWebhookAdapter
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.utils.manage_components import (create_actionrow,
-                                                   create_button,
-                                                   wait_for_component)
+from dislash import *
+import dislash
 
 from requests import post
 from utils.db import *
@@ -23,7 +19,7 @@ from discord.ext.commands.cooldowns import (BucketType, Cooldown,
                                             CooldownMapping)
 
 
-def get_link(ctx, botname):
+def get_link(ctx):
     testli = 'true'
     headers = {'Authorization': f'Bearer {os.getenv("kapusta")}',
                    'Content-Type': 'application/json'}
@@ -79,71 +75,83 @@ class premium(commands.Cog):
         try:
             self.check_premium.start()
         except  RuntimeError: ...
-    @cog_ext.cog_subcommand(base='premium', name = "buy", description='Премиум!')
+    @slash_command(name='premium', description='Premium')
+    async def premium_cmd(self, ctx):
+        pass
+    @premium_cmd.sub_command(name = "buy", description='Премиум!')
     @commands.guild_only()
     @cooldoown(1, 3, commands.BucketType.user, False)
     async def prem(self, ctx:commands.Context):
-        await ctx.defer()
+        await ctx.respond(type=5)
         guild = self.bot.get_guild(761991504793174117)
         if guild.get_member(ctx.author.id):
             premium=guild.get_role(869122020447748137)
             if premium in guild.get_member(ctx.author.id).roles:
                 embed=discord.Embed(title='Премиум', description='у вас есть премиум и вы можете его активровать! используйте /gold use')
-                await ctx.send(embed=embed)
+                await ctx.edit(embed=embed)
             else:
                 
             
                 embed=discord.Embed(title='Премиум', description='у вас нет премиума! Мы были бы признательны, если бы вы приобрели подиску и активировали бонус! Для этого нажмите на кнопку снизу! :з')
-                row=create_actionrow(
-                                        create_button(style=ButtonStyle.green, label="Купить"))
-                await ctx.send(embed=embed,  components=[row])
-                button_ctx: ComponentContext = await wait_for_component(self.bot, components=row)  
-                link=get_link(ctx, self.bot.user.name)
+                row=row_of_buttons = ActionRow(
+                Button(
+                style=ButtonStyle.green,
+                label="Купить",
+                custom_id="buy"
+                )
+                )
+                def check(inter):
+                    return inter.author == ctx.author                      
+                msg=await ctx.edit(embed=embed,  components=[row])
+                inter = await msg.wait_for_button_click(check=check)  
+                link=get_link(ctx)
                 if link=='что-то пошло не так! 404':
-                    await button_ctx.send(content='что-то пошло не так! 404', hidden=True)
+                    await inter.reply(content='что-то пошло не так! 404', ephemeral=True)
                 else:
-                    await button_ctx.send(content = "Отлично. Нажми на кнопку для оплаты", hidden=True,components = [create_actionrow(
-                                        create_button(style=ButtonStyle.URL, url=link, label="Оплата"))])
+                    await inter.reply(content = "Отлично. Нажми на кнопку для оплаты", ephemeral=True,components = [ActionRow(
+                Button(
+                style=ButtonStyle.url,
+                label="Оплата",
+                custom_id="buylink",
+                url=get_link(ctx)
+                )
+                )])
                     
 
 
         else:
             embed=discord.Embed(title='Премиум', description='вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)')
             
-            await ctx.send(embed=embed)
-    @cog_ext.cog_subcommand(base='premium', name='use', description='использовать премиум')
+            await ctx.edit(embed=embed)
+    @premium_cmd.sub_command(name='use', description='использовать премиум')
     async def use(self, ctx):
-        await ctx.defer()
+        await ctx.respond(type=5)
         try:
             if int(dict(getdb()['premium'])[str(ctx.author.id)]['count']) <= 0:
                 embed=discord.Embed(title='Активация!', description='Провал! У вас больше нет серверов для активации!')
-                await ctx.send(embed=embed)
+                await ctx.edit(embed=embed)
             else:
                 if True:
 
                     for i in dict(getdb()['premium'])['guilds']:
                         if str(i) == str(ctx.guild.id):
-                            await ctx.send(embed=discord.Embed(title='Активация!', description='Провал! Премиум уже активирован!'))
+                            await ctx.edit(embed=discord.Embed(title='Активация!', description='Провал! Премиум уже активирован!'))
                             break
                     else:
                         try:
                             minusoneguild(ctx.author.id)
                             setsupporter(str(ctx.guild.id), True)
-                            await ctx.send(embed=discord.Embed(title='Активация!', description='Успех! Премиум активирован!'))
+                            await ctx.edit(embed=discord.Embed(title='Активация!', description='Успех! Премиум активирован!'))
                         except Exception as e:
-                            await ctx.send(embed=discord.Embed(title='Активация!', description='Провал! Возникла неизвестная ошибка!'))
+                            await ctx.edit(embed=discord.Embed(title='Активация!', description='Провал! Возникла неизвестная ошибка!'))
         except:
             embed=discord.Embed(title='Активация!', description='Провал! У вас нет премиума!')
-            await ctx.send(embed=embed)
+            await ctx.edit(embed=embed)
     @commands.is_owner()
-    @cog_ext.cog_slash(name='premiumgive', description='Выдать премиум', guild_ids=[761991504793174117], options=[
-    create_option(
-    name='user',
-    description='User.',
-    required=True,
-    option_type=6)])
+    @slash_command(name='premiumgive', description='Выдать премиум', guild_ids=[761991504793174117], options=[
+    Option("user", "Enter the user", OptionType.USER, required=True)])
     async def give(self, ctx, user):
-        await ctx.defer()
+        await ctx.respond(type=5)
         data = {
             'premium': 'True',
             'count': '3'
@@ -157,7 +165,7 @@ class premium(commands.Cog):
         # Initialize the webhook class and attaches data.
         webhook=Webhook.from_url(WEBHOOK_URL,adapter=RequestsWebhookAdapter())
         webhook.send(embed=embed, username='покупка премиума', avatar_url=user.avatar_url)
-        await ctx.send(f'Премиум успешно выдан для {user.mention}!')
+        await ctx.edit(f'Премиум успешно выдан для {user.mention}!')
     @tasks.loop(minutes=10)
     async def check_premium(self):
         for i in dict(getdb()['premium']):

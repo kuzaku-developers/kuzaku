@@ -12,6 +12,7 @@ asyncio
 wavelink
 youtube_dl
 psutil
+opencv-python
 pycryptodome
 python_jwt
 sseclient
@@ -30,5 +31,6 @@ Pillow
 jishaku
 websocket-client
 python-socketio
+discord-ext-menus
 termcolor
 colorama

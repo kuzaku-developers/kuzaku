@@ -128,9 +128,9 @@ class EventCog(commands.Cog):
             await dev.send(embed=embed)
 
         if ctx.author.id in [704560097610825828]:
-            await ctx.send(f'{ctx.author.mention}, у меня произошла проблема.')
+            await ctx.reply(f'{ctx.author.mention}, у меня произошла проблема.')
         else:
-            await ctx.send('произошла ошибка! Она уже отправлена разработчикам!')
+            await ctx.reply('произошла ошибка! Она уже отправлена разработчикам!')
 
 
 def setup(bot):

@@ -6,8 +6,8 @@ from discord.ext.commands import Context
 from discord.ext.dashboard import Dashboard
 
 from discordTogether import DiscordTogether
-#from discord_slash import SlashCommand
-
+import dislash
+from dislash import InteractionClient
 from botconfig import botconfig as config
 from kuzaku.logger import Kuzaku_logger
 from kuzaku.exts   import ping
@@ -31,7 +31,7 @@ class Kuzaku (discord.ext.commands.Bot):
         super().__init__ (**options)
 
         self.together = DiscordTogether (self)
-        #self.slash = SlashCommand (self, sync_commands=True, sync_on_cog_reload=True)
+        self.slash = InteractionClient(self, test_guilds=[808013895917633546])
 
         self.log = Kuzaku_logger ('root')
 
@@ -53,13 +53,13 @@ class Kuzaku (discord.ext.commands.Bot):
         self.log.info(f'    {self.user} connected successfully in {sec} seconds')
 
     async def on_ready(self):
-        #await self.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | /help'))
+        await self.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name=f'{len(self.guilds)} guilds | /help'))
         self.log.info('<main> :: Bot')
         self.log.info('    Bot is ready to use')
         self.log.info('<api> :: Trying to ping website...')
         try:
             if ping('kuzaku.ml'):
-                self.log.warn('    Website is working!')
+                self.log.log('    Website is working!')
             else:
                 self.log.warn('    Website is not working!')
         except:
