@@ -76,7 +76,7 @@ class system(commands.Cog):
 
 
         embed=discord.Embed(title=self.data['system.stats.title'])
-        g=Github("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")
+        g=Github()
         repo=g.get_repo('kuzaku-developers/kuzaku')
         commit=repo.get_commits().totalCount
         date=repo.get_commits()[0].commit.author.date
