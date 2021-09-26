@@ -6,8 +6,13 @@ system.stats.tech.title: |-
   оборудование
 system.stats.ram: |-
   {1} {0}% <:RAM:809399476850262026>
-  `Всего ОЗУ: {2}` gb
-  `Использовано ботом: {3}` gb
+  `Всего ОЗУ: {2}` 
+  `Использовано ботом: {3}` 
+system.stats.cpu.title: |-
+  использование CPU <:CPU:809395752634810368>
+system.stats.cpu: |-
+  `Ядер процессора: {1}` 
+  `Использовано ботом: {2}` 
 info.invite.fullurl: |-
   Хотите раскрыть все мои способности? [Клик сюда](https://discordapp.com/oauth2/authorize?client_id={0}&scope=bot%20applications.commands&permissions=473197655)
 info.invite.lowurl: |-

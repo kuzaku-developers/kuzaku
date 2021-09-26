@@ -1,14 +1,8 @@
 import discord
 import datetime
+from utils.db import usedcmd
 from discord.ext import commands
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_commands import create_permission
-from discord_slash.model import SlashCommandPermissionType
-from discord_slash.utils.manage_components import wait_for_component
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.model import ButtonStyle
-from discord_slash import cog_ext
+import dislash
 
 class logger(commands.Cog):
     def __init__(self, bot:commands.Bot):
@@ -17,7 +11,10 @@ class logger(commands.Cog):
 
     @commands.Cog.listener()
     async def on_slash_command(self, ctx):
-        self.bot.log.info(f'<{ctx.guild.name}> ({ctx.author}) :: {ctx.command}')
-
+        self.bot.log.info(f'<{ctx.guild.name}> ({ctx.author}) :: {ctx.data.name}')
+        usedcmd()
+    @commands.Cog.listener()
+    async def on_auto_register(self, global_commands_patched, patched_guilds):
+        self.bot.log.info('<slash> :: Slash commands is registred')
 def setup(bot:commands.Bot):
     bot.add_cog(logger(bot))

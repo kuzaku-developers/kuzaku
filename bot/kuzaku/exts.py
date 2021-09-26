@@ -23,6 +23,7 @@ def load_dir (bot, logger, path, rel_to, ignore = []):
         if cog.is_file ():
             cog = cog.relative_to (rel_to)
             if cog.name [:-3] in ignore:
+                logger.warn(f"Cog {cog.name} is disabled.")
                 continue
 
             cog = str (cog) [:-3].replace ('/', '.').replace ('\\', '.')
@@ -43,7 +44,7 @@ def load_dir (bot, logger, path, rel_to, ignore = []):
 
 
 def load_cogs (bot, ignore = []):
-    bot.load_extension('kuzaku.jishaku')
+    bot.load_extension('jishaku')
 
     with bot.log ('COG LOADER') as logger:
         path = Path.cwd () / 'bot' / 'cogs'

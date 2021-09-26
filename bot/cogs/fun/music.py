@@ -11,14 +11,6 @@ import traceback
 from async_timeout import timeout
 from functools import partial
 from youtube_dl import YoutubeDL
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_commands import create_permission
-from discord_slash.model import SlashCommandPermissionType
-from discord_slash.utils.manage_components import wait_for_component
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.model import ButtonStyle
-from discord_slash import cog_ext
 from random import randint
 
 

@@ -28,8 +28,8 @@ botconfig = {
 
     "token": os.getenv('BOTTOKEN'),
     "production": production == 'yes',
-    "botver": "1.7.10",
-    "ignore_cogs": ["channels"],
+    "botver": "0.0.9",
+    "ignore_cogs": ["channels", "automod", "music", "economy", "promos", "premium"],
 
     "start_time": time.time (),
 }

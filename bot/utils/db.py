@@ -41,6 +41,13 @@ def setpromouses(promocodeid, uses):
         db.child("db").child('promocodes').child(promocodeid).update(data)
     except Exception as e:
         print(e)
+def usedcmd():
+    data=dict(getdb()['cmds'])
+    data['count'] = str(int(data['count'])+1)
+    db.child("db").child('cmds').set(data)
+def usedcommands():
+    data=dict(getdb()['cmds'])
+    return data['count']
 def minusoneguild(userid):
     data=dict(getdb()['premium'])[str(userid)]
     data['count'] = str(int(data['count'])-1)

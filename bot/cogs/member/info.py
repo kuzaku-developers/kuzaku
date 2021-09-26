@@ -7,9 +7,8 @@ import datetime
 import discord
 from discord.ext import commands
 from yaml import Loader, load
-from discord_slash import SlashCommand
-from discord_slash import cog_ext
-from discord_slash.utils.manage_commands import create_option
+import dislash
+from dislash import slash_command, Option, OptionType
 rootdir=os.path.abspath(os.path.join(os.curdir))
 
 class info(commands.Cog):
@@ -24,9 +23,8 @@ class info(commands.Cog):
             with open("localization/ru/bot/commands.yml", 'r', encoding='utf8') as stream:
                 self.data = load(stream, Loader=Loader)
     @commands.guild_only()
-    @cog_ext.cog_slash(name='invite',  description='invite bot')
+    @slash_command(name='invite',  description='invite bot', test_guilds=[808013895917633546])
     async def invite(self, ctx):
-        await ctx.defer()
         full_url = self.data['info.invite.fullurl'].format(self.bot.user.id)
         low_url = self.data['info.invite.lowurl'].format(self.bot.user.id)
         embed = discord.Embed(color=0xf0a302,
@@ -35,12 +33,12 @@ class info(commands.Cog):
         embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         embed.set_footer(text=f'{ctx.author} | {self.bot.user}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
-    @cog_ext.cog_slash(name='server', description='Information abot server.')
+    @dislash.cooldown(1, 5, commands.BucketType.user)
+    @slash_command(name='server', description='Information about server.', test_guilds=[808013895917633546])
     @commands.guild_only()
     async def guild(self, ctx):
-        await ctx.defer()
-        """Информация о сервере.
-        """
+        await ctx.respond(type=5)
+        """Информация о сервере."""
         embed = discord.Embed(title=ctx.guild.name, colour=discord.Colour(0xd9ec))
 
         embed.set_thumbnail(url=ctx.guild.icon_url)
@@ -55,20 +53,14 @@ class info(commands.Cog):
         embed.add_field(name="Участники:", value=f":busts_in_silhouette: | Всего участников:\n- **{len(ctx.guild.members)}**\n:interrobang: | Макс. кол-во участников:\n- **{ctx.guild.max_members}**", inline=True)
 
 
-        await ctx.send(embed=embed)
-    @cog_ext.cog_slash(name='avatar', description='Show member avatar!', guild_ids=[761991504793174117], options=[
-    create_option(
-    name='member',
-    description='Участник, аватар которого ты хочешь посмотреть.',
-    required=False,
-    option_type=6)
-            ])
+        await ctx.edit(embed=embed)
+    @slash_command(name='avatar', description='Show member avatar!', test_guilds=[808013895917633546], options=[
+    Option('member', 'Участник, аватар которого ты хочешь посмотреть.', OptionType.USER, required=False)])
     async def avatar(self, ctx, member=None):
-        await ctx.defer()
-        if not member:
-            member=ctx.author
-        embed=discord.Embed(title=self.data['avatar.embed.title'].format(member))
-        embed.set_image(url=member.avatar_url_as(format='png'))
-        await ctx.send(embed=embed)
+        async with ctx.typing:
+            member = member or ctx.author
+            embed=discord.Embed(title=self.data['avatar.embed.title'].format(member))
+            embed.set_image(url=member.avatar_url_as(format='png'))
+            await ctx.send(embed=embed)
 def setup(bot):
     bot.add_cog(info(bot))

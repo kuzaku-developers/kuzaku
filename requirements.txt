@@ -1,5 +1,5 @@
 Pygithub
-DiscordBar
+python-multibar
 jishaku
 icecream
 quart
@@ -12,6 +12,7 @@ asyncio
 wavelink
 youtube_dl
 psutil
+opencv-python
 pycryptodome
 python_jwt
 sseclient
@@ -23,12 +24,14 @@ requests
 python-socketio
 Quart-Discord
 discord-together
-discord-py-slash-command
+dislash.py
 git+https://github.com/BANanaD3V/discord-ext-dashboard.git
 python-uptimerobot
 Pillow
+numpy
 jishaku
 websocket-client
 python-socketio
+discord-ext-menus
 termcolor
 colorama
