@@ -33,7 +33,7 @@ class Kuzaku (discord.ext.commands.Bot):
         self.together = DiscordTogether (self)
         self.slash = InteractionClient(self)
 
-        self.log = Kuzaku_logger ('root')
+        self.log = Kuzaku_logger.new ()
 
         if config ['production']:
             self.dashboard = Dashboard (

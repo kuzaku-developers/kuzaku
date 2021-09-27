@@ -46,7 +46,7 @@ def load_dir (bot, logger, path, rel_to, ignore = []):
 def load_cogs (bot, ignore = []):
     bot.load_extension('jishaku')
 
-    with bot.log ('COG LOADER') as logger:
+    with bot.log.get ('COG LOADER') as logger:
         path = Path.cwd () / 'bot' / 'cogs'
 
         load_dir (bot, logger, path, path.parent, ignore)
