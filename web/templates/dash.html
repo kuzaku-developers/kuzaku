@@ -14,11 +14,10 @@
     <link type='text/css' rel='stylesheet' href="static/css/utilities.css">
     <link type='text/css' rel='stylesheet' href="static/css/index.css">
     <link type='text/css' rel='stylesheet' href="static/css/docs.css">
-    <link type='text/css' rel='stylesheet' href="static/css/style.css">
+    <link type='text/css' rel='stylesheet' href="static/css/dashmodern.css">
     <link type='text/css' rel='stylesheet' href="static/css/common.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="/static/materialize/css/materialize.min.css">
-    <link rel="stylesheet" href="/static/materialize/extras/noUiSlider/nouislider.css">
+
 
 
     <!-- Font Awesome -->
@@ -62,51 +61,51 @@
                     <li><a class='button' href='status'><span>Статус</span></a></li>
                 </ul>
             </nav>
-            {% block content_drop %}
-                {% if user %}
-                    <button onclick="myFunction()" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>
-                {% else %}
-                    <button onclick="location.href='login'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>
-                {% endif %}
-            {% endblock content_drop %}
+            <a onclick="location.href='logout'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;">Выйти</a>
         </div>
-        <div id="myDropdown" class="dropdown-content">
-            <div class="usercard">
-                <img src={{ user.avatar_url }} alt="Avatar" style="width:100%">
-                <div class="ccont">
-                  <h4><b>{{ user.name }}</b></h4>
-                  <p>{{ user }}</p>
+    </div>
+    <div style="height: 20px;"></div>
+    {% block content_guilds %}
+    <ul class="cards">
+        {% for guild in mutual_guilds %}
+        <li>
+          <a href="dashboard/{{ guild.id}}" class="card">
+            <img src="{{ guild.icon_url }}" class="card__image" alt="" onerror="this.onerror=null;this.src='/static/images/server.png'"/>
+            <div class="card__overlay">
+              <div class="card__header">
+                <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>                     
+                <img class="card__thumb" src="{{ guild.icon_url }}" alt="" onerror="this.onerror=null;this.src='/static/images/server.png'"/>
+                <div class="card__header-text">
+                  <h3 class="card__title">{{ guild.name }}</h3>            
+                  <span class="card__status">Приглашен</span>
                 </div>
               </div>
-            <a id="dashdropbutton" href="#" onclick='alert("Дашбоард еще в активной разработке. Пока что не доступно")'>Дашбоард</a>
-<a href="logout" id="exitdropbutton">Выйти</a>
-          </div>
-    </div>
-
-    {% block content %}
-    <div class="row container">
-        {% for guild in mutual_guilds %}
-            <div class="col m4 center">
-                <div class="guild">
-                    <img style="border-radius: 100%; width: 20%;" src="{{ guild.icon_url }}" onerror="this.onerror=null;this.src='/static/images/server.png'">
-                    <p style="height: 100%; font-size: 150%;">{{ guild.name }}</p>
-                    <a href="/dashboard/{{ guild.id }}" class="waves-effect waves-light btn">дашбоард</a>
-                </div>
+              <p class="card__description">Настроить бота и прокачать свой сервер!</p>
             </div>
+          </a>      
+        </li> 
         {% endfor %}
-
         {% for guild in admin_guilds %}
-            <div class="col m4 center">
-                <div class="guild">
-                    <img style="border-radius: 100%; width: 60%;" src="{{ guild.icon_url }}" onerror="this.onerror=null;this.src='/static/images/server.png'">
-                    <p style="height: 100%; font-size: 150%;">{{ guild.name }}</p>
-                    <a target="_blank" href="https://discord.com/oauth2/authorize?client_id={{ config.discord_client_id }}&guild_id={{ guild.id }}&scope=bot&permissions=8" class="waves-effect waves-light btn invite">invite</a>
+        <li>
+            <a href="https://discord.com/oauth2/authorize?client_id={{ config.discord_client_id }}&guild_id={{ guild.id }}&scope=bot&permissions=8" class="card">
+              <img style="filter: grayscale(100%);" src="{{ guild.icon_url }}" class="card__image" alt="" onerror="this.onerror=null;this.src='/static/images/server.png'"/>
+              <div class="card__overlay">
+                <div class="card__header">
+                  <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>                     
+                  <img class="card__thumb" src="{{ guild.icon_url }}" alt="" onerror="this.onerror=null;this.src='/static/images/server.png'"/>
+                  <div class="card__header-text">
+                    <h3 class="card__title">{{ guild.name }}</h3>            
+                    <span class="card__status">Добавить</span>
+                  </div>
                 </div>
-            </div>
+                <p class="card__description">Добавить бота и сделать свой сервер лучше!</p>
+              </div>
+            </a>      
+          </li> 
         {% endfor %}
-    </div>    
-{% endblock %}
-    <!-- Footer -->
+    
+      </ul>
+      {% endblock %}
     <div class='footer'>
         <div class='container full grid'>
             <div class='branding'>

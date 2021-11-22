@@ -1,7 +1,14 @@
-document.addEventListener('DOMContentLoaded', () => {
-    var dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
-    M.Dropdown.init(dropdownTriggers, { constrainWidth: false });
-});
+function toast(message) {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+    x.innerHTML = message;
+    // Add the "show" class to DIV
+    x.className = "show";
+  
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
 
 function save(guild_id, item, value) {
     var formData = new FormData();
@@ -11,7 +18,7 @@ function save(guild_id, item, value) {
     fetch(`/api/settings/change/${guild_id}`, {method: "POST", body: formData})
         .then(res => res.text())
         .then(res => {
-            if(res == "done") M.toast({html: 'SUCCESS! Setting saved successfully.'});
-            else M.toast({html: 'Sorry, an error occured.'});
+            if(res == "done") toast('Настройки успешно изменены!');
+            else toast('Произошла ошибка!');
     });
 }

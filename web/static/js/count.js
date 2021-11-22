@@ -24,7 +24,7 @@ $(document).ready(function () {
 function myFunction() {
     document.getElementById("navbarr").classList.toggle("navbar");
     document.getElementById("navbarr").classList.toggle("navbar_toggled");
-    document.getElementById("myDropdown").classList.toggle("show");
+    document.getElementById("myDropdown").classList.toggle("showed");
   }
   
   // Close the dropdown menu if the user clicks outside of it
@@ -34,10 +34,10 @@ function myFunction() {
       var i;
       for (i = 0; i < dropdowns.length; i++) {
         var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
+        if (openDropdown.classList.contains('showed')) {
           document.getElementById("navbarr").classList.add("navbar");
           document.getElementById("navbarr").classList.remove("navbar_toggled");
-          openDropdown.classList.remove('show');
+          openDropdown.classList.remove('showed');
         }
       }
     }

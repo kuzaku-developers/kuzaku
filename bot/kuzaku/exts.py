@@ -1,8 +1,10 @@
 import subprocess
 import platform
 from pathlib import Path
+import traceback
 
 # from kuzaku.logger import log, warning, error
+
 
 def ping(host):
     """
@@ -11,42 +13,42 @@ def ping(host):
     """
 
     # Option for the number of packets as a function of
-    param = '-n' if platform.system().lower()=='windows' else '-c'
+    param = "-n" if platform.system().lower() == "windows" else "-c"
 
     # Building the command. Ex: "ping -c 1 google.com"
-    command = ['ping', param, '1', host]
+    command = ["ping", param, "1", host]
 
     return subprocess.call(command, stdout=subprocess.PIPE) == 0
 
-def load_dir (bot, logger, path, rel_to, ignore = []):
-    for cog in path.iterdir ():
-        if cog.is_file ():
-            cog = cog.relative_to (rel_to)
-            if cog.name [:-3] in ignore:
+
+def load_dir(bot, logger, path, rel_to, ignore=[]):
+    for cog in path.iterdir():
+        if cog.is_file():
+            cog = cog.relative_to(rel_to)
+            if cog.name[:-3] in ignore:
                 logger.warn(f"Cog {cog.name} is disabled.")
                 continue
 
-            cog = str (cog) [:-3].replace ('/', '.').replace ('\\', '.')
+            cog = str(cog)[:-3].replace("/", ".").replace("\\", ".")
 
             try:
-                bot.load_extension (f'{cog}')
+                bot.load_extension(f"{cog}")
 
             except Exception as e:
-                logger.error(f'not loaded: {cog !r}')
-                logger.error(f'error: {e}')
+                logger.error(f"not loaded: {cog !r}")
+                logger.error(f"error: {e}")
 
             else:
-                logger.info (f'loaded: {cog !r}')
+                logger.info(f"loaded: {cog !r}")
 
         else:
-            if cog.name != '__pycache__':
-                load_dir (bot, logger, cog, rel_to, ignore)
+            if cog.name != "__pycache__":
+                load_dir(bot, logger, cog, rel_to, ignore)
 
 
-def load_cogs (bot, ignore = []):
-    bot.load_extension('jishaku')
+def load_cogs(bot, ignore=[]):
 
-    with bot.log.get ('COG LOADER') as logger:
-        path = Path.cwd () / 'bot' / 'cogs'
+    with bot.log.get("COG LOADER") as logger:
+        path = Path.cwd() / "bot" / "cogs"
 
-        load_dir (bot, logger, path, path.parent, ignore)
+        load_dir(bot, logger, path, path.parent, ignore)

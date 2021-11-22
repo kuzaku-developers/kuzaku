@@ -1,20 +1,116 @@
-{% extends "base.html" %}
-{% import "base.html" as base %}
-{% block username %} {{ user.name }} {% endblock %}
-{% block headline %} Morandi Dashboard {% endblock %}
-{% block description %} Click a module to see and change settings or use functions. {% endblock %}
-{% block user_avatar %} {{ user.avatar_url }} {% endblock %}
-{% block content %}
-    <div class="row container">
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta data-n-head='ssr' charset="utf-8">
+    <meta data-n-head='ssr' name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Head Information -->
+    <title>kuzaku - дискорд бот!</title>
+    <link data-n-head='ssr' rel='icon' type='image/x-icon' href="./static/images/nuclear.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link type='text/css' rel='stylesheet' href="../static/css/utilities.css">
+    <link type='text/css' rel='stylesheet' href="../static/css/index.css">
+    <link type='text/css' rel='stylesheet' href="../static/css/docs.css">
+    <link type='text/css' rel='stylesheet' href="../static/css/dashguild.css">
+    <link type='text/css' rel='stylesheet' href="../static/css/common.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous">
+
+    <!-- Meta -->
+    <meta data-n-head='ssr' data-hid='theme-color' name='theme-color' content='#BB860B'>
+    <meta data-n-head='ssr' data-hid='og:type' name='og:type' content='website'>
+    <meta data-n-head='ssr' data-hid='og:title' name='og:title' content='kuzaku - дискорд бот!'>
+    <meta data-n-head='ssr' data-hid='og:url' name='og:url' content='https://kuzaku.ml'>
+    <meta data-n-head='ssr' data-hid='og:image' name='og:image'
+        content="../static/images/kuzaku.png">
+    <meta data-n-head='ssr' data-hid='description' name='description'
+        content='kuzaku - дискорд чат бот!'>
+    <meta data-n-head='ssr' data-hid='og:description' name='og:description'
+        content='kuzaku - дискорд чат бот!'>
+
+</head>
+
+<body style='background-color: #424242'>
+    <!-- Preloader -->
+
+    <body class='preload'></body>
+
+    <!-- Header -->
+    <div class='navbar animate__animated animate__backInDown' id='navbarr'>
+        <div class='container full flex'>
+            <a href='/' class='logo flex'>
+                <img src="../static/images/kuzaku.png" alt='kuzaku Logo'>
+                <p class='title'>kuzaku</p>
+            </a>
+            <nav>
+                <ul>
+                    <li><a class='button' href='commands'><span>команды</span></a></li>
+                    <li><a class='button' href='docs'><span>информация</span></a></li>
+                    <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
+                    <li><a class='button' href='invite'><span>пригласить</span></a></li>
+                    <li><a class='button' href='support'><span>помощь</span></a></li>
+                    <li><a class='button' href='status'><span>Статус</span></a></li>
+                </ul>
+            </nav>
+            <a onclick="location.href='logout'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;">Выйти</a>
+        </div>
+    </div>
+    <div style="height: 60px;"></div>
+    {% block content_opts %}
+    <div class="controls-wrapper">
         {% for module in modules %}
-            <div class="col m4 center">
-                <a class="module" href="/dashboard/{{ guild.id }}/{{ module.url }}">
-                    <div class="guild">
-                        <span class="material-icons">{{ module.icon }}</span>
-                        <p style="height: 100%; font-size: 150%;">{{ module.name }}</p>
-                    </div>
-                </a>
+        <button class="control-wrapper" onclick="window.location.href='/dashboard/{{ guild.id }}/{{ module.url }}'">
+            <div class="control-ico">
+                <span class="material-icons fa-3x">{{ module.icon }}</span>
             </div>
+            <div class="control-description">
+                <span>{{ module.name }}</span>
+            </div>
+        </button>
         {% endfor %}
     </div>
-{% endblock %}
+    {% endblock %}
+  
+
+<div class='footer'>
+    <div class='container full grid'>
+        <div class='branding'>
+            <h4>kuzaku</h4>
+            <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> kuzaku</p>
+        </div>
+        <div class='flex'>
+            <div class='footernav'>
+                <ul>
+                    <li><a class='button currentPage' href='/'><span>домашняя страница</span></a></li>
+                    <li><a class='button' href='commands'><span>команды</span></a></li>
+                    <li><a class='button' href='docs'><span>информация</span></a></li>
+                </ul>
+            </div>
+            <div class='footernav'>
+                <ul>
+                    <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
+                    <li><a class='button' href='support'><span>саппорт сервер</span></a></li>
+                    <li><a class='button' href='invite'><span>пригласить бота</span></a></li>
+                    <li><a class='button' href='status'><span>Статус</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Scripts -->
+<script>$(window).load(function () { 'body'.removeClass('.preload'); });</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="static/js/jquery.spincrement.min.js"></script>
+<script src="static/js/count.js" > </script>
+</body>
+
+</html>

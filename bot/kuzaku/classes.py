@@ -1,22 +1,21 @@
 import time
 import os
-
-import discord
-from discord.ext.commands import Context
+import disnake
+from disnake.ext.commands import Context
+from disnake.ext import commands
 from discord.ext.dashboard import Dashboard
-
+import disnake
 from discordTogether import DiscordTogether
-import dislash
-from dislash import InteractionClient
 from botconfig import botconfig as config
 from kuzaku.logger import Kuzaku_logger
-from kuzaku.exts   import ping
+from kuzaku.exts import ping
 from kuzaku.dashboard import init_dashboard
 
-class Kuzaku_context (Context):
+
+class Kuzaku_context(Context):
     pass
 
-    '''
+    """
     # * Example howdoi custom accsessor
 
     @property
@@ -24,61 +23,63 @@ class Kuzaku_context (Context):
         ...
 
         return value
-    '''
+    """
 
-class Kuzaku (discord.ext.commands.Bot):
-    def __init__ (self, **options):
-        super().__init__ (**options)
 
-        self.together = DiscordTogether (self)
-        self.slash = InteractionClient(self)
+class Kuzaku(disnake.ext.commands.Bot):
+    def __init__(self, **options):
+        super().__init__(**options)
 
-        self.log = Kuzaku_logger.new ()
+        self.together = DiscordTogether(self)
 
-        if config ['production']:
-            self.dashboard = Dashboard (
-                self, os.getenv('ipckey'), "https://kuzaku.ml/dash_handler"
+        self.log = Kuzaku_logger.new()
+
+        if config["production"]:
+            self.dashboard = Dashboard(
+                self, os.getenv("ipckey"), "https://kuzaku.ml/dash_handler"
             )
 
         else:
-            self.dashboard = Dashboard (
-                self, os.getenv('ipckey'), "http://127.0.0.1:5000/dash_handler"
+            self.dashboard = Dashboard(
+                self, os.getenv("ipckey"), "http://127.0.0.1:5000/dash_handler"
             )
 
-        init_dashboard (self)
+        init_dashboard(self)
 
     async def on_connect(self):
-        sec = int (round (time.time () - config ['start_time']))
-        self.log.info(f'<main> :: Bot info')
-        self.log.info(f'    {self.user} connected successfully in {sec} seconds')
+        sec = int(round(time.time() - config["start_time"]))
+        with self.log.get("CONNECTED") as sub:
+            sub.info(f"{self.user} connected successfully in {sec} seconds")
+
+        sub.exit()
 
     async def on_ready(self):
-        await self.change_presence (
-            status   = discord.Status.dnd,
-            activity = discord.Activity (
-                type = discord.ActivityType.competing,
-                name = f'{len (self.guilds)} guilds! | /help'
+        await self.change_presence(
+            activity=disnake.Activity(
+                type=disnake.ActivityType.competing,
+                name=f"{len (self.guilds)} guilds! | /help",
             )
         )
-
-        self.log.info('<main> :: Bot')
-        self.log.info('    Bot is ready to use')
-        self.log.info('<api> :: Trying to ping website...')
+        sub = self.log.get("ready").enter()
+        sub.info("Bot is ready to use")
         try:
-            if ping('kuzaku.ml'):
-                self.log.log('    Website is working!')
+            if ping("kuzaku.ml"):
+                sub.log("Website is working!")
             else:
-                self.log.warn('    Website is not working!')
+                sub.warn("    Website is not working!")
         except:
-            self.log.warn('    Website is not working!')
+            sub.warn("    Website is not working!")
+        sub.exit()
 
     async def on_message(self, message):
         await self.dashboard.process_request(message)
         await self.process_commands(message)
 
-    async def get_context(self, message, *, cls = Kuzaku_context):
-        return await super().get_context(message, cls = cls)
-class MobileWebSocket(discord.gateway.DiscordWebSocket):
+    async def get_context(self, message, *, cls=Kuzaku_context):
+        return await super().get_context(message, cls=cls)
+
+
+class MobileWebSocket(disnake.gateway.DiscordWebSocket):
     async def identify(self):
         """Sends the IDENTIFY packet."""
         payload = {
@@ -88,7 +89,7 @@ class MobileWebSocket(discord.gateway.DiscordWebSocket):
                 "properties": {
                     "$os": "ios",
                     "$browser": "Discord iOS",
-                    "$device": "discord.py",
+                    "$device": "nextcord",
                     "$referrer": "",
                     "$referring_domain": "",
                 },
@@ -97,9 +98,6 @@ class MobileWebSocket(discord.gateway.DiscordWebSocket):
                 "v": 3,
             },
         }
-
-        if not self._connection.is_bot:
-            payload["d"]["synced_guilds"] = []
 
         if self.shard_id is not None and self.shard_count is not None:
             payload["d"]["shard"] = [self.shard_id, self.shard_count]
@@ -113,10 +111,16 @@ class MobileWebSocket(discord.gateway.DiscordWebSocket):
                 "afk": False,
             }
 
+        if state._intents is not None:
+            payload["d"]["intents"] = state._intents.value
+
+        await self.call_hooks(
+            "before_identify", self.shard_id, initial=self._initial_identify
+        )
         await self.send_as_json(payload)
-        discord.gateway.log.info(
+        disnake.gateway._log.info(
             "Shard ID %s has sent the IDENTIFY payload.", self.shard_id
         )
 
 
-discord.client.DiscordWebSocket = MobileWebSocket
+disnake.client.DiscordWebSocket = MobileWebSocket

@@ -12,4 +12,3 @@ launcher_pc.py
 .pytest_cache
 ffmpeg.exe
 logs
-**/log_config.py

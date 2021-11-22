@@ -1,0 +1,58 @@
+:root {
+    /*TODO: Customise this stuff*/
+    --brand-light: #424242;
+    --brand-light-min: #202024;
+    --brand: #2c2c2c;
+    --font: Verdana;
+    --trans-time: 0.5s;
+}
+.controls-wrapper {
+    font-family: var(--font);
+    font-size: 30pt;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    flex-wrap: wrap;
+    background: var(--brand-light);
+}
+
+/*Button style*/
+.control-wrapper {
+    outline: none;
+    border: none;
+    width: 400px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    /*justify-content: space-around;*/
+    align-items: center;
+
+    background: var(--brand);
+    color: white;
+    padding: 50px;
+    border-radius: 15px;
+
+    /*TODO: Edit this stuff with custom margin*/
+    margin: 25px;
+
+    transition: background-color var(--trans-time);
+}
+
+/*Button hovered*/
+.control-wrapper:hover {
+    cursor: pointer;
+    background-color: var(--brand-light-min);
+}
+
+/*Button pressed*/
+.control-wrapper:active {
+    cursor: pointer;
+    background-color: var(--brand);
+}
+
+.control-ico {
+    font-size: 2em;
+    margin-bottom: 20px;
+}

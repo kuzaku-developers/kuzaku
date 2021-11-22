@@ -29,6 +29,7 @@
     <link type='text/css' rel='stylesheet' href="static/css/docs.css">
     <link type='text/css' rel='stylesheet' href="static/css/common.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
 
 
 
@@ -73,23 +74,14 @@
             </nav>
             {% block content %}
                 {% if user %}
-                    <button onclick="myFunction()" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>
+                <a onclick="location.href='dashboard'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;"><img src={{ user.avatar_url }} alt="Avatar" style="display: inline; width:20px; border-radius: 25px; margin-right: 7px;"> {{ dashbtnname }}</a>
+               
+                    <!--<button onclick="myFunction()" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>!-->
                 {% else %}
-                    <button onclick="location.href='login'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>
+                <a onclick="location.href='login'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;">{{ dashbtnname }}</a>
                 {% endif %}
             {% endblock content %}
         </div>
-        <div id="myDropdown" class="dropdown-content">
-            <div class="usercard">
-                <img src={{ user.avatar_url }} alt="Avatar" style="width:100%">
-                <div class="ccont">
-                  <h4><b>{{ user.name }}</b></h4>
-                  <p>{{ user }}</p>
-                </div>
-              </div>
-            <a id="dashdropbutton" href="#" onclick='alert("Дашбоард еще в активной разработке. Пока что не доступно")'>Дашбоард</a>
-<a href="logout" id="exitdropbutton">Выйти</a>
-          </div>
     </div>
 
     <!-- Showcase -->
@@ -181,7 +173,7 @@
     <div class="benefits animate__animated animate__lightSpeedInLeft">
         <div class="benefits__inner">
             <h2 class="benefits__header">
-                Нам доверяют:
+                Наша статистика:
             </h2>
             <div class="benefits__element">
                 <img class="benefits__icon" src="static/images/server.svg" alt="Guilds">
@@ -202,6 +194,7 @@
     </div>
     </section>
     <!-- Footer -->
+    
     <div class='footer'>
         <div class='container full grid'>
             <div class='branding'>

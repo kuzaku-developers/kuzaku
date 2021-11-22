@@ -6,8 +6,13 @@
   <a href="https://discord.gg/FeYTfmtTzq">
     <img src="https://img.shields.io/discord/761991504793174117.svg?logo=discord&colorB=7289DA" alt="Discord">
   </a>
-  <a href="https://discordpy.readthedocs.io/en/stable/">
-    <img src="https://img.shields.io/badge/discord.py-v1.7.3-blue.svg?logo=python" alt="discord.py">
+
+  <a href="https://disnake.readthedocs.io/en/stable/">
+    <img src="https://img.shields.io/badge/disnake-v2.0-blue.svg?logo=python" alt="discord.py">
+  </a>
+  
+  <a href="https://github.com/kuzaku-developers/kuzaku">
+    <img src="https://img.shields.io/tokei/lines/github/kuzaku-developers/kuzaku?color=red&label=Lines%20of%20code&logo=github&logoColor=red" alt="boosty">
   </a>
    <a href="https://github.com/kuzaku-developers/kuzaku">
     <img src="https://img.shields.io/github/sponsors/kuzaku-developers?logo=github" alt="sponsors">
@@ -16,7 +21,6 @@
     <img src="https://img.shields.io/badge/kuzaku%20version-0.0.3-blue" alt="kuzaku_ver">
   </a>
 </p>
-
 > **Kuzaku** это сильный, многоцелевой и бесплатный дискорд бот с кучей возможностей, созданных на [Discord.py](https://discordpy.readthedocs.io/en/stable/).
 
 Будем очень рады, если вы поставите этому репозиторию звезду ⭐, чтобы мы росли намного быстрее! <3

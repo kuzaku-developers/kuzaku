@@ -136,19 +136,28 @@ svg {
 
   /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-	-moz-transition: opacity 0.7s linear;
-    -o-transition: opacity 0.7s linear;
-    -webkit-transition: opacity 0.7s linear;
-    transition: opacity 0.7s linear;
+	-moz-transition: opacity 0.1s linear;
+    -o-transition: opacity 0.1s linear;
+    -webkit-transition: opacity 0.1s linear;
+    transition: opacity 0.1s linear;
 	position: absolute;
     right: 0;
-	display: none;
+	opacity: 0;
     background-color: rgba(32, 32, 36, 0.65);
     border-bottom: none;
+	height: 0;
 	min-width: 160px;
+	display: block;
+	visibility: hidden;
 	z-index: 1;
 	border-bottom-left-radius: 30px;
 	border-bottom-right-radius: 30px;
+}
+.dropdown-content.showed {
+	opacity: 1;
+	height: auto;
+	min-width: 160px;
+	visibility: visible;
 }
   /* Links inside the dropdown */
 #dashdropbutton{
@@ -178,9 +187,8 @@ svg {
 	color: #ff0000 !important;
 	transition: 0.3s
 }
-  
   /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
+
 .trans2 {
 	background-color: #424242;
 }

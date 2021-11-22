@@ -4,11 +4,15 @@ def pickform(num: int, wordforms: list):
     -> Возвращает нужную форму слова для данного числа, например "1 велосипед" или "2 велосипеда"
     """
     # Числа-исключения от 11 до 14
-    if 10 < num < 15: return wordforms[2]
-    num = num % 10 # Далее важна только последняя цифра
-    if num == 1: return wordforms[0]
-    if 1 < num < 5: return wordforms[1]
+    if 10 < num < 15:
+        return wordforms[2]
+    num = num % 10  # Далее важна только последняя цифра
+    if num == 1:
+        return wordforms[0]
+    if 1 < num < 5:
+        return wordforms[1]
     return wordforms[2]
+
 
 def visdelta(delta):
     """
@@ -16,24 +20,29 @@ def visdelta(delta):
     -> Возвращает читаемый промежуток времени на русском языке, например "3 минуты 30 секунд"
     """
     # Если delta это просто число, то оно считывается как секунды
-    if not isinstance(delta, int): delta = int(delta.total_seconds())
+    if not isinstance(delta, int):
+        delta = int(delta.total_seconds())
     # Вычисляем и записываем каждую единицу времени
     nt = {}
-    nt['s'] = delta % 60; delta //= 60 # Секунды
-    nt['m'] = delta % 60; delta //= 60 # Минуты
-    nt['h'] = delta % 24; delta //= 24 # Часы
-    nt['d'] = delta % 7; delta //= 7 # Дни
-    nt['w'] = delta # Недели
+    nt["s"] = delta % 60
+    delta //= 60  # Секунды
+    nt["m"] = delta % 60
+    delta //= 60  # Минуты
+    nt["h"] = delta % 24
+    delta //= 24  # Часы
+    nt["d"] = delta % 7
+    delta //= 7  # Дни
+    nt["w"] = delta  # Недели
     # Далее идут все возможные формы слов в связке с числом (1 банан, 2 банана, 5 бананов)
     wforms = {
-        's': ['секунда', 'секунды', 'секунд'],
-        'm': ['минута', 'минуты', 'минут'],
-        'h': ['час', 'часа', 'часов'],
-        'd': ['день', 'дня', 'дней'],
-        'w': ['неделя', 'недели', 'недель']
+        "s": ["секунда", "секунды", "секунд"],
+        "m": ["минута", "минуты", "минут"],
+        "h": ["час", "часа", "часов"],
+        "d": ["день", "дня", "дней"],
+        "w": ["неделя", "недели", "недель"],
     }
     # Формируем читаемые сочетания для каждой единицы времени
-    l = [f'{n} {pickform(n, wforms[k])}' for k, n in nt.items() if n > 0]
-    l.reverse() # Чтобы время писалось начиная с недель и заканчивая секундами
+    l = [f"{n} {pickform(n, wforms[k])}" for k, n in nt.items() if n > 0]
+    l.reverse()  # Чтобы время писалось начиная с недель и заканчивая секундами
     # Склеиваем словосочетания
-    return '0.1 секунды' if len(l) == 0 else ' '.join(l)
+    return "0.1 секунды" if len(l) == 0 else " ".join(l)

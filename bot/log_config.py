@@ -1,9 +1,8 @@
 config = {
-    # 'funcs': {
-    #     'example': {'color': 'red', 'type': 'EX   ', 'icon': '$', 'style': {'bold', 'underline'}}
-    # }
-
-    'log_pattern': '{ctime} :: [{cicon}]{tabs} > {cmsg}',
-    'time_pattern': '%M:%S:%f',
-    'tabs_function': 'a.;SEP;10'
+    "funcs": {
+        "command": {"color": "yellow", "type": "CMD   ", "icon": "^", "style": {"bold"}}
+    },
+    "log_pattern": "{ctime} :: [{cicon}]{tabs} > {cmsg}",
+    "time_pattern": "%M:%S:%f",
+    "tabs_function": "n4",
 }  # EXAMPLE

@@ -1,101 +1,123 @@
-import discord
-from discord.ext import commands
-from discord_slash import SlashCommand
-from discord_slash.model import SlashCommandPermissionType
-from discord_slash.utils.manage_components import wait_for_component
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.utils.manage_commands import create_option, create_permission
-from discord_slash.model import ButtonStyle
-from discord_slash import cog_ext
+import disnake
+from disnake.ext import commands
 from utils.db import *
+
+
 class promocodes(commands.Cog):
-    def __init__(self, bot:commands.Bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    @commands.slash_command(name="promocodes", description="promocodes!")
+    async def promocmd(self, ctx):
+        pass
 
-    @cog_ext.cog_subcommand(base='promocodes', name='use', description='Использовать промокод', guild_ids=[761991504793174117])
+    @promocmd.sub_command(
+        name="use",
+        description="Использовать промокод",
+    )
     async def usepromo(self, ctx, promocode):
-        await ctx.defer(hidden=True)
-        existing=False
+        await ctx.response.defer(ephemeral=True)
+        existing = False
         global i
         global used_by
         for i in getpromos():
-            if getpromos()[i]['promocode']==promocode:
-                existing=True
+            if getpromos()[i]["promocode"] == promocode:
+                existing = True
                 try:
-                    used_by=getpromos()[i]['usedby']
+                    used_by = getpromos()[i]["usedby"]
                 except:
-                    used_by=[]  
+                    used_by = []
         if not existing:
-            return await ctx.send(embed=discord.Embed(title='Промокоды', description='Такого промокода не существует', hidden=True))
+            return await ctx.edit_original_mesage(
+                embed=disnake.Embed(
+                    title="Промокоды",
+                    description="Такого промокода не существует",
+                )
+            )
         else:
             try:
                 if ctx.author.id in used_by:
-                    return await ctx.send(embed=discord.Embed(title='Промокоды', description='Вы уже использовали данный промокод!', hidden=True))
-                    
+                    return await ctx.edit_original_message(
+                        embed=disnake.Embed(
+                            title="Промокоды",
+                            description="Вы уже использовали данный промокод!",
+                        )
+                    )
+
                 else:
                     used_by.append(ctx.author.id)
                     addusepromo(i, used_by)
-                if getpromos()[i]['uses'] !='inf' and str(getpromos()[i]['uses']) =='0':
-                    return await ctx.send(embed=discord.Embed(title='Промокоды', description='Ошибка! У данного промокода не осталось использований!', hidden=True))
-                prem=int(dict(getdb()['premium'])[str(ctx.author.id)]['count'])+1
+                if (
+                    getpromos()[i]["uses"] != "inf"
+                    and str(getpromos()[i]["uses"]) == "0"
+                ):
+                    return await ctx.edit_original_message(
+                        embed=disnake.Embed(
+                            title="Промокоды",
+                            description="Ошибка! У данного промокода не осталось использований!",
+                        )
+                    )
+                prem = int(dict(getdb()["premium"])[str(ctx.author.id)]["count"]) + 1
             except:
-                prem=1
-            data = {
-                'premium': 'True',
-                'count': prem
-            }
+                prem = 1
+            data = {"premium": "True", "count": prem}
             db.child("db").child("premium").child(ctx.author.id).set(data)
-            if getpromos()[i]['uses'] !='inf':
-                setpromouses(i, int(getpromos()[i]['uses'])-1)
-            await ctx.send(embed=discord.Embed(title='Промокоды', description='Успех! Промокод активирован!', hidden=True))
+            if getpromos()[i]["uses"] != "inf":
+                setpromouses(i, int(getpromos()[i]["uses"]) - 1)
+            await ctx.edit_original_message(
+                embed=disnake.Embed(
+                    title="Промокоды",
+                    description="Успех! Промокод активирован!",
+                )
+            )
+
     @commands.is_owner()
-    @cog_ext.cog_subcommand(base='promocodes', name='create', description='Создать промокод', guild_ids=[761991504793174117], options=[
-    create_option(
-    name='promocode',
-    description='Promocode to add.',
-    required=True,
-    option_type=3
-        ),
-    create_option(
-    name='uses',
-    description='Max uses of promocode',
-    required=False,
-    option_type=4
-        )
-            ])
-    async def createpromo(self, ctx, promocode, uses=None):
-        await ctx.defer(hidden=True)
+    @promocmd.sub_command(
+        name="create",
+        description="Создать промокод",
+    )
+    async def createpromo(self, ctx, promocode: str, uses: int = None):
+        await ctx.response.defer(ephemeral=True)
         if not uses:
-            uses='inf'
-        existing=False
+            uses = "inf"
+        existing = False
         for i in getpromos():
-            if getpromos()[i]['promocode']==promocode:
-                existing=True
-            uuses=getpromos()[i]['uses']
-            if uuses=='inf':
-                uuses='Бесконечно'
+            if getpromos()[i]["promocode"] == promocode:
+                existing = True
+            uuses = getpromos()[i]["uses"]
+            if uuses == "inf":
+                uuses = "Бесконечно"
         if existing:
-            embed=discord.Embed(title='Промокоды', description=f'Промокод уже существует! у него {uuses} исп.')
+            embed = disnake.Embed(
+                title="Промокоды",
+                description=f"Промокод уже существует! у него {uuses} исп.",
+            )
         else:
             addpromo(promocode, uses)
-            embed=discord.Embed(title='Промокоды', description=f'Промокод создан!')
+            embed = disnake.Embed(title="Промокоды", description=f"Промокод создан!")
 
-        await ctx.send(embed=embed, hidden=True)
+        await ctx.edit_original_message(embed=embed)
+
     @commands.is_owner()
-    @cog_ext.cog_subcommand(base='promocodes', name='list', description='Создать промокод', guild_ids=[761991504793174117])
+    @promocmd.sub_command(
+        name="list",
+        description="Создать промокод",
+    )
     async def listpromo(self, ctx):
-        await ctx.defer(hidden=True)
-        embed=discord.Embed(title='Промокоды', description='Все промокоды!')
+        await ctx.response.defer(ephemeral=True)
+        embed = disnake.Embed(title="Промокоды", description="Все промокоды!")
         for i in getpromos():
-            uuses=getpromos()[i]['uses']
-            if uuses=='inf':
-                uuses='Бесконечно'
-            embed.add_field(name=f'{getpromos()[i]["promocode"]}', value=f'{uuses} исп.', inline=False)
+            uuses = getpromos()[i]["uses"]
+            if uuses == "inf":
+                uuses = "Бесконечно"
+            embed.add_field(
+                name=f'{getpromos()[i]["promocode"]}',
+                value=f"{uuses} исп.",
+                inline=False,
+            )
 
-        await ctx.send(embed=embed, hidden=True)
+        await ctx.edit_original_message(embed=embed)
 
 
-
-def setup(bot:commands.Bot):
+def setup(bot: commands.Bot):
     bot.add_cog(promocodes(bot))

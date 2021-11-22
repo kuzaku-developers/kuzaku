@@ -1,0 +1,6 @@
+(A) dashboard @web
+(B) economy @bot @db
+(B) No materialize @web
+(B) docs about premium (boosty) @docs
+(C) new desgn (embeds) @bot
+(C) hire third developer @other
