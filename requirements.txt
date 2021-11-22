@@ -10,7 +10,6 @@ git+https://github.com/DisnakeDev/disnake#egg=disnake[discord,voice,speed]
 firebase
 asyncio
 wavelink
-CoffeePaginator
 youtube_dl
 psutil
 opencv-python
