@@ -5,7 +5,7 @@ from disnake.ext.commands import Context
 from disnake.ext import commands
 from discord.ext.dashboard import Dashboard
 import disnake
-from discordTogether import DiscordTogether
+from discord_together import DiscordTogether
 from botconfig import botconfig as config
 from kuzaku.logger import Kuzaku_logger
 from kuzaku.exts import ping
