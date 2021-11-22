@@ -93,7 +93,7 @@ async def dashboard():
         admin_guilds=admin_guilds,
         mutual_guilds=mutual_guilds,
         user=user,
-        config={"discord_client_id": "788834922340679700"},
+        config={"discord_client_id": "778648045960298568"},
         modules=modules,
     )
 
