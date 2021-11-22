@@ -100,8 +100,6 @@ async def dashboard():
 
 @app.route("/dashboard/<guild_id>")
 async def guild_dashboard(guild_id):
-    if os.getenv("PRODUCTION") == "yes":
-        return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
         return redirect("login")
@@ -118,8 +116,6 @@ async def guild_dashboard(guild_id):
 
 @app.route("/dashboard/<guild_id>/<module>")
 async def guild_dashboard_leveling(guild_id, module):
-    if os.getenv("PRODUCTION") == "yes":
-        return redirect("/")
     authorized = await discord.authorized
     if authorized != True:
         return redirect("login")
