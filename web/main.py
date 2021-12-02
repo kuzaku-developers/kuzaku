@@ -53,7 +53,7 @@ app_dashboard = Server(
 )
 
 
-@app.route("/login/")
+@app.route("/login")
 async def login():
     return await discord.create_session()
 
@@ -359,9 +359,9 @@ async def amogus():
     return await render_template("amogus.html")
 
 
-@app.route("/invite/")
+@app.route("/invite")
 async def invite():
     return redirect(await app_dashboard.request("get_invite_url"))
 
 
-app.run(host="0.0.0.0", port=os.getenv("PORT", 5000), debug=True)
+app.run(host="0.0.0.0", port=os.getenv("PORT", 5000))
