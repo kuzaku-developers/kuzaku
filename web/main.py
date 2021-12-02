@@ -73,7 +73,7 @@ async def redirect_unauthorized(e):
 async def dashboard():
     authorized = await discord.authorized
     if authorized != True:
-        return redirect("/login")
+        return redirect("login")
 
     guild_ids = await app_dashboard.request("get_mutual_guilds")
     if not guild_ids:
