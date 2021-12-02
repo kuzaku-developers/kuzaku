@@ -53,7 +53,7 @@ app_dashboard = Server(
 )
 
 
-@app.route("/login")
+@app.route("/login/")
 async def login():
     return await discord.create_session()
 
