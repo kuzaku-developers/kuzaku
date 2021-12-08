@@ -46,7 +46,7 @@ class info(commands.Cog):
         embed.set_footer(
             text=f"{ctx.author} | {self.bot.user}", icon_url=ctx.author.avatar.url
         )
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.slash_command(

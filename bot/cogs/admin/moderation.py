@@ -44,12 +44,22 @@ class moderation(commands.Cog, name="Модерация"):
         await view.wait()
         if view.value == None:
             for child in view.children:
-                print(child)
+   
                 child.disabled = True
-                print(child)
-                await msg.edit(content="timeout", view=view)
+ 
+                await msg.edit(view=view)
         elif view.value:
-            await ctx.guild.ban(user=member, reason=reason)
+            try:
+                await ctx.guild.ban(user=member, reason=reason)
+            except Exception as e:
+                print(e)
+                for child in view.children:
+     
+                    child.disabled = True
+   
+                await msg.edit(view=view, embed=disnake.Embed(title="Ошибка!", description="У меня нет прав!"))
+                return
+                
 
             embed = disnake.Embed(
                 color=0x00FF00,
@@ -81,66 +91,55 @@ class moderation(commands.Cog, name="Модерация"):
         await ctx.edit_original_message(
             content=self.data["say.text"].format(message.jump_url)
         )
-
-    @commands.slash_command(name="kick", description="Кикнет участника.")
+    @commands.slash_command(name="kick", description="Кикает участника.")
     @commands.has_permissions(ban_members=True)
     async def kick(
         self, ctx, member: disnake.Member, reason: str = "Причина отсутствует."
     ):
         await ctx.response.defer()
+        view = Confirm()
         embedd = disnake.Embed(
-            title="Точно кикать?",
+            title="Точно Кикать?",
             description=f"вы уверены, что хотите кикнуть пользователя {member.mention}? Тогда нажмите на кнопку!",
         )
-        msg = await ctx.edit_original_message(
-            embed=embedd,
-            components=[
-                ActionRow(
-                    Button(style=ButtonStyle.green, emoji="✅", custom_id="confirmban")
-                )
-            ],
-        )
-        on_click = msg.create_click_listener(timeout=60)
+        msg = await ctx.edit_original_message(embed=embedd, view=view)
+        await view.wait()
+        if view.value == None:
+            for child in view.children:
 
-        @on_click.not_from_user(ctx.author, cancel_others=True, reset_timeout=False)
-        async def on_wrong_user(inter):
-            # This function is called in case a button was clicked not by the author
-            # cancel_others=True prevents all on_click-functions under this function from working
-            # regardless of their checks
-            # reset_timeout=False makes the timer keep going after this function is called
-            await inter.reply("Вы не автор сообщения!", ephemeral=True)
-
-        @on_click.matching_id("confirmban")
-        async def on_test_button(inter):
-            # This function only works if the author presses the button
-            # Becase otherwise the previous decorator cancels this one
-            await inter.guild.kick(user=member, reason=reason)
+                child.disabled = True
+   
+                await msg.edit(view=view)
+        elif view.value:
+            try:
+                await ctx.guild.ban(user=member, reason=reason)
+            except Exception as e:
+                print(e)
+                for child in view.children:
+                    print(child)
+                    child.disabled = True
+                    print(child)
+                await msg.edit(view=view, embed=disnake.Embed(title="Ошибка!", description="У меня нет прав!"))
+                return
+                
 
             embed = disnake.Embed(
                 color=0x00FF00,
-                description=f"Пользователь {member.mention} кикнут!\nПричина: {reason}.",
+                description=f"Пользователь {member.mention} Кикнут!\nПричина: {reason}.",
             )
-            embed.set_author(name=ctx.author.name, icon_url=inter.author.avatar.url)
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
             embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
 
-            await msg.edit(embed=embed, components=[])
-
-        @on_click.timeout
-        async def on_timeout():
-            await msg.edit(
-                embed=embedd,
-                components=[
-                    ActionRow(
-                        Button(
-                            style=ButtonStyle.green,
-                            emoji="✅",
-                            custom_id="confirmban",
-                            disabled=True,
-                        )
-                    )
-                ],
+            await msg.edit(embed=embed)
+        else:
+            embed = disnake.Embed(
+                color=0x00FF00,
+                description=f"Кик отклонен.",
             )
+            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
+            embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
 
+            await msg.edit(embed=embed)
 
 def setup(bot: commands.Bot):
     bot.add_cog(moderation(bot))

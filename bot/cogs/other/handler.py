@@ -169,6 +169,7 @@ class EventCog(commands.Cog):
             await ctx.edit_original_message(embed=embed)
 
 
+
 def setup(bot):
     bot.add_cog(EventCog(bot))
 

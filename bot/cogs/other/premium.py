@@ -49,7 +49,7 @@ class premium(commands.Cog):
         guild = self.bot.get_guild(761991504793174117)
         if await guild.fetch_member(ctx.author.id):
             premium = guild.get_role(869883325265874975)
-            if premium in await guild.fetch_member(ctx.author.id).roles:
+            if premium in (await guild.fetch_member(ctx.author.id)).roles:
                 embed = disnake.Embed(
                     title="Премиум",
                     description="у вас есть премиум и вы можете его активровать! используйте /gold use",

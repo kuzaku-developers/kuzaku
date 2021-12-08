@@ -70,7 +70,6 @@ class Kuzaku(disnake.ext.commands.Bot):
         except:
             sub.warn("    Website is not working!")
         sub.exit()
-
     async def on_message(self, message):
         await self.dashboard.process_request(message)
         await self.process_commands(message)
