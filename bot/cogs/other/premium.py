@@ -47,6 +47,15 @@ class premium(commands.Cog):
     async def prem(self, ctx):
         await ctx.response.defer()
         guild = self.bot.get_guild(761991504793174117)
+        try:
+            member = await guild.fetch_member(ctx.author.id)
+        except:
+            embed = disnake.Embed(
+                title="Премиум",
+                description="вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)",
+            )
+
+            return await ctx.edit_original_message(embed=embed)
         if await guild.fetch_member(ctx.author.id):
             premium = guild.get_role(869883325265874975)
             if premium in (await guild.fetch_member(ctx.author.id)).roles:

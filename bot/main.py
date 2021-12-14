@@ -23,7 +23,7 @@ else:
         command_prefix=config["default_prefix"],
         intents=intents,
         owner_ids=[704560097610825828, 732571199913328691],
-        test_guilds=[808013895917633546],
+        test_guilds=[808013895917633546, 888371092610252800],
         reload=True,
     )
 

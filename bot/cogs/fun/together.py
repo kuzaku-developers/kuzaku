@@ -24,6 +24,7 @@ class together(commands.Cog):
     ):
         await ctx.response.defer()
         if ctx.author.voice:
+            print(self.bot.together)
             link = await self.bot.together.create_link(
                 ctx.author.voice.channel.id, activity
             )

@@ -112,18 +112,36 @@ def getpremium(guildid):
 
 
 def dbgetrpid(id_user):
-    all_users = db.child("rp").get().val()
-    rpid = len(all_users) + 1
+    all_users = db.child("rp").child("users").get().val()
+    rpid = len(all_users)
+    print(len(all_users))
     return rpid
 
 
 def dbrpaddmoney(id_user, money):
-    data = dbrpgetuser(id_user)
-    try:
+    if id_user == "federation":
+        data = dict(dbrpgetdef(id_user))
+        print(data)
         data["rubles"] = int(data["rubles"]) + int(money)
-    except:
-        data["rubles"] = str(int(0) + int(money))
-    db.child("rp").child(id_user).set(data)
+        db.child("rp").child(id_user).set(data)
+    else:
+        data = dict(dbrpgetuser(id_user))
+        print(data)
+        data["rubles"] = int(data["rubles"]) + int(money)
+        db.child("rp").child("users").child(id_user).set(data)
+
+
+def dbrpadddollars(id_user, money):
+    if id_user == "federation":
+        data = dict(dbrpgetdef(id_user))
+        print(data)
+        data["dollars"] = int(data["dollars"]) + int(money)
+        db.child("rp").child(id_user).set(data)
+    else:
+        data = dict(dbrpgetuser(id_user))
+        print(data)
+        data["dollars"] = int(data["dollars"]) + int(money)
+        db.child("rp").child("users").child(id_user).set(data)
 
 
 def dbrpadddollars(id_user, money):
@@ -132,31 +150,31 @@ def dbrpadddollars(id_user, money):
         data["dollars"] = int(data["dollars"]) + int(money)
     except:
         data["dollars"] = str(int(0) + int(money))
-    db.child("rp").child(id_user).set(data)
+    db.child("rp").child("users").child(id_user).set(data)
 
 
 def dbrpsethome(id_user, home):
     data = dbrpgetuser(id_user)
     data["home"] = home
-    db.child("rp").child(id_user).set(data)
+    db.child("rp").child("users").child(id_user).set(data)
 
 
 def dbrpsetjson(id_user, name, value):
     data = dbrpgetuser(id_user)
     data[name] = value
-    db.child("rp").child(id_user).set(data)
+    db.child("rp").child("users").child(id_user).set(data)
 
 
 def dbrpsetcar(id_user, car):
     data = dbrpgetuser(id_user)
     data["car"] = car
-    db.child("rp").child(id_user).set(data)
+    db.child("rp").child("users").child(id_user).set(data)
 
 
 def dbrpsetresume(id_user, resume):
     data = dbrpgetuser(id_user)
     data["resume"] = resume
-    db.child("rp").child(id_user).set(data)
+    db.child("rp").child("users").child(id_user).set(data)
 
 
 def dbsetrp(id_user, rpname, naviki):
@@ -166,11 +184,12 @@ def dbsetrp(id_user, rpname, naviki):
         "naviki": naviki,
         "money": 0,
         "home": False,
+        "rubles": 0,
     }
-    db.child("rp").child(id_user).set(data)
+    db.child("rp").child("users").child(id_user).set(data)
 
 
-def dbrpgetuser(id_user):
+def dbrpgetdef(id_user):
     all_users = db.child("rp").get()
     for user in all_users.each():  # все элементы
         kkey = user.key()  # ключ
@@ -179,6 +198,20 @@ def dbrpgetuser(id_user):
             a = user.val()  # true(1) или false(0) (в бд так)
             try:
                 return a  # .
+            except:
+                return {}
+
+
+def dbrpgetuser(id_user):
+    all_users = db.child("rp").child("users").get()
+    for user in all_users.each():  # все элементы
+        kkey = user.key()  # ключ
+
+        if str(kkey) == str(id_user):  # проверка на равенство
+            a = user.val()
+            print(a)  # true(1) или false(0) (в бд так)
+            try:
+                return dict(a)  # .
             except:
                 return {}
 

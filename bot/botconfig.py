@@ -27,7 +27,7 @@ botconfig = {
     "token": os.getenv("BOTTOKEN"),
     "production": production == "yes",
     "botver": "0.0.9",
-    "ignore_cogs": ["channels", "automod", "music", "lava", "inertia_rp"],
+    "ignore_cogs": ["channels", "automod", "music", "lava"],
     "start_time": time.time(),
     "traceback": True,
 }

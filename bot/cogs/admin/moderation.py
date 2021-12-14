@@ -44,22 +44,13 @@ class moderation(commands.Cog, name="Модерация"):
         await view.wait()
         if view.value == None:
             for child in view.children:
-   
+
                 child.disabled = True
- 
+
                 await msg.edit(view=view)
         elif view.value:
-            try:
-                await ctx.guild.ban(user=member, reason=reason)
-            except Exception as e:
-                print(e)
-                for child in view.children:
-     
-                    child.disabled = True
-   
-                await msg.edit(view=view, embed=disnake.Embed(title="Ошибка!", description="У меня нет прав!"))
-                return
-                
+
+            await ctx.guild.ban(user=member, reason=reason)
 
             embed = disnake.Embed(
                 color=0x00FF00,
@@ -91,6 +82,7 @@ class moderation(commands.Cog, name="Модерация"):
         await ctx.edit_original_message(
             content=self.data["say.text"].format(message.jump_url)
         )
+
     @commands.slash_command(name="kick", description="Кикает участника.")
     @commands.has_permissions(ban_members=True)
     async def kick(
@@ -108,7 +100,7 @@ class moderation(commands.Cog, name="Модерация"):
             for child in view.children:
 
                 child.disabled = True
-   
+
                 await msg.edit(view=view)
         elif view.value:
             try:
@@ -119,9 +111,6 @@ class moderation(commands.Cog, name="Модерация"):
                     print(child)
                     child.disabled = True
                     print(child)
-                await msg.edit(view=view, embed=disnake.Embed(title="Ошибка!", description="У меня нет прав!"))
-                return
-                
 
             embed = disnake.Embed(
                 color=0x00FF00,
@@ -140,6 +129,7 @@ class moderation(commands.Cog, name="Модерация"):
             embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
 
             await msg.edit(embed=embed)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(moderation(bot))

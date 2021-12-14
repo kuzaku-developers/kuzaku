@@ -78,7 +78,7 @@ class system(commands.Cog):
         bar = ProgressBar(round(using), round(allmem), length=10)
         progress = bar.write_progress(line="□", fill="[■](https://kuzaku.ml)")
 
-        embed = discord.Embed(title=self.data["system.stats.title"])
+        embed = disnake.Embed(title=self.data["system.stats.title"])
         g = Github()
         repo = g.get_repo("kuzaku-developers/kuzaku")
         commit = repo.get_commits().totalCount
@@ -89,7 +89,7 @@ class system(commands.Cog):
             value=f"""
 💻 ОС **{platform.system()} {platform.release()}**
 <:python:796454672860708896> Python версии **{platform.python_version()}**
-<:python:796454672860708896> disnake.py версии **{discord.__version__}**
+<:python:796454672860708896> disnake.py версии **{disnake.__version__}**
 <:settings_blue:796456043416780840> версия kuzaku **{date} ({commit})**
         """,
             inline=True,
@@ -142,10 +142,10 @@ class system(commands.Cog):
         # {repo.get_commits()[0].commit.message}
         # ```
         #''', inline=False)
-        embed.set_thumbnail(url=self.bot.user.avatar_url)
-        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+        embed.set_thumbnail(url=self.bot.user.avatar.url)
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
         embed.set_footer(
-            text=f"команда stats | вызваал {ctx.author}", icon_url=ctx.author.avatar_url
+            text=f"команда stats | вызваал {ctx.author}", icon_url=ctx.author.avatar.url
         )
 
         await ctx.edit_original_message(embed=embed)
@@ -189,7 +189,7 @@ def setup(bot):
         em.add_field(name="<:settings:852398515106611220>**Статистика**", value=f"<:upward_stonks:852398532254367765>| Серверов: `{len(self.bot.guilds)}`\n<:upward_stonks:852398532254367765>| Людей: `{len(self.bot.users)}`\n<:upward_stonks:852398532254367765>| Эмоджи: `{len(self.bot.emojis)}`\n")
         em.add_field(name="<:settings:852398515106611220>**Задержка**", value=f"<:greenTick:852398498657599569>|Веб-сокет:`{round(self.bot.latency*1000, 2)}`\n<:greenTick:852398498657599569>|Работает:`{сюда}`")
         em.add_field(name="<:settings:852398515106611220>**VPS (использование)**", value=f"<:rich_presence:852398506441572373>**|** ОС: `{platform.system() + platform.release()}`\n<:rich_presence:852398506441572373>**|** ОЗУ: `{psutil.virtual_memory().percent}`%\n<:rich_presence:852398506441572373>**|** ЦП: `{psutil.cpu_percent(interval=None, percpu=False)}`%\n")
-        em.add_field(name="<:settings:852398515106611220>**Версии**", value=f"<:A2python:852402187232870400> **|** discord.py: `{discord.__version__}`\n<:A2python:852402187232870400> **|** Python: `{sys.version[:5]}`\n:purple_heart: **|** Anni: `2.0.2` (41 commits)")
+        em.add_field(name="<:settings:852398515106611220>**Версии**", value=f"<:A2python:852402187232870400> **|** disnake.py: `{disnake.__version__}`\n<:A2python:852402187232870400> **|** Python: `{sys.version[:5]}`\n:purple_heart: **|** Anni: `2.0.2` (41 commits)")
 
         em.set_thumbnail(url={bot.avatar_url})
         em.set_footer(text=f"Запрошено: {ctx.author.name} | Команда: a.stats", icon_url=f"{ctx.author.avatar_url}")

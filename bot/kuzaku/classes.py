@@ -30,8 +30,6 @@ class Kuzaku(disnake.ext.commands.Bot):
     def __init__(self, **options):
         super().__init__(**options)
 
-        self.together = DiscordTogether(self)
-
         self.log = Kuzaku_logger.new()
 
         if config["production"]:
@@ -54,6 +52,7 @@ class Kuzaku(disnake.ext.commands.Bot):
         sub.exit()
 
     async def on_ready(self):
+        self.together = await DiscordTogether(self.http.token)
         await self.change_presence(
             activity=disnake.Activity(
                 type=disnake.ActivityType.competing,
@@ -70,6 +69,7 @@ class Kuzaku(disnake.ext.commands.Bot):
         except:
             sub.warn("    Website is not working!")
         sub.exit()
+
     async def on_message(self, message):
         await self.dashboard.process_request(message)
         await self.process_commands(message)

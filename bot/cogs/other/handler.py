@@ -59,14 +59,20 @@ class EventCog(commands.Cog):
                 name=f"Указаны не все аргументы для {ctx.command}.",
                 icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
             )
-            await ctx.response.send_message(embed=embed)
+            try:
+                await ctx.response.send_message(embed=embed)
+            except disnake.errors.InteractionResponded:
+                await ctx.edit_original_message(embed=embed)
 
         elif isinstance(error, commands.DisabledCommand):
             embed = disnake.Embed(color=0xFF0000).set_author(
                 name=f"Команда {ctx.command} отключена.",
                 icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
             )
-            return await ctx.response.send_message(embed=embed)
+            try:
+                return await ctx.response.send_message(embed=embed)
+            except disnake.errors.InteractionResponded:
+                return await ctx.edit_original_message(embed=embed)
 
         elif isinstance(error, disnake.errors.Forbidden):
             embed = disnake.Embed(color=0xFF0000).set_author(
@@ -74,16 +80,22 @@ class EventCog(commands.Cog):
                 icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
             )
 
-            return await ctx.response.send_message(embed=embed)
+            try:
+                return await ctx.response.send_message(embed=embed)
+            except disnake.errors.InteractionResponded:
+                return await ctx.edit_original_message(embed=embed)
 
         elif isinstance(error, commands.CheckFailure):
             if not isinstance(error, commands.errors.NSFWChannelRequired):
                 if isinstance(error, disnake.ext.commands.errors.MissingPermissions):
                     embed = disnake.Embed(color=0xFF0000,).set_author(
-                        name=f"у тебя нет прав",
+                        name=f"у вас нет прав",
                         icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
                     )
-                    return await ctx.response.send_message(embed=embed)
+                    try:
+                        return await ctx.response.send_message(embed=embed)
+                    except disnake.errors.InteractionResponded:
+                        return await ctx.edit_original_message(embed=embed)
 
                 embed = disnake.Embed(color=0xFF0000).set_author(
                     name="У вас нет прав.",
@@ -94,14 +106,20 @@ class EventCog(commands.Cog):
                     name=f"Эту команду нельзя выполнить здесь. (Может быть, в NSFW канале)",
                     icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
                 )
-            return await ctx.response.send_message(embed=embed)
+            try:
+                return await ctx.response.send_message(embed=embed)
+            except disnake.errors.InteractionResponded:
+                return await ctx.edit_original_message(embed=embed)
         elif isinstance(error, commands.NoPrivateMessage):
             try:
                 embed = disnake.Embed(color=0xFF0000).set_author(
                     name=f"Команда {ctx.command} не может быть выполнена в ЛС.",
                     icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
                 )
-                return await ctx.response.send_message(embed=embed)
+                try:
+                    await ctx.response.send_message(embed=embed)
+                except disnake.errors.InteractionResponded:
+                    await ctx.edit_original_message(embed=embed)
             except:
                 pass
 
@@ -110,14 +128,20 @@ class EventCog(commands.Cog):
                 name=f"Получен неверный аргумент для {ctx.command}.",
                 icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
             )
-            await ctx.response.send_message(embed=embed)
+            try:
+                await ctx.response.send_message(embed=embed)
+            except disnake.errors.InteractionResponded:
+                await ctx.edit_original_message(embed=embed)
 
         elif isinstance(error, commands.CommandOnCooldown):
             embed = disnake.Embed(color=0xFF0000).set_author(
                 name=f"Команду {ctx.data.name} нельзя выполнять так часто. Подождите {visdelta(int(error.retry_after))}.",
                 icon_url="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326489locked.png",
             )
-            return await ctx.response.send_message(embed=embed)
+            try:
+                await ctx.response.send_message(embed=embed)
+            except disnake.errors.InteractionResponded:
+                await ctx.edit_original_message(embed=embed)
 
         # Если ничего не подходит
         embed = disnake.Embed(
@@ -167,7 +191,6 @@ class EventCog(commands.Cog):
             await ctx.response.send_message(embed=embed)
         except disnake.errors.InteractionResponded:
             await ctx.edit_original_message(embed=embed)
-
 
 
 def setup(bot):

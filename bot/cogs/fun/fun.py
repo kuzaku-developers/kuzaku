@@ -26,7 +26,7 @@ class fun(commands.Cog):
         file_like_object = io.BytesIO(response.content)
         imgchannel = await self.bot.fetch_channel(879049868415496213)
         msg = await imgchannel.send(
-            file=discord.File(file_like_object, filename="screen.png")
+            file=disnake.File(file_like_object, filename="screen.png")
         )
         print(msg.attachments[0].url)
         embed.set_image(url=msg.attachments[0].url)
@@ -77,12 +77,15 @@ class fun(commands.Cog):
             embed.set_thumbnail(url=data["results"][0].get("image_url"))
 
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
-            await ctx.edit_original_message(embed=embed)
+            return await ctx.edit_original_message(embed=embed)
 
-        except KeyError:
+        except:
             await ctx.edit_original_message(
-                f"По запросу ``{anime}`` ничего не найдено.."
+                content=f"По запросу ``{anime}`` ничего не найдено.."
             )
+        return await ctx.edit_original_message(
+            content=f"По запросу ``{anime}`` ничего не найдено.."
+        )
 
 
 def setup(bot):

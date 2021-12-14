@@ -1,151 +1,166 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-   ym(85096561, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true
-   });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/85096561" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-    <meta data-n-head='ssr' charset="utf-8">
-    <meta data-n-head='ssr' name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Head Information -->
-    <title>kuzaku - дискорд бот!</title>
-    <link data-n-head='ssr' rel='icon' type='image/x-icon' href="static/images/nuclear.png">
-
-    <!-- Styles -->
-    <link type='text/css' rel='stylesheet' href="static/css/utilities.css">
-    <link type='text/css' rel='stylesheet' href="static/css/index.css">
-    <link type='text/css' rel='stylesheet' href="static/css/docs.css">
-    <link type='text/css' rel='stylesheet' href="static/css/common.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<html>
+    <head>
+        <meta data-n-head='ssr' charset="utf-8">
+        <meta data-n-head='ssr' name="viewport" content="width=device-width, initial-scale=1.0">
     
-
-
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
-        crossorigin="anonymous">
-
-    <!-- Meta -->
-    <meta data-n-head='ssr' data-hid='theme-color' name='theme-color' content='#BB860B'>
-    <meta data-n-head='ssr' data-hid='og:type' name='og:type' content='website'>
-    <meta data-n-head='ssr' data-hid='og:title' name='og:title' content='kuzaku - дискорд бот!'>
-    <meta data-n-head='ssr' data-hid='og:url' name='og:url' content='https://kuzaku.ml'>
-    <meta data-n-head='ssr' data-hid='og:image' name='og:image'
-        content="{{ url_for('static', filename='images/kuzaku.png') }}">
-    <meta data-n-head='ssr' data-hid='description' name='description'
-        content='kuzaku - дискорд чат бот!'>
-    <meta data-n-head='ssr' data-hid='og:description' name='og:description'
-        content='kuzaku - дискорд чат бот!'>
-
-</head>
-
-<body style='background-color: #424242'>
-    <!-- Preloader -->
-
-    <body class='preload'></body>
-
-    <!-- Header -->
-    <div class='navbar animate__animated animate__backInDown' id='navbarr'>
-        <div class='container full flex'>
-            <a href='/' class='logo flex'>
-                <img src="static/images/kuzaku.png" alt='kuzaku Logo'>
-                <p class='title'>Kuzaku</p>
-            </a>
-            <nav>
-                <ul>
-                    <li><a class='button' href='docs'><span>информация</span></a></li>
-                    <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
-                    <li><a class='button' href='invite'><span>пригласить</span></a></li>
-                    <li><a class='button' href='support'><span>помощь</span></a></li>
-                </ul>
-            </nav>
-            {% block content %}
-                {% if user %}
-                <a onclick="location.href='dashboard'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;"><img src={{ user.avatar_url }} alt="Avatar" style="display: inline; width:20px; border-radius: 25px; margin-right: 7px;"> {{ dashbtnname }}</a>
-               
-                    <!--<button onclick="myFunction()" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>!-->
-                {% else %}
-                <a onclick="location.href='login'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;">{{ dashbtnname }}</a>
-                {% endif %}
-            {% endblock content %}
-        </div>
-    </div>
-
-
-    <section class='devs card animate__animated animate__lightSpeedInRight'>
-        <h2>Разработчики</h2>
-        <div class='container flex'>
-            <div class='card'>
-                <h3>BANana</h3>
-                <p>Привет! Я банан. Я - создатель kuzaku и этого сайта! рад пообщаться!</p>
-                <br>
-                <h4>Мои соц-сети!</h4>
-                <div class='media'>
-                    <a href="https://github.com/BANanaD3V"><i class="fab fa-github fa-2x"></i></a>
-                    <a href="https://dsc.bio/bananadev"><i class="fab fa-discord fa-2x"></i></a>
-                    <a href="https://bananadev.ml/"><i class="fas fa-globe fa-2x"></i></a>
-                    <a href="https://www.youtube.com/channel/UCGXjpZJtGJHqUuNIt_90C9w"><i class="fab fa-youtube fa-2x"></i></a>
-                </div>
-
-
-            </div>
-            <div class='card'>
-                <h3>Un Zote 4o2</h3>
-                <p>Непризнанный геней.</p>
-                <br>
-                <h4>Мои соц-сети!</h4>
-                <div class='media'>
-                    <a href="https://github.com/misha-python"><i class="fab fa-github fa-2x"></i></a>
-                    <a href="https://misha-python.ml/"><i class="fas fa-globe fa-2x"></i></a>
-                </div>
-
-
-            </div>
-
-
-            </div>
-        </div>
-    </div>
-    </section>
-   
+        <!-- Head Information -->
+        <title>kuzaku - команды</title>
+        <link data-n-head='ssr' rel='icon' type='image/x-icon' href="static/images/kuzaku.png">
     
-    <div class='footer'>
-        <div class='container full grid'>
-            <div class='branding'>
-                <h4>kuzaku</h4>
-                <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> kuzaku</p>
-            </div>
-            <div class='flex'>
-                <div class='footernav'>
+        <!-- Styles -->
+        <link type='text/css' rel='stylesheet' href="static/css/devs.css">
+        
+        <link type='text/css' rel='stylesheet' href="static/css/index.css">
+
+        <link type='text/css' rel='stylesheet' href="static/css/common.css">
+
+    
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+            integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+            crossorigin="anonymous">
+    
+        <!-- Meta -->
+        <meta data-n-head='ssr' data-hid='theme-color' name='theme-color' content='#8f45d9'>
+        <meta data-n-head='ssr' data-hid='og:type' name='og:type' content='website'>
+        <meta data-n-head='ssr' data-hid='og:title' name='og:title' content='kuzaku - команды'>
+        <meta data-n-head='ssr' data-hid='og:url' name='og:url' content='https://kuzaku.ml/commands'>
+        <meta data-n-head='ssr' data-hid='og:image' name='og:image'
+            content="static/images/kuzaku.png">
+        <meta data-n-head='ssr' data-hid='description' name='description'
+            content='все команды!'>
+        <meta data-n-head='ssr' data-hid='og:description' name='og:description'
+            content='все команды!!!!'>
+    
+    </head>
+<body>
+    <body style='background-color: #424242'>
+        <!-- Preloader -->
+    
+        <body class='preload'></body>
+    
+        <!-- Header -->
+        <div class='navbar animate__animated animate__backInDown' id='navbarr'>
+            <div class='container full flex'>
+                <a href='/' class='logo flex'>
+                    <img src="static/images/kuzaku.png" alt='kuzaku Logo'>
+                    <p class='title'>Kuzaku</p>
+                </a>
+                <nav>
                     <ul>
-                        <li><a class='button currentPage' href='/'><span>Домашняя страница</span></a></li>
-                        <li><a class='button' href='docs'><span>Информация</span></a></li>
+                        <li><a class='button' href='docs'><span>информация</span></a></li>
                         <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
-                        <li><a class='button' href='support'><span>Помощь</span></a></li>
-                        <li><a class='button' href='invite'><span>Пригласить бота</span></a></li>
+                        <li><a class='button' href='invite'><span>пригласить</span></a></li>
+                        <li><a class='button' href='support'><span>помощь</span></a></li>
                     </ul>
-                </div>
+                </nav>
+                {% block content %}
+                    {% if user %}
+                    <a onclick="location.href='dashboard'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;"><img src={{ user.avatar_url }} alt="Avatar" style="display: inline; width:20px; border-radius: 25px; margin-right: 7px;"> {{ dashbtnname }}</a>
+                   
+                        <!--<button onclick="myFunction()" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>!-->
+                    {% else %}
+                    <a onclick="location.href='login'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;">{{ dashbtnname }}</a>
+                    {% endif %}
+                {% endblock content %}
             </div>
         </div>
-    </div>
-    <!-- Scripts -->
-    <script>$(window).load(function () { 'body'.removeClass('.preload'); });</script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="static/js/jquery.spincrement.min.js"></script>
-    <script src="static/js/count.js" > </script>
-</body>
+<div style="padding-top: 70px;" class="safe-zone"></div>
+<div class="container">
+<div class="bc-container">
+<div class="container paddings" style="padding-bottom: 0">
+<div class="developers-title-wrapper">
+<div class="developers-title">Kuzaku разрабатывается 2 разработчиками из России.
+</div>
+</div>
+<div class="developers-wrapper">
+<div class="developers-role">Разработка сайта</div>
+<div class="developers-grid">
+<a href="https://bananadev.ml/" target="_blank">
+<div class="developer">
+<div class="developer-text">
+<div class="developer-username">BANana</div>
+<div class="developer-subtitle">Backend-разработка, бот, API</div>
+</div>
+<img class="developer-image" src="https://cdn.discordapp.com/avatars/704560097610825828/0f6a7fe87d2ed6e29225fbafb040ca67.webp">
+</div>
+</a>
+<a href="https://denvot.xyz/" target="_blank">
+<div class="developer">
+<div class="developer-text">
+<div class="developer-username">DenVot</div>
+<div class="developer-subtitle">Frontend-разработка</div>
+</div>
+<img class="developer-image" src="https://cdn.discordapp.com/avatars/630454253877723154/e8e2b7a7b5bf1e1daa6fda26d6f0b305.webp">
+</div>
+</a>
+</div>
+<div class="developers-role">Команда проекта</div>
+<div class="developers-grid">
+<a href="https://misha-python.ml/" target="_blank">
 
-</html>
+<div class="developer">
+<div class="developer-text">
+<div class="developer-username">Zote the mighty</div>
+<div class="developer-subtitle">Разработка бота.</div>
+</div>
+<img class="developer-image" src="https://cdn.discordapp.com/avatars/732571199913328691/f5286bde9babdc91e4d35d831ffc4a3f.webp">
+</div>
+</a>
+<a href="#" target="_blank">
+<div class="developer">
+<div class="developer-text">
+<div class="developer-username">Aleksey_Morton</div>
+<div class="developer-subtitle">Модератор проекта</div>
+</div>
+<img class="developer-image" src="https://cdn.discordapp.com/avatars/794539295268012035/a_299811e696cc87f7dd5df6b3db155fa7.webp">
+</div>
+</a>
+
+
+</div>
+<div class="developers-role">Хорошие люди, без которых некоторые функции не были бы реализованы</div>
+<div class="developers-grid">
+<a href="https://leylabot.ml/" target="_blank">
+<div class="developer">
+<div class="developer-text">
+<div class="developer-username" style="margin-bottom: 0">Reidy</div>
+<div class="developer-subtitle">Помощь с ботом.</div>
+</div>
+<img class="developer-image" src="https://cdn.discordapp.com/avatars/848593011038224405/829e21f5a357ed6fc1a887375679ab39.webp">
+</div>
+</a>
+<a href="https://leylabot.ml/" target="_blank">
+<div class="developer">
+<div class="developer-text">
+<div class="developer-username" style="margin-bottom: 0">𝐌𝐚𝐠𝐌𝟏𝐠𝐨_♡</div>
+<div class="developer-subtitle">Помощь с ботом.</div>
+</div>
+<img class="developer-image" src="https://cdn.discordapp.com/avatars/598387707311554570/cb491907c5623410f08d2a05ceecc6a9.webp">
+</div>
+</a>
+
+</div>
+<div class="developers-role">Наши проекты</div>
+<div class="developers-grid">
+<a href="https://sonatabot.top/ru" target="_blank">
+<div class="developer">
+<div class="developer-text">
+<div class="developer-username" style="margin-bottom: 0">Kuzaku</div>
+<div class="developer-subtitle">Многофункциональный дискорд бот</div>
+</div>
+<img class="developer-image" src="https://cdn.discordapp.com/avatars/781404915142492171/720e159b11a66e346682db0efd4aa57a.webp">
+</div>
+</a>
+</div>
+<div class="version">
+Версия Frontend-части сайта: <span style="color: gold;">1.32.5-deprecated</span><br>
+Версия Backend-части сайта: <span style="color: gold;">1.30.0-deprecated</span>
+</div>
+</div>
+</div>
+</div>
+
+
+</body></html>
