@@ -1,6 +1,6 @@
 import disnake
 from termcolor import cprint
-
+import os
 from botconfig import botconfig as config
 from kuzaku.classes import Kuzaku
 import kuzaku.exts as ext
