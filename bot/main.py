@@ -49,6 +49,7 @@ cprint(
     color="red",
     attrs={"bold"},
 )
+print(os.getenv("PORT"))
 
 print("\n")
 
