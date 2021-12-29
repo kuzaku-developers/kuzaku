@@ -28,7 +28,7 @@ python-socketio
 motor
 Quart-Discord
 discord-together
-discord-ext-ipc
+git+https://github.com/Z1R343L/discord-ext-ipc
 python-uptimerobot
 Pillow
 numpy
