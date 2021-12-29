@@ -9,7 +9,7 @@ git+https://github.com/DisnakeDev/disnake
 git+https://github.com/DisnakeDev/disnake#egg=disnake[discord,voice,speed]
 firebase
 asyncio
-wavelink
+https://github.com/sync1211/Wavelink-Disnake/archive/refs/heads/master.zip
 youtube_dl
 psutil
 opencv-python
@@ -19,13 +19,16 @@ sseclient
 gcloud
 python-dotenv
 requests_toolbelt
+disnake-ext-menus
+humanize
 hypercorn
 aiohttp
 requests
 python-socketio
+motor
 Quart-Discord
 discord-together
-git+https://github.com/kuzaku-developers/discord-ext-dashboard.git
+discord-ext-ipc
 python-uptimerobot
 Pillow
 numpy

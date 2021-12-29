@@ -41,7 +41,7 @@ class InvalidVoiceChannel(VoiceConnectionError):
     """Exception for cases of invalid Voice Channels."""
 
 
-class YTDLSource(discord.PCMVolumeTransformer):
+class YTDLSource(disnake.PCMVolumeTransformer):
     def __init__(self, source, *, data, requester):
         super().__init__(source)
         self.requester = requester
@@ -82,7 +82,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
                 "title": data["title"],
             }
 
-        return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
+        return cls(disnake.FFmpegPCMAudio(source), data=data, requester=ctx.author)
 
     @classmethod
     async def regather_stream(cls, data, *, loop):
@@ -94,7 +94,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         to_run = partial(ytdl.extract_info, url=data["webpage_url"], download=False)
         data = await loop.run_in_executor(None, to_run)
 
-        return cls(discord.FFmpegPCMAudio(data["url"]), data=data, requester=requester)
+        return cls(disnake.FFmpegPCMAudio(data["url"]), data=data, requester=requester)
 
 
 class MusicPlayer:
@@ -245,7 +245,7 @@ class Music(commands.Cog):
 
         return player
 
-    @cog_ext.cog_slash(name="connect", description="Joins the voice channel!")
+    @commands.slash_command(name="connect", description="Joins the voice channel!")
     async def connect_(self, ctx, *, channel: disnake.VoiceChannel = None):
         """Подключить меня к голосовому каналу. *Просто подключить? А пати?*
         Аргументы:
@@ -284,13 +284,13 @@ class Music(commands.Cog):
 
         await ctx.send(f":notes: Голосовой канал: **{channel}**", delete_after=20)
 
-    @cog_ext.cog_slash(name="looptest", description="e", guild_ids=[])
+    @commands.slash_command(name="looptest", description="e", guild_ids=[])
     async def looptest(self, ctx):
         vc = ctx.voice.client
         vc.loop(True)
         await ctx.send("abobus")
 
-    @cog_ext.cog_slash(name="play", description="Play some music!")
+    @commands.slash_command(name="play", description="Play some music!")
     async def play_(self, ctx, *, song: str):
         """Запросить проигрывание музыки. *Мне надоело сидеть в тишине, го пати!*
         Аргументы:
@@ -301,7 +301,7 @@ class Music(commands.Cog):
         n!play Nightcore - MayDay
         ```
         """
-        await ctx.defer()
+        await ctx.response.defer()
         vc = ctx.voice_client
 
         if not vc:
@@ -319,7 +319,7 @@ class Music(commands.Cog):
         except:
             await ctx.send("Не удалось получить видео! Проверьте, может быть оно 18+?!")
 
-    @cog_ext.cog_slash(name="pause", description="Pause the music. IM AFK!!1111!1")
+    @commands.slash_command(name="pause", description="Pause the music. IM AFK!!1111!1")
     async def pause_(self, ctx):
         """Поставить проигрыватель на паузу. *Я афк!11*"""
         vc = ctx.voice_client
@@ -335,7 +335,7 @@ class Music(commands.Cog):
         vc.pause()
         await ctx.send(f"**`{ctx.author}`** поставил проигрыватель на паузу.")
 
-    @cog_ext.cog_slash(
+    @commands.slash_command(
         name="resume", description="Resume music. Wait, don't stop cool music!"
     )
     async def resume_(self, ctx):
@@ -352,7 +352,7 @@ class Music(commands.Cog):
         vc.resume()
         await ctx.send(f"**`{ctx.author}`** снял проигрыватель с паузы.")
 
-    @cog_ext.cog_slash(name="skip", description="I don't like this song!")
+    @commands.slash_command(name="skip", description="I don't like this song!")
     async def skip_(self, ctx):
         """Перейти к следующему треку в очереди. *Мне надоела эта песня!*"""
         vc = ctx.voice_client
@@ -370,7 +370,7 @@ class Music(commands.Cog):
         vc.stop()
         await ctx.send(f"**`{ctx.author}`** пропустил текущий трек.")
 
-    @cog_ext.cog_slash(
+    @commands.slash_command(
         name="queue", description="What will play next? oh no, rickro..."
     )
     async def queue_info(self, ctx):
@@ -394,7 +394,7 @@ class Music(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @cog_ext.cog_slash(
+    @commands.slash_command(
         name="playing", description="hey, what is playing? its a good song!"
     )
     async def now_playing_(self, ctx):
@@ -423,7 +423,7 @@ class Music(commands.Cog):
             f"Запросил: `{vc.source.requester}`"
         )
 
-    @cog_ext.cog_slash(name="volume", description="You need loudy music? OK!")
+    @commands.slash_command(name="volume", description="You need loudy music? OK!")
     async def change_volume(self, ctx, *, volume: float):
         """Изменить громкость проигрывателя. *Нужно еще громче?? Пожалуйста!*
         Аргументы:
@@ -454,7 +454,7 @@ class Music(commands.Cog):
             f"**`{ctx.author}`** установил громкость проигрывателя на **{volume}%**"
         )
 
-    @cog_ext.cog_slash(
+    @commands.slash_command(
         name="stop", description="Stop music! wait... you don't like it?"
     )
     async def stop_(self, ctx):
@@ -478,7 +478,7 @@ class Music(commands.Cog):
         "🔗": "Подключить меня к каналу",
     }
 
-    @cog_ext.cog_slash(name="musmenu", description="Open reactions menu! Its cool!")
+    @commands.slash_command(name="musmenu", description="Open reactions menu! Its cool!")
     async def call_menu_(self, ctx):
         embed = disnake.Embed(title="Контроллер проигрывателя.")
         paginator = commands.Paginator(prefix="", suffix="")
@@ -546,4 +546,4 @@ class Music(commands.Cog):
 
 
 def setup(bot):
-    bot.log.sub_logger.warn('Cog "/fun/music.py" is code-level disabled')
+    bot.add_cog(Music(bot))

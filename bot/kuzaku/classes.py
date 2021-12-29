@@ -2,14 +2,13 @@ import time
 import os
 import disnake
 from disnake.ext.commands import Context
-from disnake.ext import commands
+from disnake.ext import commands, ipc
 from discord.ext.dashboard import Dashboard
 import disnake
 from discord_together import DiscordTogether
 from botconfig import botconfig as config
 from kuzaku.logger import Kuzaku_logger
 from kuzaku.exts import ping
-from kuzaku.dashboard import init_dashboard
 
 
 class Kuzaku_context(Context):
@@ -24,6 +23,14 @@ class Kuzaku_context(Context):
 
         return value
     """
+    async def send(self, content=None, **kwargs):
+        if not kwargs.get('mention_author'):
+            kwargs['mention_author'] = False
+        try:
+            return await self.send(content, **kwargs)
+        except disnake.errors.InteractionResponded:
+            return self.send(content=content, **kwargs)
+
 
 
 class Kuzaku(disnake.ext.commands.Bot):
@@ -31,18 +38,9 @@ class Kuzaku(disnake.ext.commands.Bot):
         super().__init__(**options)
 
         self.log = Kuzaku_logger.new()
+        self.ipc = ipc.Server(self, secret_key="my_secret_key", port=os.getenv("PORT", 80), do_multicast=False)
 
-        if config["production"]:
-            self.dashboard = Dashboard(
-                self, os.getenv("ipckey"), "https://kuzaku.ml/dash_handler"
-            )
 
-        else:
-            self.dashboard = Dashboard(
-                self, os.getenv("ipckey"), "http://127.0.0.1:5000/dash_handler"
-            )
-
-        init_dashboard(self)
 
     async def on_connect(self):
         sec = int(round(time.time() - config["start_time"]))

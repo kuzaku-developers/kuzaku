@@ -28,11 +28,11 @@ class together(commands.Cog):
             link = await self.bot.together.create_link(
                 ctx.author.voice.channel.id, activity
             )
-            await ctx.edit_original_message(
+            await ctx.send(
                 content=f"Ссылка для инициализации комнаты: \n{link}"
             )
         else:
-            await ctx.edit_original_message(
+            await ctx.send(
                 content="Вы не подключены к голосовому каналу!"
             )
 

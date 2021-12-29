@@ -824,6 +824,7 @@ class roleplay(commands.Cog):
                 if i != "federation:":
                     dbrpsetjson(i, "health", 100)
                     if firework[i]["hunger"] <= 0:
+                        print(firework)
                         user = self.bot.get_user(int(i))
                         if firework[i]["health"] >= 1:
                             dbrpsetjson(i, "health", dbrpgetuser(i)["health"] - 1)

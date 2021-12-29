@@ -30,7 +30,7 @@ class fun(commands.Cog):
         )
         print(msg.attachments[0].url)
         embed.set_image(url=msg.attachments[0].url)
-        await ctx.edit_original_message(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.slash_command(
         name="anime",
@@ -77,13 +77,13 @@ class fun(commands.Cog):
             embed.set_thumbnail(url=data["results"][0].get("image_url"))
 
             embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
-            return await ctx.edit_original_message(embed=embed)
+            return await ctx.send(embed=embed)
 
         except:
-            await ctx.edit_original_message(
+            await ctx.send(
                 content=f"По запросу ``{anime}`` ничего не найдено.."
             )
-        return await ctx.edit_original_message(
+        return await ctx.send(
             content=f"По запросу ``{anime}`` ничего не найдено.."
         )
 

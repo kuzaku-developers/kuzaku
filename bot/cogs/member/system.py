@@ -148,7 +148,7 @@ class system(commands.Cog):
             text=f"команда stats | вызваал {ctx.author}", icon_url=ctx.author.avatar.url
         )
 
-        await ctx.edit_original_message(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.slash_command(name="devs", description="разработчики бота")
     async def devs(self, ctx):

@@ -62,7 +62,7 @@ class EventCog(commands.Cog):
             try:
                 await ctx.response.send_message(embed=embed)
             except disnake.errors.InteractionResponded:
-                await ctx.edit_original_message(embed=embed)
+                await ctx.send(embed=embed)
 
         elif isinstance(error, commands.DisabledCommand):
             embed = disnake.Embed(color=0xFF0000).set_author(
@@ -72,7 +72,7 @@ class EventCog(commands.Cog):
             try:
                 return await ctx.response.send_message(embed=embed)
             except disnake.errors.InteractionResponded:
-                return await ctx.edit_original_message(embed=embed)
+                return await ctx.send(embed=embed)
 
         elif isinstance(error, disnake.errors.Forbidden):
             embed = disnake.Embed(color=0xFF0000).set_author(
@@ -83,7 +83,7 @@ class EventCog(commands.Cog):
             try:
                 return await ctx.response.send_message(embed=embed)
             except disnake.errors.InteractionResponded:
-                return await ctx.edit_original_message(embed=embed)
+                return await ctx.send(embed=embed)
 
         elif isinstance(error, commands.CheckFailure):
             if not isinstance(error, commands.errors.NSFWChannelRequired):
@@ -95,7 +95,7 @@ class EventCog(commands.Cog):
                     try:
                         return await ctx.response.send_message(embed=embed)
                     except disnake.errors.InteractionResponded:
-                        return await ctx.edit_original_message(embed=embed)
+                        return await ctx.send(embed=embed)
 
                 embed = disnake.Embed(color=0xFF0000).set_author(
                     name="У вас нет прав.",
@@ -109,7 +109,7 @@ class EventCog(commands.Cog):
             try:
                 return await ctx.response.send_message(embed=embed)
             except disnake.errors.InteractionResponded:
-                return await ctx.edit_original_message(embed=embed)
+                return await ctx.send(embed=embed)
         elif isinstance(error, commands.NoPrivateMessage):
             try:
                 embed = disnake.Embed(color=0xFF0000).set_author(
@@ -119,7 +119,7 @@ class EventCog(commands.Cog):
                 try:
                     await ctx.response.send_message(embed=embed)
                 except disnake.errors.InteractionResponded:
-                    await ctx.edit_original_message(embed=embed)
+                    await ctx.send(embed=embed)
             except:
                 pass
 
@@ -131,7 +131,7 @@ class EventCog(commands.Cog):
             try:
                 await ctx.response.send_message(embed=embed)
             except disnake.errors.InteractionResponded:
-                await ctx.edit_original_message(embed=embed)
+                await ctx.send(embed=embed)
 
         elif isinstance(error, commands.CommandOnCooldown):
             embed = disnake.Embed(color=0xFF0000).set_author(
@@ -141,7 +141,7 @@ class EventCog(commands.Cog):
             try:
                 await ctx.response.send_message(embed=embed)
             except disnake.errors.InteractionResponded:
-                await ctx.edit_original_message(embed=embed)
+                await ctx.send(embed=embed)
 
         # Если ничего не подходит
         embed = disnake.Embed(
@@ -190,7 +190,7 @@ class EventCog(commands.Cog):
             embed.set_footer(text=random.choice(errors_msgs))
             await ctx.response.send_message(embed=embed)
         except disnake.errors.InteractionResponded:
-            await ctx.edit_original_message(embed=embed)
+            await ctx.send(embed=embed)
 
 
 def setup(bot):

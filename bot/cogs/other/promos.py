@@ -37,7 +37,7 @@ class promocodes(commands.Cog):
         else:
             try:
                 if ctx.author.id in used_by:
-                    return await ctx.edit_original_message(
+                    return await ctx.send(
                         embed=disnake.Embed(
                             title="Промокоды",
                             description="Вы уже использовали данный промокод!",
@@ -51,7 +51,7 @@ class promocodes(commands.Cog):
                     getpromos()[i]["uses"] != "inf"
                     and str(getpromos()[i]["uses"]) == "0"
                 ):
-                    return await ctx.edit_original_message(
+                    return await ctx.send(
                         embed=disnake.Embed(
                             title="Промокоды",
                             description="Ошибка! У данного промокода не осталось использований!",
@@ -64,7 +64,7 @@ class promocodes(commands.Cog):
             db.child("db").child("premium").child(ctx.author.id).set(data)
             if getpromos()[i]["uses"] != "inf":
                 setpromouses(i, int(getpromos()[i]["uses"]) - 1)
-            await ctx.edit_original_message(
+            await ctx.send(
                 embed=disnake.Embed(
                     title="Промокоды",
                     description="Успех! Промокод активирован!",
@@ -96,7 +96,7 @@ class promocodes(commands.Cog):
             addpromo(promocode, uses)
             embed = disnake.Embed(title="Промокоды", description=f"Промокод создан!")
 
-        await ctx.edit_original_message(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.is_owner()
     @promocmd.sub_command(
@@ -116,7 +116,7 @@ class promocodes(commands.Cog):
                 inline=False,
             )
 
-        await ctx.edit_original_message(embed=embed)
+        await ctx.send(embed=embed)
 
 
 def setup(bot: commands.Bot):

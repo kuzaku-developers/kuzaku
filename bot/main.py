@@ -25,6 +25,8 @@ else:
         owner_ids=[704560097610825828, 732571199913328691],
         test_guilds=[808013895917633546, 888371092610252800],
         reload=True,
+        enable_debug_events=True
+
     )
 
 botname = (
@@ -52,6 +54,8 @@ print("\n")
 
 ext.load_cogs(bot, ignore=config["ignore_cogs"])
 
-bot.run(config["token"])
+if __name__ == "__main__":
+    bot.ipc.start()
+    bot.run(config["token"])
 # Если вы это читаете, то вы подтверждаете то что вы не имеете права критиковать этот говно-код за его убогость и нечитаемость.
 # Автор кода придерживается принципа пофиг-как, главное чтоб работало.

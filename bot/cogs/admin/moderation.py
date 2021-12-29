@@ -40,7 +40,7 @@ class moderation(commands.Cog, name="Модерация"):
             title="Точно банить?",
             description=f"вы уверены, что хотите забанить пользователя {member.mention}? Тогда нажмите на кнопку!",
         )
-        msg = await ctx.edit_original_message(embed=embedd, view=view)
+        msg = await ctx.send(embed=embedd, view=view)
         await view.wait()
         if view.value == None:
             for child in view.children:
@@ -79,7 +79,7 @@ class moderation(commands.Cog, name="Модерация"):
         message = await channel.send(
             text.replace("@everyone", "@ everyone").replace("@here", "@ here")
         )
-        await ctx.edit_original_message(
+        await ctx.send(
             content=self.data["say.text"].format(message.jump_url)
         )
 
@@ -94,7 +94,7 @@ class moderation(commands.Cog, name="Модерация"):
             title="Точно Кикать?",
             description=f"вы уверены, что хотите кикнуть пользователя {member.mention}? Тогда нажмите на кнопку!",
         )
-        msg = await ctx.edit_original_message(embed=embedd, view=view)
+        msg = await ctx.send(embed=embedd, view=view)
         await view.wait()
         if view.value == None:
             for child in view.children:

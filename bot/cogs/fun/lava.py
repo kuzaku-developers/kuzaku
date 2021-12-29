@@ -230,17 +230,13 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
             for node in previous.values():
                 await node.destroy()
 
-        nodes = {
-            "MAIN": {
-                "host": "lava.link",
-                "port": 80,
-                "rest_uri": "http://lava.link:80",
-                "password": "yournodepassword",
-                "identifier": "MAIN",
-                "region": "germany",
-            }
-        }
-
+        nodes = {'MAIN': {'host': 'lavalink.eu',
+                          'port': 2333,
+                          'rest_uri': 'http://lavalink.eu:2333',
+                          'password': 'Raccoon',
+                          'identifier': 'MAIN',
+                          'region': 'us_central'
+                          }}
         for n in nodes.values():
             await self.bot.wavelink.initiate_node(**n)
 
@@ -383,16 +379,16 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
             try:
                 await player.connect(ctx.author.voice.channel.id)
             except:
-                return await ctx.edit_original_message(
+                return await ctx.send(
                     content="Сначала войдите в голосовой канал!"
                 )
         query = query.strip("<>")
         if not URL_REG.match(query):
-            query = f"ytsearch:{query}"
+            query = f"scsearch:{query}"
 
         tracks = await self.bot.wavelink.get_tracks(query)
         if not tracks:
-            return await ctx.edit_original_message(
+            return await ctx.send(
                 content="<a:no_anim:796454160283074611> Увы, треков не найдено. Повторите попытку."
             )
 
@@ -401,13 +397,13 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
                 track = Track(track.id, track.info, requester=ctx.author)
                 await player.queue.put(track)
 
-            await ctx.edit_original_message(
+            await ctx.send(
                 content=f'```ini\nПлейлист {tracks.data["playlistInfo"]["name"]}'
                 f" с {len(tracks.tracks)} треками добавлен в очередь.\n```"
             )
         else:
             track = Track(tracks[0].id, tracks[0].info, requester=ctx.author)
-            await ctx.edit_original_message(
+            await ctx.send(
                 content=f"```ini\nТрек {track.title} добавлен в очередь\n```"
             )
             await player.queue.put(track)
@@ -417,7 +413,7 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
 
     @commands.slash_command(
         name="pause",
-        description="RPause the currently playing song.",
+        description="Pause the currently playing song.",
     )
     async def pause(self, ctx):
         """Pause the currently playing song."""
@@ -667,10 +663,10 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
             return
 
         if player.queue.qsize() == 0:
-            return await ctx.send("There are no more songs in the queue.")
+            return await ctx.send("Очередь пустая.")
 
         entries = [track.title for track in player.queue._queue]
-        embed = disnake.Embed(title="Coming Up...", colour=0x4F0321)
+        embed = disnake.Embed(title="Включаю...", colour=0x4F0321)
         embed.description = "\n".join(
             f"`{index}. {title}`" for index, title in enumerate(page, 1)
         )

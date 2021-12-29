@@ -17,7 +17,7 @@ class economy(commands.Cog):
     async def rank(self, ctx, member: disnake.Member = None):
         await ctx.response.defer()
         if not get_config(ctx.guild.id)["eco_enabled"] == "true":
-            return await ctx.edit_original_message(
+            return await ctx.send(
                 content="Извините, но на сервере выключена система рейтинга!"
             )
         if not member:
@@ -50,7 +50,7 @@ class economy(commands.Cog):
         await card.setDisplayProcents(True)
         await card.setTextStyle(path="bot/font.ttf")
         file = await card.create()
-        await ctx.edit_original_message(file=disnake.File(fp=file, filename="rank.png"))
+        await ctx.send(file=disnake.File(fp=file, filename="rank.png"))
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):

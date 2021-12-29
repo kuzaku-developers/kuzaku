@@ -55,7 +55,7 @@ class premium(commands.Cog):
                 description="вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)",
             )
 
-            return await ctx.edit_original_message(embed=embed)
+            return await ctx.send(embed=embed)
         if await guild.fetch_member(ctx.author.id):
             premium = guild.get_role(869883325265874975)
             if premium in (await guild.fetch_member(ctx.author.id)).roles:
@@ -63,7 +63,7 @@ class premium(commands.Cog):
                     title="Премиум",
                     description="у вас есть премиум и вы можете его активровать! используйте /gold use",
                 )
-                await ctx.edit_original_message(embed=embed)
+                await ctx.send(embed=embed)
             else:
 
                 embed = disnake.Embed(
@@ -71,7 +71,7 @@ class premium(commands.Cog):
                     description="у вас нет премиума! Мы были бы признательны, если бы вы приобрели подиску и активировали бонус! Для этого посетите документацию :з",
                 )
 
-                await ctx.edit_original_message(embed=embed, view=PremView())
+                await ctx.send(embed=embed, view=PremView())
 
         else:
             embed = disnake.Embed(
@@ -79,7 +79,7 @@ class premium(commands.Cog):
                 description="вас нет на сервере поддержки! мы [советуем вам зайти!](https://discord.gg/tmrrdRwJCU)",
             )
 
-            await ctx.edit_original_message(embed=embed)
+            await ctx.send(embed=embed)
 
     @premium_cmd.sub_command(name="use", description="использовать премиум")
     async def use(self, ctx):
@@ -90,13 +90,13 @@ class premium(commands.Cog):
                     title="Активация!",
                     description="Провал! У вас больше нет серверов для активации!",
                 )
-                await ctx.edit_original_message(embed=embed)
+                await ctx.send(embed=embed)
             else:
                 if True:
 
                     for i in dict(getdb()["premium"])["guilds"]:
                         if str(i) == str(ctx.guild.id):
-                            await ctx.edit_original_message(
+                            await ctx.send(
                                 embed=disnake.Embed(
                                     title="Активация!",
                                     description="Провал! Премиум уже активирован!",
@@ -107,14 +107,14 @@ class premium(commands.Cog):
                         try:
                             minusoneguild(ctx.author.id)
                             setsupporter(str(ctx.guild.id), True)
-                            await ctx.edit_original_message(
+                            await ctx.send(
                                 embed=disnake.Embed(
                                     title="Активация!",
                                     description="Успех! Премиум активирован!",
                                 )
                             )
                         except Exception as e:
-                            await ctx.edit_original_message(
+                            await ctx.send(
                                 embed=disnake.Embed(
                                     title="Активация!",
                                     description="Провал! Возникла неизвестная ошибка!",
@@ -124,7 +124,7 @@ class premium(commands.Cog):
             embed = disnake.Embed(
                 title="Активация!", description="Провал! У вас нет премиума!"
             )
-            await ctx.edit_original_message(embed=embed)
+            await ctx.send(embed=embed)
 
     @commands.is_owner()
     @premium_cmd.sub_command(
@@ -149,7 +149,7 @@ class premium(commands.Cog):
             await webhook.send(
                 embed=embed, username="покупка премиума", avatar_url=user.avatar.url
             )
-        await ctx.edit_original_message(
+        await ctx.send(
             content=f"Премиум успешно выдан для {user.mention}!"
         )
 
@@ -183,7 +183,7 @@ class premium(commands.Cog):
                 elif premium2 in (await guild.fetch_member(user.id)).roles:
                     setpremium(user.id, True, 5)
                 continue
-            for i in dict(getdb()["premium"]):
+            for i in dict(await getdb()["premium"]):
                 try:
 
                     if await guild.fetch_member(i):

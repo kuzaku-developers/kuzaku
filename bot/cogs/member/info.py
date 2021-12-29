@@ -96,7 +96,7 @@ class info(commands.Cog):
             inline=True,
         )
 
-        await ctx.edit_original_message(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.slash_command(name="avatar", description="Show member avatar!")
     async def avatar(self, ctx, member: disnake.Member = None):
@@ -104,7 +104,7 @@ class info(commands.Cog):
         member = member or ctx.author
         embed = disnake.Embed(title=self.data["avatar.embed.title"].format(member))
         embed.set_image(url=member.avatar.url)
-        await ctx.edit_original_message(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.slash_command(name="help", description="WHAT THIS COMMAND DO?!")
     async def thelp(self, ctx, *, command: str = None):
@@ -141,7 +141,7 @@ class info(commands.Cog):
                         )
                     )
 
-            message = await ctx.edit_original_message(embed=embs[0])
+            message = await ctx.send(embed=embs[0])
 
             pages = Paginator(message, embs, ctx.author, footer=True)
             return await pages.start()
@@ -200,7 +200,7 @@ class info(commands.Cog):
             )
         )
 
-        await ctx.edit_original_message(embed=embed)  # самая легкая команда хелп
+        await ctx.send(embed=embed)  # самая легкая команда хелп
 
 
 def setup(bot):
