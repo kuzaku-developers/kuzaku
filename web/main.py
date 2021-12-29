@@ -5,7 +5,6 @@ import disnake as discord
 from functools import wraps
 from disnake import Webhook
 from disnake.ext import ipc
-from discord.ext.dashboard import Server
 from quart import Quart, render_template, request, session, redirect, url_for, Response
 from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 import os

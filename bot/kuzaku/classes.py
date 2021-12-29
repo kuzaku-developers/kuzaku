@@ -3,7 +3,6 @@ import os
 import disnake
 from disnake.ext.commands import Context
 from disnake.ext import commands, ipc
-from discord.ext.dashboard import Dashboard
 import disnake
 from discord_together import DiscordTogether
 from botconfig import botconfig as config
