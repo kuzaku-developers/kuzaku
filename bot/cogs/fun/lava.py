@@ -229,9 +229,9 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
             for node in previous.values():
                 await node.destroy()
 
-        nodes = {'MAIN': {'host': 'node01.lavalink.eu',
-                          'port': 2333,
-                          'rest_uri': 'http://node01.lavalink.eu:2333',
+        nodes = {'MAIN': {'host': 'lava.link',
+                          'port': 80,
+                          'rest_uri': 'http://lava.link:80',
                           'password': 'Raccoon',
                           'identifier': 'MAIN',
                           'region': 'us_central'
