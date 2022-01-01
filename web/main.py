@@ -4,7 +4,7 @@ import requests
 import disnake as discord
 from functools import wraps
 from disnake import Webhook
-from disnake.ext import ipc
+from discord.ext.dashboard import Server
 from quart import Quart, render_template, request, session, redirect, url_for, Response
 from quart_discord import DiscordOAuth2Session, requires_authorization, Unauthorized
 import os
@@ -48,7 +48,9 @@ app.config["DISCORD_BOT_TOKEN"] = os.getenv(
     "BOTTOKEN"
 )  # Required to access BOT resources.
 discord = DiscordOAuth2Session(app)
-app_dashboard = ipc.Client(secret_key="my_secret_key", port=80) 
+app_dashboard = Server(
+    app, os.getenv("ipckey"), webhook_url=os.getenv("webhook_ipc"), sleep_time=1
+)
 
 
 @app.route("/login/")
@@ -267,7 +269,18 @@ async def premium():
 
 @app.errorhandler(404)
 async def page_not_found(e):
-    return await render_template("404.html"), 404
+    try:
+        authorized = await discord.authorized
+    except:
+        authorized = False
+    if authorized != True:
+        user = None
+    else:
+        try:
+            user = await discord.fetch_user()
+        except:
+            return redirect("logout")
+    return await render_template("404.html", user=user), 404
 
 
 @app.route("/api/v1/")
@@ -291,7 +304,6 @@ async def main():
         except:
             return redirect("logout")
     statistic = await app_dashboard.request("get_stats")
-    print(statistic)
     if statistic:
         return await render_template(
             "index.html",

@@ -46,7 +46,7 @@ body {
 .showcase {
 	height: 700px;
 	position: relative;
-	background-color: #424242;
+	background-color: #292929;
 }
 .trans {
 	background-image: linear-gradient(#424242, #424242, #882b2b, #882b2b);
@@ -62,7 +62,7 @@ svg {
 }
 .benefits {
     width: 100%;
-    background: #424242;
+    background: #222222;
 }
 
 .benefits__inner {
@@ -242,27 +242,79 @@ svg {
 	justify-content: center;
 }
 
-/* Panels */
-.features {
-	height: auto 500px;
-	background-color: #882b2b;
+
+.function {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 70px;
 }
 
-.features h3 {
-	text-align: center;
-	font-size: 25px;
-	font-weight: 400;
+.functions-block {
+    padding: 20px;
 }
 
-.features p {
-	text-align: center;
+.functions-title {
+    text-align: center;
 }
 
-.features img {
-	border-radius: 5px;
-	justify-self: center;
-	width: 75%;
+.function-info {
+    width: 50%;
+    margin: 10px;
 }
+
+.function-title {
+    font-weight: 800;
+    font-size: 30px;
+    color: #ebf2ff;
+}
+
+.function-img {
+    border: 2px solid #b6b6b6;
+    border-radius: 15px;
+    width: 480px;
+}
+
+.func-l {
+    order: 1;
+    text-align: right;
+}
+
+.func-r {
+    order: 2;
+    text-align: left;
+}
+
+@media (max-width: 945px) {
+    .function-img {
+        width: 380px;
+    }
+}
+
+@media (max-width:744px) {
+    .function {
+        display: block;
+        text-align: center;
+    }
+
+    .function-info {
+        width: auto;
+        text-align: center;
+    }
+    .function-img {
+        width: 90%;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .function-img {
+        margin: 10px;
+    }
+}
+
+
+
+
 
 .mobile {
 	display: none;
@@ -270,9 +322,6 @@ svg {
 
 /* Tablet Responsive */
 @media (max-width: 768px) {
-	.features img {
-		width: 100%;
-	}
 	.dropdown-content {position: revert; border-bottom-left-radius: revert; border-bottom-right-radius: revert}
 }
 
@@ -295,11 +344,6 @@ svg {
 	.showcase a {
 		width: 100%;
 		text-align: center;
-	}
-
-	.features .grid {
-		grid-template-columns: 1fr;
-		grid-template-rows: 1fr;
 	}
 
 	.desktop {

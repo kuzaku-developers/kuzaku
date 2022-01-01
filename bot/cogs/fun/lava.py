@@ -157,12 +157,7 @@ class Player(wavelink.Player):
 
     async def teardown(self):
         """Clear internal states, remove player controller and disconnect."""
-        try:
-            await self.controller.message.delete()
-        except disnake.HTTPException:
-            pass
 
-        self.controller.stop()
 
         try:
             await self.destroy()
@@ -218,13 +213,17 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
             bot.wavelink = wavelink.Client(bot=bot)
 
         bot.loop.create_task(self.start_nodes())
-
+    async def getRadio(self, radio):
+        if radio=="Ретро FM":
+            return "http://retroserver.streamr.ru:8043/retro256.mp3"
+        elif radio=="Дорожное радио":
+            return "http://dorognoe.hostingradio.ru:8000/radio"
     async def start_nodes(self) -> None:
         """Connect and intiate nodes."""
         await self.bot.wait_until_ready()
 
         if self.bot.wavelink.nodes:
-            self.bot.log.info("Lavalink :: Initializing nodes")
+            self.bot.log.warn("Lavalink :: Initializing nodes")
             previous = self.bot.wavelink.nodes.copy()
 
             for node in previous.values():
@@ -384,7 +383,7 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
                 )
         query = query.strip("<>")
         if not URL_REG.match(query):
-            query = f"scsearch:{query}"
+            query = f"ytsearch:{query}"
 
         tracks = await self.bot.wavelink.get_tracks(query)
         if not tracks:
@@ -405,6 +404,57 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
             track = Track(tracks[0].id, tracks[0].info, requester=ctx.author)
             await ctx.send(
                 content=f"```ini\nТрек {track.title} добавлен в очередь\n```"
+            )
+            await player.queue.put(track)
+
+        if not player.is_playing:
+            await player.do_next()
+
+
+    @commands.slash_command(name="radio", description="Radio, yes!")
+    async def radio_(self, ctx, radio: str =commands.Param(
+            choices=[
+                "Ретро FM",
+                "Дорожное радио",
+            ]
+        ),):
+        query=await self.getRadio(radio)
+        """Play or queue a song with the given query."""
+        await ctx.response.defer()
+        player: Player = self.bot.wavelink.get_player(
+            guild_id=ctx.guild.id, cls=Player, context=ctx
+        )
+
+        if not player.is_connected:
+            try:
+                await player.connect(ctx.author.voice.channel.id)
+            except:
+                return await ctx.send(
+                    content="Сначала войдите в голосовой канал!"
+                )
+        query = query.strip("<>")
+        if not URL_REG.match(query):
+            query = f"scsearch:{query}"
+
+        tracks = await self.bot.wavelink.get_tracks(query)
+        if not tracks:
+            return await ctx.send(
+                content="<a:no_anim:796454160283074611> Увы, треков не найдено. Повторите попытку."
+            )
+
+        if isinstance(tracks, wavelink.TrackPlaylist):
+            for track in tracks.tracks:
+                track = Track(track.id, track.info, requester=ctx.author)
+                await player.queue.put(track)
+
+            await ctx.send(
+                content=f'```ini\nПлейлист {tracks.data["playlistInfo"]["name"]}'
+                f" с {len(tracks.tracks)} треками добавлен в очередь.\n```"
+            )
+        else:
+            track = Track(tracks[0].id, tracks[0].info, requester=ctx.author)
+            await ctx.send(
+                content=f"```ini\nРадио {radio} добавлено в очередь\n```"
             )
             await player.queue.put(track)
 
@@ -668,33 +718,20 @@ class Musicc(commands.Cog, wavelink.WavelinkMixin):
         entries = [track.title for track in player.queue._queue]
         embed = disnake.Embed(title="Включаю...", colour=0x4F0321)
         embed.description = "\n".join(
-            f"`{index}. {title}`" for index, title in enumerate(page, 1)
+            f"`{index}. {title}`" for index, title in track in player.queue._queue
         )
 
         await ctx.send(embed=embed)
 
-    @commands.slash_command(
-        name="playing",
-        description="hey, what is playing? its a good song!",
-    )
-    async def nowplaying(self, ctx):
-        """Update the player controller."""
-        player: Player = self.bot.wavelink.get_player(
-            guild_id=ctx.guild.id, cls=Player, context=ctx
-        )
-
-        if not player.is_connected:
-            return await ctx.send("Вы не подключены к голосовому каналу!")
-
-        await player.invoke_controller()
-        await ctx.send("Готово!")
+   
 
     @commands.slash_command(
         name="swap",
         description="Swap the current DJ to another member in the voice channel.",
     )
-    async def swap_dj(self, ctx, *, member: disnake.Member = None):
+    async def swap_dj(self, ctx, member: disnake.Member = None):
         """Swap the current DJ to another member in the voice channel."""
+        await ctx.response.defer()
         player: Player = self.bot.wavelink.get_player(
             guild_id=ctx.guild.id, cls=Player, context=ctx
         )

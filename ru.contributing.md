@@ -18,5 +18,3 @@
 2. <strike>i did some changes to clear command</strike> ❌ Сообщение о коммите не содержит никакой полезной информации и написано в прошедшем времени.
 3. **make second argument in clear command optional** ✅ Все отлично!
 
-
-Переведено с помощью www.DeepL.com/Translator (бесплатная версия)

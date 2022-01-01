@@ -42,24 +42,38 @@
     <body class='preload'></body>
 
     <!-- Header -->
-    <div class='navbar' style='margin-bottom: 120px'>
-        <div class='container full flex'>
-            <a href='/' class='logo flex'>
-                <img src="static/images/kuzaku.png" alt='kuzaku Logo'>
-                <p class='title'>kuzaku</p>
-            </a>
-            <nav>
-                <ul>
-                    <li><a class='button' href='commands'><span>команды</span></a></li>
-                    <li><a class='button' href='docs'><span>информация</span></a></li>
-                    <li><a class='button currentPage' href='premium' target="_blank"><span>премиум</span></a></li>
-                    <li><a class='button' href='invite'><span>пригласить бота</span></a></li>
-                    <li><a class='button' href='support'><span>помощь</span></a></li>
-                    <li><a class='button' href='status'><span>Статус</span></a></li>
-                </ul>
-            </nav>
+    <nav class="navbar">
+        <div class="navbar-column navbar-noToggle">
+          <a href="/">
+            <div class="navbar-name">
+            <img src="static/images/kuzaku.png" alt="" class="navbar-logo">
+            <div class="navbar-title" >Kuzaku</div>
         </div>
-    </div>
+          </a>
+            
+            <button onclick="getNavbar()" class="btn-toggle" id="navid"><i class="fas fa-bars"></i></button>
+        </div>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <div class="navbar-column">
+                <ul class="ul">
+                    <a href="docs" id="navid"><li class="li">Информация</li></a>
+                    <a href="premium" id="navid"><li class="li">Премиум</li></a>
+                    <a href="invite" id="navid"><li class="li">Пригласить</li></a>
+                    <a href="support" id="navid"><li class="li">Помощь</li></a>
+                </ul>
+            </div>
+            <div class="navbar-column">
+              {% block content %}
+                  {% if user %}
+                  <a href="dashboard" class="btn-login" >Панель управления</a>
+                  {% else %}
+                  <a href="login" class="btn-login" >Войти</a>
+                  {% endif %}
+              {% endblock content %}
+          </div>
+        </div>
+    </nav>
+      <div style="height:25px;"></div>
 
     <!-- Showcase -->
     <div class='showcase' style='margin-top: 20px; margin-bottom: 20px;'>
@@ -108,22 +122,17 @@
         <div class='container full grid'>
             <div class='branding'>
                 <h4>Kuzaku</h4>
-                <p>Copyright &copy; 2021 kuzaku</p>
+                <p>Copyright &copy; 2022 kuzaku</p>
             </div>
             <div class='flex'>
+            
                 <div class='footernav'>
                     <ul>
-                        <li><a class='button' href='/'><span>домашняя страница</span></a></li>
-                        <li><a class='button' href='commands'><span>команды</span></a></li>
-                        <li><a class='button' href='docs'><span>информация</span></a></li>
-                        <li><a class='button' href='status'><span>Статус</span></a></li>
-                    </ul>
-                </div>
-                <div class='footernav'>
-                    <ul>
-                        <li><a class='button' href='premium'><span>премиум</span></a></li>
-                        <li><a class='button' href='support'><span>саппорт сервер</span></a></li>
-                        <li><a class='button' href='invite'><span>пригласить бота</span></a></li>
+                        <li><a class='button currentPage' href='/'><span>Домашняя страница</span></a></li>
+                        <li><a class='button' href='docs'><span>Информация</span></a></li>
+                        <li><a class='button' href='premium'><span>Премиум</span></a></li>
+                        <li><a class='button' href='support'><span>Помощь</span></a></li>
+                        <li><a class='button' href='invite'><span>Пригласить бота</span></a></li>
                     </ul>
                 </div>
             </div>

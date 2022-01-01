@@ -20,13 +20,14 @@
     <meta data-n-head='ssr' name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Head Information -->
-    <title>kuzaku - дискорд бот!</title>
-    <link data-n-head='ssr' rel='icon' type='image/x-icon' href="static/images/nuclear.png">
+    <title>Kuzaku - Discord bot!</title>
+    <link data-n-head='ssr' rel='icon' type='image/x-icon' href="static/images/kuzaku.png">
 
     <!-- Styles -->
     <link type='text/css' rel='stylesheet' href="static/css/utilities.css">
     <link type='text/css' rel='stylesheet' href="static/css/index.css">
     <link type='text/css' rel='stylesheet' href="static/css/docs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link type='text/css' rel='stylesheet' href="static/css/common.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     
@@ -34,10 +35,7 @@
 
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
-        crossorigin="anonymous">
-
+    
     <!-- Meta -->
     <meta data-n-head='ssr' data-hid='theme-color' name='theme-color' content='#BB860B'>
     <meta data-n-head='ssr' data-hid='og:type' name='og:type' content='website'>
@@ -46,95 +44,95 @@
     <meta data-n-head='ssr' data-hid='og:image' name='og:image'
         content="{{ url_for('static', filename='images/kuzaku.png') }}">
     <meta data-n-head='ssr' data-hid='description' name='description'
-        content='kuzaku - дискорд чат бот!'>
+        content='Kuzaku - Discord bot.'>
     <meta data-n-head='ssr' data-hid='og:description' name='og:description'
-        content='kuzaku - дискорд чат бот!'>
+        content='Kuzaku - Discord bot.'>
 
 </head>
 
-<body style='background-color: #424242'>
+<body style='background-color: #222222'>
     <!-- Preloader -->
 
     <body class='preload'></body>
 
     <!-- Header -->
-    <div class='navbar animate__animated animate__backInDown' id='navbarr'>
-        <div class='container full flex'>
-            <a href='/' class='logo flex'>
-                <img src="static/images/kuzaku.png" alt='kuzaku Logo'>
-                <p class='title'>Kuzaku</p>
-            </a>
-            <nav>
-                <ul>
-                    <li><a class='button' href='docs'><span>информация</span></a></li>
-                    <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
-                    <li><a class='button' href='invite'><span>пригласить</span></a></li>
-                    <li><a class='button' href='support'><span>помощь</span></a></li>
-                </ul>
-            </nav>
+
+            <nav class="navbar">
+      <div class="navbar-column navbar-noToggle">
+        <a href="/">
+          <div class="navbar-name">
+          <img src="static/images/kuzaku.png" alt="" class="navbar-logo">
+          <div class="navbar-title" >Kuzaku</div>
+      </div>
+        </a>
+          
+          <button onclick="getNavbar()" class="btn-toggle" id="navid"><i class="fas fa-bars"></i></button>
+      </div>
+      <div class="navbar-toggle" id="navbar-toggle">
+          <div class="navbar-column">
+              <ul class="ul">
+                  <a href="docs" id="navid"><li class="li">Информация</li></a>
+                  <a href="premium" id="navid"><li class="li">Премиум</li></a>
+                  <a href="invite" id="navid"><li class="li">Пригласить</li></a>
+                  <a href="support" id="navid"><li class="li">Помощь</li></a>
+              </ul>
+          </div>
+          <div class="navbar-column">
             {% block content %}
                 {% if user %}
-                <a onclick="location.href='dashboard'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;"><img src={{ user.avatar_url }} alt="Avatar" style="display: inline; width:20px; border-radius: 25px; margin-right: 7px;"> {{ dashbtnname }}</a>
-               
-                    <!--<button onclick="myFunction()" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 15px !important;">{{ dashbtnname }}</button>!-->
+                <a href="dashboard" class="btn-login" >Панель управления</a>
                 {% else %}
-                <a onclick="location.href='login'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;">{{ dashbtnname }}</a>
+                <a href="login" class="btn-login" >Войти</a>
                 {% endif %}
             {% endblock content %}
         </div>
-    </div>
+      </div>
+  </nav>
+    <div style="height:25px;"></div>
 
     <!-- Showcase -->
-    <div class='showcase animate__animated animate__lightSpeedInRight'>
+    <div class='showcase'>
         <div class='container flex'>
             <div class='showcase-text'>
-                <h1>Kuzaku - дискорд бот!</h1>
+                <h1>Kuzaku - Discord bot!</h1>
                 <p>Сделано с любовью!</p>
                 <div class='buttons flex'>
-                    <a class='button btn btn-blurple' href='invite.html'><span><i class="fab fa-discord fa-2x"></i>Добавить в дискорд</span></a>
-                    <a class='button btn' href='#features'><span>Что может бот </span></a>
-                    <a class='button btn' href='support'><span>Получить помощь</span></a>
+                    <a class='button btn btn-blurple' href='invite.html'><span><i class="fab fa-discord fa-2x"></i>Добавить бота</span></a>
+                    <a class='button btn' href='#features'><span>Функции</span></a>
+                    <a class='button btn' href='support'><span>Поддержка</span></a>
                 </div>
             </div>
         </div>
     </div>
-    <div class='trans'>
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="visual" viewBox="0 0 960 300" width="960" height="300" version="1.1"><rect x="0" y="0" width="960" height="300" fill="#424242"/><path d="M0 186L26.7 180.2C53.3 174.3 106.7 162.7 160 168C213.3 173.3 266.7 195.7 320 190C373.3 184.3 426.7 150.7 480 125.7C533.3 100.7 586.7 84.3 640 97.3C693.3 110.3 746.7 152.7 800 154C853.3 155.3 906.7 115.7 933.3 95.8L960 76L960 301L933.3 301C906.7 301 853.3 301 800 301C746.7 301 693.3 301 640 301C586.7 301 533.3 301 480 301C426.7 301 373.3 301 320 301C266.7 301 213.3 301 160 301C106.7 301 53.3 301 26.7 301L0 301Z" fill="#882b2b" stroke-linecap="round" stroke-linejoin="miter"/></svg>
-    </div>
     <!-- Features -->
-    <div id='features' class='features animate__animated animate__lightSpeedInLeft'>
-        <div class='container grid'>
-            <div>
-                <h3>Много утилит!</h3>
-                <p>Вы можете посмотреть аватар пользователя, инфо о пользователе или сервере и многое другое!</p>
+    <div class="functions-block">
+        <h1 class="functions-title">Функции бота:</h1>
+        <div class="functions-place">
+            <div class="function">
+                <div class="function-info func-r">
+                    <div class="function-title">Музыка</div>
+                    <div class="function-text">В боте есть музыка и что-то еще. Качество очень крутое, всем не советую. dddd ddddddd dddd ddddddd dddd ddddddd dddd ddddddd dddd ddddddd </div>
+                </div>
+                <img src="https://catherineasquithgallery.com/uploads/posts/2021-03/1614626507_16-p-fon-mainkraft-dlya-fotoshopa-38.jpg" alt="" class="function-img func-l">
             </div>
-            <img src="static/images/utils.png" alt='utils'>
+            <div class="function">
+                <div class="function-info func-l">
+                    <div class="function-title">Модерация</div>
+                    <div class="function-text">Вы можете модерировать сервер очень легко! Бот очень быстро выдаст наказание нарушителю.  dddd ddddddd dddd ddddddd dddd ddddddd dddd ddddddd dddd ddddddd </div>
+                </div>
+                <img src="https://catherineasquithgallery.com/uploads/posts/2021-03/1614626507_16-p-fon-mainkraft-dlya-fotoshopa-38.jpg" alt="" class="function-img func-r">
+            </div>
+            <div class="function">
+                <div class="function-info func-r">
+                    <div class="function-title">Информация</div>
+                    <div class="function-text">Вы можете посмотреть информацию о себе, о сервере или о другом пользователе. dddd ddddddd dddd ddddddd dddd ddddddd dddd ddddddd dddd ddddddd </div>
+                </div>
+                <img src="https://catherineasquithgallery.com/uploads/posts/2021-03/1614626507_16-p-fon-mainkraft-dlya-fotoshopa-38.jpg" alt="" class="function-img func-l">
+            </div>
         </div>
     </div>
-    <div style="height: 50px; background-color: #882b2b"></div>
-    <div class='features'>
-        <div class='container grid'>
-            <img class='desktop' src="https://picsum.photos/200" alt='lorem'>
-            <div>
-                <h3>lorem</h3>
-                <p>lorem ipsum dolor sit amet, consectetur adipisicing el</p>
-            </div>
-            <img class='mobile' src="https://picsum.photos/200" alt='lorem'>
-        </div>
-    </div>
-    <div style="height: 50px; background-color: #882b2b"></div>
-    <div class='features'>
-        <div class='container grid'>
-            <div>
-                <h3>lorem ipsum</h3>
-                <p>lorem ipsum dolor sit amet, consectetur adipisicing el</p>
-            </div>
-            <img src="https://picsum.photos/200" alt='lorem'>
-        </div>
-    </div>
-    <div class='trans2'>
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="visual" viewBox="0 0 960 300" width="960" height="300" version="1.1"><rect x="0" y="0" width="960" height="300" fill="#424242"/><path d="M0 106L20 111.7C40 117.3 80 128.7 120 144.5C160 160.3 200 180.7 240 180.7C280 180.7 320 160.3 360 148.3C400 136.3 440 132.7 480 119.7C520 106.7 560 84.3 600 91.5C640 98.7 680 135.3 720 147.3C760 159.3 800 146.7 840 146.5C880 146.3 920 158.7 940 164.8L960 171L960 0L940 0C920 0 880 0 840 0C800 0 760 0 720 0C680 0 640 0 600 0C560 0 520 0 480 0C440 0 400 0 360 0C320 0 280 0 240 0C200 0 160 0 120 0C80 0 40 0 20 0L0 0Z" fill="#882b2b" stroke-linecap="round" stroke-linejoin="miter"/></svg>
-    </div>
+
+        <!--
     <section class='devs card animate__animated animate__lightSpeedInRight'>
         <h2>Разработчики</h2>
         <div class='container flex'>
@@ -170,7 +168,8 @@
         </div>
     </div>
     </section>
-    <div class="benefits animate__animated animate__lightSpeedInLeft">
+-->
+    <div class="benefits">
         <div class="benefits__inner">
             <h2 class="benefits__header">
                 Наша статистика:
@@ -206,7 +205,7 @@
                     <ul>
                         <li><a class='button currentPage' href='/'><span>Домашняя страница</span></a></li>
                         <li><a class='button' href='docs'><span>Информация</span></a></li>
-                        <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
+                        <li><a class='button' href='premium'><span>Премиум</span></a></li>
                         <li><a class='button' href='support'><span>Помощь</span></a></li>
                         <li><a class='button' href='invite'><span>Пригласить бота</span></a></li>
                     </ul>
@@ -219,6 +218,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="static/js/jquery.spincrement.min.js"></script>
     <script src="static/js/count.js" > </script>
+    <script class="" src="static/js/app.js" async=""></script>
 </body>
 
 </html>

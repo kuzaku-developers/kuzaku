@@ -37,26 +37,32 @@
 
 </head>
 <body onload="loadall('{{ config.eco_enabled }}', '{{ config.xppermsg }}')">
-    <div class='navbar animate__animated animate__backInDown' id='navbarr'>
-        <div class='container full flex'>
-            <a href='/' class='logo flex'>
-                <img src="{{ url_for('static', filename='images/kuzaku.png') }}" alt='kuzaku Logo'>
-                <p class='title'>kuzaku</p>
-            </a>
-            <nav>
-                <ul>
-                    <li><a class='button' href='commands'><span>команды</span></a></li>
-                    <li><a class='button' href='docs'><span>информация</span></a></li>
-                    <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
-                    <li><a class='button' href='invite'><span>пригласить</span></a></li>
-                    <li><a class='button' href='support'><span>помощь</span></a></li>
-                    <li><a class='button' href='status'><span>Статус</span></a></li>
-                </ul>
-            </nav>
-            <a onclick="location.href='logout'" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="margin:9px;padding: 8px; font-size: 15px !important; padding-left: 20px; padding-right: 20px; align-items: center; display:flex;justify-content: center;">Выйти</a>
+    <nav class="navbar">
+        <div class="navbar-column navbar-noToggle">
+          <a href="/">
+            <div class="navbar-name">
+            <img src="{{ url_for('static', filename='images/kuzaku.png') }}" alt="" class="navbar-logo">
+            <div class="navbar-title" >Kuzaku</div>
         </div>
-    </div>
-    <div style="height: 80px;"></div>
+          </a>
+            
+            <button onclick="getNavbar()" class="btn-toggle" id="navid"><i class="fas fa-bars"></i></button>
+        </div>
+        <div class="navbar-toggle" id="navbar-toggle">
+            <div class="navbar-column">
+                <ul class="ul">
+                    <a href="docs" id="navid"><li class="li">Информация</li></a>
+                    <a href="premium" id="navid"><li class="li">Премиум</li></a>
+                    <a href="invite" id="navid"><li class="li">Пригласить</li></a>
+                    <a href="support" id="navid"><li class="li">Помощь</li></a>
+                </ul>
+            </div>
+            <div class="navbar-column">
+                    <a href="logout" class="btn-login" >Выйти</a>
+            </div>
+        </div>
+    </nav>
+    <div style="height:80px;"></div>
     <div class="back-fill">
         <div class="brand-fill bea-container">
             <h1>Leveling system</h1>
@@ -113,10 +119,11 @@
                 </div>
                 <div class='footernav'>
                     <ul>
-                        <li><a class='button' href='premium' target ="_blank"><span>премиум</span></a></li>
-                        <li><a class='button' href='support'><span>саппорт сервер</span></a></li>
-                        <li><a class='button' href='invite'><span>пригласить бота</span></a></li>
-                        <li><a class='button' href='status'><span>Статус</span></a></li>
+                        <li><a class='button currentPage' href='/'><span>Домашняя страница</span></a></li>
+                        <li><a class='button' href='docs'><span>Информация</span></a></li>
+                        <li><a class='button' href='premium'><span>Премиум</span></a></li>
+                        <li><a class='button' href='support'><span>Помощь</span></a></li>
+                        <li><a class='button' href='invite'><span>Пригласить бота</span></a></li>
                     </ul>
                 </div>
             </div>

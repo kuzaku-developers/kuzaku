@@ -1,6 +1,6 @@
 import disnake
 from disnake.ext import commands
-
+from utils.db import dbsetlist
 
 class owner(commands.Cog):
     """Набор команд для отладки и тестирования."""
@@ -217,7 +217,29 @@ class owner(commands.Cog):
             )
         else:
             await ctx.send(f"**`Модуль {cog} успешно перезагружен`**")
+            
+    @commands.slash_command(name="blacklist", description="ban. them.")
+    async def blacklist(self, ctx):
+        pass
 
+    @blacklist.sub_command(
+        name="add",
+        description="Добавить пользователя в блеклист.",
+    )
+    async def blacklistadd(self, ctx, user: disnake.User):
+        dbsetlist(user.id, 1)
+        await ctx.send(f'в блеклист добавлен {user}!')
+   
+
+    
+    @blacklist.sub_command(
+        name="remove",
+        description="Убрать пользователя из блеклиста.",
+    )
+    async def blacklistremove(self, ctx, user: disnake.User):
+        dbsetlist(user.id, 0)
+        await ctx.send(f'из блеклиста убран {user}!')
+  
 
 def setup(bot: commands.Bot):
     bot.add_cog(owner(bot))

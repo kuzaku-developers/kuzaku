@@ -183,7 +183,7 @@ class premium(commands.Cog):
                 elif premium2 in (await guild.fetch_member(user.id)).roles:
                     setpremium(user.id, True, 5)
                 continue
-            for i in dict(await getdb()["premium"]):
+            for i in dict(getdb()["premium"]):
                 try:
 
                     if await guild.fetch_member(i):

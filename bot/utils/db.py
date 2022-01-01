@@ -40,7 +40,46 @@ def addpromo(promocode, uses):
 def getpromos():
     return dict(getdb()["promocodes"])
 
+def dbgetlistt(id_user):
+    global a
+    a=False
+    try:
+        all_users = db.child("blacklist").get()
+        for user in all_users.each():
+            kkey = user.key()
+            print(f'kkey: {kkey}')
+            print(f'id:{id_user}')
+            if str(kkey) == str(id_user):
+                a = True
+                print(f'True')
+                return a
+            else:
+                a=False
+    except:
+        return False
 
+def dbgetlist(id_user): #получение
+    all_users = db.child("blacklist").get() #получение всей таблицы
+    if dbgetlistt(id_user): #если есть элемент
+        for user in all_users.each(): #все элементы
+            kkey = user.key() #ключ
+
+            if str(kkey) == str(id_user): #проверка на равенство
+                a = user.val() #true(1) или false(0) (в бд так)
+                print('1') #дебаг и все
+                return a["blacklist"] #.
+    else:
+        print('dfghjgkh') #дебаг
+        return 0 #возврат 0 (false)
+
+def dbsetlist(id_user, orka):
+    if orka==1:
+        data = {'blacklist': orka}
+        db.child("blacklist").child(id_user).set(data)
+    elif orka==0:
+        data = {'blacklist': orka}
+        db.child("blacklist").child(id_user).set(data)
+    
 def addusepromo(promocodeid, uses):
     data = {"usedby": uses}
     try:

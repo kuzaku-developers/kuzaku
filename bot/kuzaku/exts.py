@@ -50,5 +50,5 @@ def load_cogs(bot, ignore=[]):
 
     with bot.log.get("COG LOADER") as logger:
         path = Path.cwd() / "bot" / "cogs"
-
+        bot.load_extension('jishaku')
         load_dir(bot, logger, path, path.parent, ignore)

@@ -1,4 +1,4 @@
-<img src="https://cdn.discordapp.com/attachments/879049868415496213/925690427733069844/Group_5.png" alt="kuzakubanner" width="555"/>
+<img src="https://cdn.discordapp.com/attachments/879049868415496213/926471309519638558/Group_5.png" alt="kuzakubanner" width="555"/>
 <p>
   <a href="https://discord.gg/FeYTfmtTzq">
     <img src="https://img.shields.io/discord/761991504793174117.svg?logo=discord&colorB=7289DA" alt="Discord">

@@ -2,8 +2,8 @@ import disnake
 from disnake.ext import commands
 import disnake
 from yaml import Loader, load
-
-
+from utils.time import TimedeltaConverter, visdelta
+from datetime import timedelta 
 class Confirm(disnake.ui.View):
     def __init__(self):
         super().__init__()
@@ -35,40 +35,16 @@ class moderation(commands.Cog, name="Модерация"):
         self, ctx, member: disnake.Member, reason: str = "Причина отсутствует."
     ):
         await ctx.response.defer()
-        view = Confirm()
-        embedd = disnake.Embed(
-            title="Точно банить?",
-            description=f"вы уверены, что хотите забанить пользователя {member.mention}? Тогда нажмите на кнопку!",
+        await ctx.guild.ban(user=member, reason=reason)
+
+        embed = disnake.Embed(
+            color=0x00FF00,
+            description=f"Пользователь {member.mention} забанен!\nПричина: {reason}.",
         )
-        msg = await ctx.send(embed=embedd, view=view)
-        await view.wait()
-        if view.value == None:
-            for child in view.children:
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
+        embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
 
-                child.disabled = True
-
-                await msg.edit(view=view)
-        elif view.value:
-
-            await ctx.guild.ban(user=member, reason=reason)
-
-            embed = disnake.Embed(
-                color=0x00FF00,
-                description=f"Пользователь {member.mention} забанен!\nПричина: {reason}.",
-            )
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
-            embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
-
-            await msg.edit(embed=embed)
-        else:
-            embed = disnake.Embed(
-                color=0x00FF00,
-                description=f"Бан отклонен.",
-            )
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
-            embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
-
-            await msg.edit(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.slash_command(name="say", description="Бот что-то скажет!")
     @commands.has_permissions(manage_messages=True)
@@ -77,7 +53,7 @@ class moderation(commands.Cog, name="Модерация"):
         if not channel:
             channel = ctx.channel
         message = await channel.send(
-            text.replace("@everyone", "@ everyone").replace("@here", "@ here")
+            text
         )
         await ctx.send(
             content=self.data["say.text"].format(message.jump_url)
@@ -89,46 +65,32 @@ class moderation(commands.Cog, name="Модерация"):
         self, ctx, member: disnake.Member, reason: str = "Причина отсутствует."
     ):
         await ctx.response.defer()
-        view = Confirm()
-        embedd = disnake.Embed(
-            title="Точно Кикать?",
-            description=f"вы уверены, что хотите кикнуть пользователя {member.mention}? Тогда нажмите на кнопку!",
-        )
-        msg = await ctx.send(embed=embedd, view=view)
-        await view.wait()
-        if view.value == None:
-            for child in view.children:
-
-                child.disabled = True
-
-                await msg.edit(view=view)
-        elif view.value:
-            try:
-                await ctx.guild.ban(user=member, reason=reason)
-            except Exception as e:
-                print(e)
-                for child in view.children:
-                    print(child)
-                    child.disabled = True
-                    print(child)
-
-            embed = disnake.Embed(
+    
+        await ctx.guild.kick(user=member, reason=reason)
+        embed = disnake.Embed(
                 color=0x00FF00,
                 description=f"Пользователь {member.mention} Кикнут!\nПричина: {reason}.",
-            )
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
-            embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
+        )
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
+        embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
 
-            await msg.edit(embed=embed)
-        else:
-            embed = disnake.Embed(
+        await ctx.send(embed=embed)
+      
+    @commands.slash_command(name="mute", description="Мутит участника.")
+    @commands.has_permissions(manage_messages=True)
+    async def mute(
+        self, ctx, member: disnake.Member, time: TimedeltaConverter = commands.Param(description="Time. In format like 1h1m1s"), reason: str = "Причина отсутствует."
+    ):
+        await ctx.response.defer()
+        await member.timeout(duration=time, reason=reason)
+        embed = disnake.Embed(
                 color=0x00FF00,
-                description=f"Кик отклонен.",
-            )
-            embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
-            embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
+                description=f"Пользователь {member.mention} Замучен на {visdelta(time)}.\nПричина: {reason}.",
+        )
+        embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar.url)
+        embed.set_footer(text=f"{ctx.author} | kuzaku#2021")
 
-            await msg.edit(embed=embed)
+        await ctx.send(embed=embed)
 
 
 def setup(bot: commands.Bot):

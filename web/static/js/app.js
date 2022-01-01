@@ -22,3 +22,18 @@ function save(guild_id, item, value) {
             else toast('Произошла ошибка!');
     });
 }
+let navbarOpen = false
+
+function getNavbar() {
+    navbar = document.getElementById("navbar-toggle")
+    switch(navbarOpen) {
+        case false:
+            navbar.classList.add("active");
+            navbarOpen = true;
+            break;
+        case true:
+            navbar.classList.remove("active");
+            navbarOpen = false;
+            break;
+    };
+};
