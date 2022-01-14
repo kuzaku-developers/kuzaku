@@ -141,7 +141,7 @@ class info(commands.Cog):
                         )
                     )
 
-            message = await ctx.send(embed=embs[0])
+            message = await ctx.followup.send(embed=embs[0])
 
             pages = Paginator(message, embs, ctx.author, footer=True)
             return await pages.start()
